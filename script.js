@@ -1,48 +1,43 @@
-function createLoop(trackId, speed = 0.5) {
-  const track = document.getElementById(trackId);
+let progress = 0;
+const loader = document.getElementById("loader");
+const number = document.getElementById("loader-number");
 
-  function startLoop() {
-    const clone = track.cloneNode(true);
-    clone.classList.add("clone");
-    track.parentElement.appendChild(clone);
+function updateLoader() {
+  // random jump between 1 and 15
+  const jump = Math.floor(Math.random() * 15) + 1;
 
-    // Position clone AFTER the original
-    clone.style.left = track.offsetWidth + "px";
+  progress += jump;
 
-    let x = 0;
+  if (progress > 100) progress = 100;
 
-    function animate() {
-      x -= speed;
+  number.textContent = progress + "%";
 
-      track.style.transform = `translateX(${x}px)`;
-      clone.style.transform = `translateX(${x}px)`;
-
-      if (Math.abs(x) >= track.offsetWidth) {
-        x = 0;
-      }
-
-      requestAnimationFrame(animate);
-    }
-
-    animate();
+  if (progress < 100) {
+    // random delay between jumps (40–200ms)
+    setTimeout(updateLoader, Math.random() * 160 + 40);
+  } else {
+    loader.classList.add("hide");
   }
+}
+updateLoader();
+window.addEventListener("load", () => { const hero = document.querySelector(".hero"); hero.classList.add("show"); });
+const hero = document.querySelector(".hero");
 
-  // Wait for images to load before measuring width
-  const images = track.querySelectorAll("img");
-  let loaded = 0;
+window.addEventListener("scroll", () => {
+  const offset = window.scrollY * 0.2; // adjust strength
+  hero.style.transform = `translateY(${offset}px)`;
+});
 
-  images.forEach(img => {
-    if (img.complete) {
-      loaded++;
-      if (loaded === images.length) startLoop();
-    } else {
-      img.onload = () => {
-        loaded++;
-        if (loaded === images.length) startLoop();
-      };
+const reveals = document.querySelectorAll(".reveal");
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("show");
+      observer.unobserve(entry.target); // animate once
     }
   });
-}
+}, { threshold: 0.2 });
 
-createLoop("programming-track", 0.4);
-createLoop("design-track", 0.4);
+reveals.forEach(section => observer.observe(section));
+document.getElementById("year").textContent = new Date().getFullYear();

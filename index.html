@@ -33,12 +33,6 @@
       <li><a href="#projects">PROJECTS</a></li>
       <li><a href="#contact" class="nav-contact">CONTACT ME</a></li>
     </ul>
-    <div class="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-
     <div class="social-icons">
       <a class="social" href="https://www.facebook.com/te.ichty/" target="_blank">
         <img src="./images/social/facebook.png" class="logo-img" alt="facebook">
@@ -217,53 +211,10 @@
 <footer class="site-footer">
   <div class="footer-inner">
     <p>&copy; <span id="year"></span> ICHTY TE. ALL RIGHTS RESERVED.</p>
-    <p class="design">DESIGNED BY <span class="name">ICHTY TE</span></p>
+    <p class="design">DESIGNED & DEVELOPED BY <span class="name">ICHTY TE</span></p>
   </div>
 </footer>
-<script>
-  let progress = 0;
-  const loader = document.getElementById("loader");
-  const number = document.getElementById("loader-number");
-
-  function updateLoader() {
-    // random jump between 1 and 15
-    const jump = Math.floor(Math.random() * 15) + 1;
-
-    progress += jump;
-
-    if (progress > 100) progress = 100;
-
-    number.textContent = progress + "%";
-
-    if (progress < 100) {
-      // random delay between jumps (40–200ms)
-      setTimeout(updateLoader, Math.random() * 160 + 40);
-    } else {
-      loader.classList.add("hide");
-    }
-  }
-  updateLoader();
-  window.addEventListener("load", () => { const hero = document.querySelector(".hero"); hero.classList.add("show"); });
-    const hero = document.querySelector(".hero");
-
-    window.addEventListener("scroll", () => {
-    const offset = window.scrollY * 0.2; // adjust strength
-    hero.style.transform = `translateY(${offset}px)`;
-  });
-
-    const reveals = document.querySelectorAll(".reveal");
-
-    const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("show");
-        observer.unobserve(entry.target); // animate once
-      }
-    });
-  }, { threshold: 0.2 });
-
-    reveals.forEach(section => observer.observe(section));
-
+<script src="script.js">
 </script>
 
 </body>
