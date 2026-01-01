@@ -41,3 +41,11 @@ const observer = new IntersectionObserver(entries => {
 
 reveals.forEach(section => observer.observe(section));
 document.getElementById("year").textContent = new Date().getFullYear();
+
+  const hamburger = document.querySelector('.hamburger');
+  const navLinks = document.querySelector('.nav-link');
+
+  hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  navLinks.classList.toggle('show');
+});
