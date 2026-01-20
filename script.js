@@ -7,7 +7,6 @@ function updateLoader() {
   const jump = Math.floor(Math.random() * 15) + 1;
 
   progress += jump;
-
   if (progress > 100) progress = 100;
 
   number.textContent = progress + "%";
