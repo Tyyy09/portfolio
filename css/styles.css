@@ -730,6 +730,7 @@ ABOUT
     font-size: 4rem;
   }
   .section{
+    max-height: 20vh;
     padding: 0 3rem;
     text-align: center;
     display: flex;
@@ -741,12 +742,13 @@ ABOUT
   .contact-item{
     font-size: 0.8rem;
   }
-  .social {
-    gap:0.8rem;
+  .socials {
+    gap:1rem;
   }
   .socials a{
     padding: 1rem 2rem;
     font-size: 1rem;
+    
     margin-top: 1.5rem;
   }
   .project-section{
@@ -770,6 +772,9 @@ ABOUT
   }
   .tool-icons img {
     width: 1.6rem;
+  }
+  .project-title{
+    font-size: 3rem;
   }
 
 
