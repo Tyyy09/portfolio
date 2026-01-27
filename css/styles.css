@@ -63,19 +63,18 @@ nav {
   top: 0;
   left: 0;
   width: 100%;
-  height: 4.5rem; /* 72px */
+  height: 4rem; /* 72px */
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 9rem; /* 48px */
-  background: var(--color-bg);
-  backdrop-filter: blur(0.75rem); /* 12px */
-  border-bottom: 2px solid var(--color-border);
-
+  padding: 0 9rem;
+  backdrop-filter: blur(0.80rem);
   z-index: 1000;
+  border-bottom: 1px solid rgba(0,0,0,0.6);
   transition: background var(--transition-med), border var(--transition-med);
 }
+
 
 /* LOGO */
 .logo {
@@ -86,6 +85,7 @@ nav {
   transition: color var(--transition-fast);
   cursor: pointer;
   text-decoration: none;
+left: 9rem;
 }
 
 /* NAV LINKS */
@@ -128,6 +128,8 @@ nav {
   display: flex;
   align-items: center;
   gap: 1.25rem; /* 20px */
+  position: absolute;
+  right: 9rem;
 }
 
 .logo-img {
@@ -504,6 +506,7 @@ ABOUT
   justify-content: center;
   min-height: 80vh;
 }
+
 .project-title {
   font-size: 4rem;
   font-weight: 400;
@@ -556,7 +559,7 @@ ABOUT
 }
 .project-card h3 {
   font-size: 2rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.5px;
 }
 .project-description p {
@@ -589,18 +592,6 @@ ABOUT
 .project-link:hover{
   color: var(--color-accent);
   background-color: var(--color-tag);
-}
-
-
-
-
-
-/* HAMBURGER BASE */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
 }
 
 .hamburger span {
