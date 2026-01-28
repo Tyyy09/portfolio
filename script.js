@@ -41,10 +41,28 @@ const observer = new IntersectionObserver(entries => {
 reveals.forEach(section => observer.observe(section));
 document.getElementById("year").textContent = new Date().getFullYear();
 
-  const hamburger = document.querySelector('.hamburger');
-  const navLinks = document.querySelector('.nav-link');
+const hamburger = document.querySelector('.hamburger');
+const navLinks = document.querySelector('.nav-link');
+const links = document.querySelectorAll('.nav-link a');
 
-  hamburger.addEventListener('click', () => {
+// Toggle drawer
+hamburger.addEventListener('click', () => {
   hamburger.classList.toggle('active');
   navLinks.classList.toggle('show');
+});
+
+// Close drawer when clicking a link
+links.forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    navLinks.classList.remove('show');
+  });
+});
+
+// Auto‑reset on desktop resize
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 768) {
+    hamburger.classList.remove('active');
+    navLinks.classList.remove('show');
+  }
 });
