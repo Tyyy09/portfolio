@@ -508,8 +508,9 @@ ABOUT
 }
 
 .project-title {
-  font-size: 4rem;
+  font-size: 3rem;
   font-weight: 400;
+  text-align: center;
 }
 
 .project-section{
