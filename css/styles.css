@@ -827,8 +827,10 @@ ABOUT
   }
 
   /* HOME */
+
   .home {
     padding: 1.5rem;
+    max-height: 70vh;
   }
 
   .headline {
@@ -934,6 +936,9 @@ ABOUT
     align-self: center;
     justify-content: center;
 
+  }
+  .project-title{
+    font-size: 2rem;
   }
   /* FOOTER */
   .footer-inner {
