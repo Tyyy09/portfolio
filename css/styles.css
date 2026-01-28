@@ -950,14 +950,14 @@ ABOUT
   }
   
 }
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 769px) and (max-width: 1380px) {
 
   nav {
     padding: 0 4rem;
   }
 
   .social-icons {
-    display: flex;
+    display: none;
   }
 
   .hamburger {
@@ -967,7 +967,7 @@ ABOUT
   .nav-link {
     display: flex;
     flex-direction: row;
-    gap: 2rem;
+    gap: 1rem;
     position: static;
     height: auto;
     padding: 0;
@@ -975,15 +975,18 @@ ABOUT
   }
 
   .nav-link a {
-    font-size: 0.9rem;
-    padding: 0;
+    font-size: 0.8rem;
+    padding: 0.4rem 1rem;
   }
 
   /* HOME */
+ 
   .home {
-    padding: 4rem 4rem;
+    padding: 0 4rem;
     flex-direction: row;
-    max-height: none;
+    justify-content: center;
+    text-align: center;
+    max-height: 80vh;
   }
 
   .headline {
@@ -1020,13 +1023,14 @@ ABOUT
 
   /* SOFTWARE */
   .main-software {
-    font-size: 4.5rem;
+    justify-content: center;
+    font-size: 3rem;
   }
 
   /* CONTACT */
   .section {
     padding: 0 4rem;
-    text-align: left;
+    text-align: center;
   }
 
   .section-title {
@@ -1045,13 +1049,27 @@ ABOUT
   /* PROJECTS */
   .project-section {
     padding: 0 4rem;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     gap: 2rem;
   }
 
   .project-card {
-    max-width: 45%;
+    padding: 1rem 1rem;
+    max-width: 100%;
+  }
+  .project-description h3{
+    font-size: 1.5rem;
+  }
+  .project-description p{
+    font-size: 0.7rem;
+  }
+  .key-software{
+    font-size: 0.4;
+  }
+  .project-title{
+    font-size: 2.5rem;
+    text-align: center;
   }
 
   /* FOOTER */
