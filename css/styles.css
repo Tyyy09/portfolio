@@ -258,6 +258,8 @@ ABOUT
 }
 .profile-pic{
   width: 100%;
+    object-fit: cover;
+
 }
 .about-content{
   display: flex;
@@ -894,7 +896,7 @@ ABOUT
 }
   .about-text {
     font-size: 0.8rem;
-    max-width: 59ch;
+    max-width: 75ch;
   }
 
   .stat-header {
@@ -1052,7 +1054,7 @@ ABOUT
 
   .about-text {
     font-size: 0.7rem;
-    max-width: 75ch;
+    max-width: 80ch;
   }
   .stat{
     min-width: 50px;
@@ -1063,7 +1065,15 @@ ABOUT
   .stat-header {
     font-size: 2rem;
   }
-
+  .profile{
+  display: flex;
+  width: 40%;
+  height: auto;
+}
+.profile-pic{
+  width: 100%;
+  object-fit: cover;
+}
   /* SOFTWARE */
   .main-software {
     justify-content: center;
