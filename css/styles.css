@@ -305,12 +305,11 @@ ABOUT
 
 .main-software{
   display: flex;
-  justify-content: start;
+  justify-content: center;
   text-align: left;
-  padding:0 9rem;
   font-size: 4rem;
   margin-top: 2rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 .software-title{
   font-weight: 400;
@@ -523,8 +522,8 @@ ABOUT
 }
 
 .project-title {
-  font-size: 3rem;
-  font-weight: 400;
+  font-size: 4rem;
+  font-weight: 500;
   text-align: center;
 }
 
