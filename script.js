@@ -260,63 +260,6 @@ if (!REDUCED) {
   updateParallax();
 }
 
-/* ── MARQUEE BUILDER + VELOCITY SKEW ──────────────────────── */
-const progTools = [
-  { name: 'HTML',          img: 'images/programming/html.png'   },
-  { name: 'CSS',           img: 'images/programming/css.png'    },
-  { name: 'JavaScript',    img: 'images/programming/js.png'     },
-  { name: 'React',         img: 'images/programming/react.png'  },
-  { name: 'Java',          img: 'images/programming/java.png'   },
-  { name: 'Python',        img: 'images/programming/python.png' },
-  { name: 'PHP',           img: 'images/programming/php.png'    },
-  { name: 'MySQL',         img: 'images/programming/mysql.png'  },
-  { name: 'Git',           img: 'images/programming/git.png'    },
-  { name: 'VS Code',       img: 'images/programming/vs.png'     },
-  { name: 'GitHub',        img: 'images/programming/github.png' },
-  { name: 'Packet Tracer', img: 'images/programming/packet.png' },
-];
-const designTools = [
-  { name: 'Figma',       img: 'images/designing/figma.png'    },
-  { name: 'Illustrator', img: 'images/designing/ai.png'       },
-  { name: 'Photoshop',   img: 'images/designing/ps.png'       },
-  { name: 'Affinity',    img: 'images/designing/affinity.png' },
-];
-function buildMarquee(trackId, items, repeats) {
-  const track = document.getElementById(trackId);
-  if (!track) return;
-  const all = Array.from({ length: repeats }, () => items).flat();
-  track.innerHTML = all.map(item =>
-    `<div class="marquee-item">
-       <img src="${item.img}" alt="${item.name}" loading="lazy" />
-       <span>${item.name}</span>
-     </div>`
-  ).join('');
-}
-buildMarquee('prog-track',   progTools,   4);
-buildMarquee('design-track', designTools, 10);
-
-/* Scroll velocity subtly skews the marquees for a kinetic feel */
-if (!REDUCED) {
-  const skewTargets = document.querySelectorAll('.marquee-outer');
-  let curSkew = 0;
-  function skewLoop() {
-    const targetSkew = clamp(scrollVelocity * 0.35, -8, 8);
-    curSkew = lerp(curSkew, targetSkew, 0.1);
-    scrollVelocity *= 0.9; // decay when no Lenis
-    skewTargets.forEach(t => { t.style.transform = `skewX(${curSkew.toFixed(2)}deg)`; });
-    requestAnimationFrame(skewLoop);
-  }
-  // Only skew via wheel velocity when Lenis isn't supplying it
-  if (lenis) skewLoop();
-  else {
-    let lastY = window.scrollY;
-    window.addEventListener('scroll', () => {
-      scrollVelocity = window.scrollY - lastY;
-      lastY = window.scrollY;
-    }, { passive: true });
-    skewLoop();
-  }
-}
 
 /* ── SCROLL PROGRESS + SCROLL-SPY NAV ─────────────────────── */
 (function () {
