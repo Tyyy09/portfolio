@@ -108,14 +108,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 100%;
   z-index: 1000;
   border-bottom: 1px solid transparent;
-  transition: background var(--dur-med), border-color var(--dur-med), backdrop-filter var(--dur-med);
+  transition: background var(--dur-med), border-color var(--dur-med);
 }
-.site-header.scrolled {
-  background: rgba(10, 10, 10, 0.82);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-color: var(--border);
-}
+/* Background sits on the inner pill, not the full bar */
 .nav-inner {
   max-width: var(--container-max);
   margin: 0 auto;
@@ -124,7 +119,34 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border: 1px solid transparent;
+  border-radius: 0;
+  transition: max-width var(--dur-med) var(--ease-out),
+              height var(--dur-med) var(--ease-out),
+              margin var(--dur-med) var(--ease-out),
+              padding var(--dur-med) var(--ease-out),
+              background var(--dur-med), border-color var(--dur-med),
+              border-radius var(--dur-med), box-shadow var(--dur-med);
 }
+/* On scroll: condense into a smaller floating pill pulled in from the sides */
+.site-header.scrolled .nav-inner {
+  max-width: 880px;
+  height: 52px;
+  margin-top: var(--s-3);
+  padding: 0 var(--s-4) 0 var(--s-6);
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-color: var(--border);
+  border-radius: 999px;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.28);
+}
+html[data-theme="light"] .site-header.scrolled .nav-inner {
+  background: rgba(247, 246, 243, 0.72);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.10);
+}
+/* Slightly smaller logo when condensed */
+.site-header.scrolled .nav-logo { font-size: var(--t-base); }
 .nav-logo {
   font-size: var(--t-lg);
   font-weight: 700;
@@ -140,16 +162,51 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   align-items: center;
   gap: var(--s-1);
 }
-.nav-links a {
+.nav-links a { text-decoration: none; }
+
+/* Animated text-slide links (award style) */
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   font-size: var(--t-sm);
   font-weight: 500;
   color: var(--text-2);
-  text-decoration: none;
   padding: var(--s-2) var(--s-4);
-  border-radius: 6px;
-  transition: color var(--dur-fast), background var(--dur-fast);
 }
-.nav-links a:hover { color: var(--text-1); background: var(--surface-raised); }
+.nav-link span {
+  display: block;
+  transition: transform 0.45s var(--ease-out), color var(--dur-fast);
+}
+.nav-link::after {
+  content: attr(data-label);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  transform: translateY(110%);
+  transition: transform 0.45s var(--ease-out);
+}
+.nav-link:hover span  { transform: translateY(-130%); }
+.nav-link:hover::after { transform: translateY(0); }
+/* Active underline indicator */
+.nav-link::before {
+  content: "";
+  position: absolute;
+  left: var(--s-4); right: var(--s-4);
+  bottom: 5px; height: 1.5px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out);
+}
+.nav-link.active { color: var(--accent); }
+.nav-link.active span { color: var(--accent); }
+.nav-link.active::before { transform: scaleX(1); }
 .nav-cta {
   color: var(--bg) !important;
   background: var(--text-1) !important;
@@ -938,9 +995,6 @@ html[data-theme="light"] {
   --accent-dim:    rgba(143, 107, 56, 0.10);
   --accent-glow:   rgba(143, 107, 56, 0.28);
   --accent-border: rgba(143, 107, 56, 0.35);
-}
-html[data-theme="light"] .site-header.scrolled {
-  background: rgba(247, 246, 243, 0.82);
 }
 @media (max-width: 768px) {
   html[data-theme="light"] .nav-links { background: rgba(247, 246, 243, 0.97); }

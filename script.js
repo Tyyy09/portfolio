@@ -154,10 +154,11 @@ if (FINE_POINTER && !REDUCED) {
   }
 }
 
-/* ── NAVBAR ELEVATION ─────────────────────────────────────── */
+/* ── NAVBAR CONDENSE ON SCROLL ────────────────────────────── */
 const siteHeader = document.getElementById('site-header');
 function onScrollHeader(y) { siteHeader.classList.toggle('scrolled', y > 40); }
-window.addEventListener('scroll', () => onScrollHeader(window.scrollY), { passive: true });
+if (lenis) lenis.on('scroll', ({ scroll }) => onScrollHeader(scroll));
+else window.addEventListener('scroll', () => onScrollHeader(window.scrollY), { passive: true });
 
 /* ── HAMBURGER ────────────────────────────────────────────── */
 const hamburger = document.getElementById('hamburger');
