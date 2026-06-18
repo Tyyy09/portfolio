@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1400" height="875" viewBox="0 0 1400 875" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="38%" r="55%">
+      <stop offset="0%" stop-color="#f57000" stop-opacity="0.30"/>
+      <stop offset="55%" stop-color="#f57000" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#f57000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="875" fill="#0f0f0f"/>
+  <rect width="1400" height="875" fill="url(#glow)"/>
+
+  <!-- Logo (original 1080x1080 art scaled ~0.40 and centered, lifted above center) -->
+  <g transform="translate(484,120) scale(0.40)">
+    <g transform="matrix(1.285957,0,0,1.285957,-279.926507,-386.000148)">
+      <circle cx="637.6" cy="720.086" r="279.914" style="fill:#f57000;"/>
+    </g>
+    <g>
+      <path d="M335.839,613.82C290.429,440.537 412.087,419.045 494.872,462.699C568.828,501.698 550.966,577.552 540,621.416" style="fill:none;stroke:white;stroke-width:32.08px;"/>
+      <path d="M368.875,384.37C491.029,389.052 525.731,364.518 587.443,300" style="fill:none;stroke:white;stroke-width:32.08px;"/>
+      <path d="M360.651,665.552C398.149,737.423 466.491,756.15 524.221,759.915" style="fill:none;stroke:white;stroke-width:32.08px;"/>
+      <g transform="matrix(1,0,0,1,35.54249,-6.083684)">
+        <path d="M399.111,260.941C288.761,316.659 143.127,488.89 243.268,685.029C252.624,703.353 314.872,828.237 456.894,828.237C457.404,828.237 488.678,827.833 488.678,827.833" style="fill:none;stroke:white;stroke-width:32.08px;"/>
+      </g>
+      <path d="M635.986,348.799C635.986,348.799 580.341,613.981 689.415,641.722C802.084,670.377 836.31,544.359 836.817,504.605" style="fill:none;stroke:white;stroke-width:32.08px;"/>
+      <path d="M682.532,489.723C684.811,580.809 731.279,589.738 751.398,558.739" style="fill:none;stroke:white;stroke-width:32.08px;"/>
+    </g>
+  </g>
+
+  <!-- Wordmark: lowercase "kromtrip" (krom white, trip orange) -->
+  <text x="700" y="650" text-anchor="middle" font-family="'Helvetica Now', Helvetica, Arial, sans-serif" font-size="120" font-weight="700" letter-spacing="-3">
+    <tspan fill="#ffffff">krom</tspan><tspan fill="#f57000">trip</tspan>
+  </text>
+
+  <!-- Tagline -->
+  <text x="700" y="712" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="24" letter-spacing="6" fill="#f57000">GROUP TRAVEL MANAGEMENT APP</text>
+</svg>

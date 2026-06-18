@@ -3,249 +3,358 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ichty Te - Portfolio</title>
-  <meta name="description" content="Ichty Te - Portfolio." />
+  <title>Ichty Te · Developer &amp; Designer</title>
+  <meta name="description" content="Computer Programming student building polished digital products where engineering precision meets design clarity." />
+  <meta name="author" content="Ichty Te" />
+  <meta name="theme-color" content="#0a0a0a" />
 
-  <!-- Google Fonts -->
+  <!-- Favicon: inline SVG monogram -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Ctext x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter,Arial,sans-serif' font-size='30' font-weight='700' fill='%23ededed'%3EIT%3C/text%3E%3Ccircle cx='48' cy='44' r='3' fill='%23c8a97e'/%3E%3C/svg%3E" />
+
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Ichty Te · Developer &amp; Designer" />
+  <meta property="og:description" content="Computer Programming student building polished digital products where engineering precision meets design clarity." />
+  <meta property="og:image" content="images/profile.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Ichty Te · Developer &amp; Designer" />
+  <meta name="twitter:description" content="Programmer and designer building software that works well and looks right." />
+  <meta name="twitter:image" content="images/profile.jpg" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght,YOPQ@100..900,300&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Share+Tech&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght,YOPQ@100..900,300&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Onest:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Share+Tech&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Lenis smooth scroll -->
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 </head>
 <body>
 
-<div id="loader">
-  <span id="loader-number">0%</span>
+<div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+
+<div id="loader" aria-hidden="true">
+  <div class="loader-counter">
+    <span id="loader-number">0</span><span class="loader-pct">%</span>
+  </div>
 </div>
 
-<header class="site-header" data-elevate>
-  <nav>
-    <a class="logo" href="#home">ICHTY TE.</a>
-    <ul class="nav-link">
-      <li><a href="#home">HOME</a></li>
-      <li><a href="#about">ABOUT ME</a></li>
-      <li><a href="#softwares">TOOLS</a></li>
-      <li><a href="#projects">PORTFOLIO</a></li>
-      <li><a href="#contact" class="nav-contact">CONTACT ME</a></li>
+<header class="site-header" id="site-header">
+  <nav class="nav-inner">
+    <a class="nav-logo" href="#home">IT.</a>
+    <ul class="nav-links" id="nav-links" role="list">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Work</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact" class="nav-cta">Contact</a></li>
     </ul>
-    <div class="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 </header>
 
 <main>
-  <!-- Hero -->
-  <section id="home" class="home reveal">
-    <div class="home-content">
-      <article class="hero">
-        <h1 class="headline">EXPLORE MY PORTFOLIO</h1>
-        <div class="home-row">
-          <p class="identity">PROGRAMMER - DESIGNER EST.2022</p>
-          <p class="passion">I ENJOY BUILDING THINGS THAT LOOK GOOD, WORK WELL, AND MAKE PEOPLE'S LIVES EASIER.</p>
-        </div>
-      </article>
-    </div>
-  </section>
 
-  <!-- About -->
-  <section id="about" class="about-me reveal">
-    <div class="about-container">
-      <div class="about-desc">
-      <div class="box-about">
-      <h2 class="about-title">ABOUT ME</h2>
-      <article class="about-content">
-    <p class="about-text">
-      <span class="name-about">HI, ICHTY TE</span> <br>
-      I FOCUS ON BUILDING INTERFACES AND SYSTEMS THAT ARE SIMPLE, PURPOSEFUL, AND EASY TO USE. I BELIEVE GOOD DESIGN IS ABOUT CLARITY AND RESTRAINT REMOVING FRICTION, GUIDING USERS NATURALLY, AND MAKING EVERY DECISION FEEL DELIBERATE. FROM LAYOUT AND TYPOGRAPHY TO STRUCTURE AND PERFORMANCE, I CARE ABOUT DETAILS THAT IMPROVE BOTH USABILITY AND VISUAL BALANCE.<br>
-      <br>
-      WITH EXPERIENCE IN BOTH DESIGN AND DEVELOPMENT, I BRIDGE THE GAP BETWEEN HOW THINGS LOOK AND HOW THEY WORK. I ENJOY TURNING IDEAS INTO FUNCTIONAL, WELL-STRUCTURED PRODUCTS BY COMBINING CREATIVE THINKING WITH TECHNICAL PROBLEM-SOLVING. I VALUE CONSISTENCY, MAINTAINABILITY, AND THOUGHTFUL EXECUTION, AND MY GOAL IS TO CREATE DIGITAL WORK THAT FEELS CALM, REFINED, AND MEANINGFUL.
-      </article>
-      <article class="about-state">
-        <div class="stat">
-          <h3 class="stat-header">5</h3>
-          <p class="stat-text">SUCCESS PROJECT</p>
-        </div>
-        <div class="stat">
-          <h3 class="stat-header">2+</h3>
-          <p class="stat-text">YEARS EXPERIENCE</p>
-        </div>
-        <div class="stat">
-          <h3 class="stat-header">2</h3>
-          <p class="stat-text">CORE DISCIPLINES</p>
-        </div>
-      </article>
+  <!-- HERO -->
+  <section id="home" class="hero-section">
+    <div class="hero-spotlight" id="hero-spotlight" aria-hidden="true"></div>
+    <div class="hero-inner container">
+      <div class="hero-eyebrow">
+        <span>Open to opportunities</span>
       </div>
-      <div class="profile">
-          <img class= "profile-pic" src="./images/profile.jpg">
+      <h1 class="hero-name">ICHTY TE</h1>
+      <div class="hero-roles">
+        <span class="hero-role">Computer Programming Student</span>
+        <span class="hero-sep" aria-hidden="true">·</span>
+        <span class="hero-role">Developer &amp; Designer</span>
       </div>
+      <p class="hero-tagline">
+        Building polished digital products where<br>
+        engineering precision meets design clarity.
+      </p>
+      <div class="hero-ctas">
+        <a href="#projects" class="btn btn-primary">View Work</a>
+        <a href="assets/Ichty-Te-Resume.pdf" target="_blank" rel="noopener" class="btn btn-ghost" download>Download CV</a>
+        <a href="mailto:ichty086@gmail.com" class="btn btn-ghost">Get in Touch</a>
       </div>
-    </div>
-   
-  </section>
-
-  <!-- Skills -->
-  <section id="softwares" class="software reveal">
-    <h2 class="main-software">TOOLS & LANGUAGES</h2>
-    <!-- PROGRAMMING -->
-    <article class="software-block">
-      <h3 class="software-title">PROGRAMMING</h3>
-      <div class="loop-container">
-        <ul class="loop-track" id="programming-track">
-          <img src="images/programming/vs.png" alt="VS Code">
-          <img src="images/programming/git.png" alt="Git">
-          <img src="images/programming/html.png" alt="HTML">
-          <img src="images/programming/css.png" alt="CSS">
-          <img src="images/programming/js.png" alt="JavaScript">
-          <img src="images/programming/react.png" alt="React">
-          <img src="images/programming/java.png" alt="JAVA">
-          <img src="images/programming/python.png" alt="Python">
-          <img src="images/programming/php.png" alt="PHP">
-          <img src="images/programming/mysql.png" alt="MySql">
-          <img src="images/programming/react.png" alt="React">
-          <img src="images/programming/packet.png" alt="Packet Tracer">
-          <img src="images/programming/vs.png" alt="VS Code">
-          <img src="images/programming/git.png" alt="Git">
-          <img src="images/programming/react.png" alt="React">
-          <img src="images/programming/html.png" alt="HTML">
-          <img src="images/programming/css.png" alt="CSS">
-          <img src="images/programming/js.png" alt="JavaScript">
-          <img src="images/programming/java.png" alt="JAVA">
-          <img src="images/programming/python.png" alt="Python">
-          <img src="images/programming/php.png" alt="PHP">
-          <img src="images/programming/mysql.png" alt="MySql">
-          <img src="images/programming/react.png" alt="React">
-          <img src="images/programming/packet.png" alt="Packet Tracer">
-        </ul>
-      </div>
-    </article>
-    <article class="software-block">
-      <h3 class="software-title">DESIGN</h3>
-      <div class="loop-container">
-        <ul class="loop-track" id="design-track">
-          <img src="images/designing/figma.png" alt="Figma">
-          <img src="images/designing/ai.png" alt="Illustrator">
-          <img src="images/designing/ps.png" alt="Photoshop">
-          <img src="images/designing/affinity.png" alt="Affinity">
-          <img src="images/designing/figma.png" alt="Figma">
-          <img src="images/designing/ai.png" alt="Illustrator">
-          <img src="images/designing/ps.png" alt="Photoshop">
-          <img src="images/designing/affinity.png" alt="Affinity">
-          <img src="images/designing/figma.png" alt="Figma">
-          <img src="images/designing/ai.png" alt="Illustrator">
-          <img src="images/designing/ps.png" alt="Photoshop">
-          <img src="images/designing/affinity.png" alt="Affinity">
-          <img src="images/designing/figma.png" alt="Figma">
-          <img src="images/designing/ai.png" alt="Illustrator">
-          <img src="images/designing/ps.png" alt="Photoshop">
-          <img src="images/designing/affinity.png" alt="Affinity">
-          <img src="images/designing/figma.png" alt="Figma">
-          <img src="images/designing/ai.png" alt="Illustrator">
-          <img src="images/designing/ps.png" alt="Photoshop">
-          <img src="images/designing/affinity.png" alt="Affinity">
-          <img src="images/designing/figma.png" alt="Figma">
-        </ul>
-      </div>
-    </article>
-  </section>
-
-  <!-- Projects -->
-  <section id="projects" class="project reveal">
-    <h3 class="project-title">PROGRAMMING PROJECTS</h3>
-    <div class="project-section">
-
-      <!-- AutoHack 2.0 Winner -->
-      <div class="project-card">
-        <img src="images/Honda.webp" alt="Honda EQM – AutoHack 2.0">
-        <div class="project-description">
-          <h3>HONDA EQM &nbsp;</h3>
-          <p>
-            <strong>2nd Place — AutoHack 2.0 @ Honda of Canada Mfg., Alliston ON.</strong>
-            A predictive equipment failure monitoring system built in 24 hours by Team Ctrl Alt Elite.
-            Firmware written in <span class="key-software">C++ / Arduino</span> reads real-time machine health
-            data from <span class="key-software">DS18B20</span> temperature and
-            <span class="key-software">MPU-6050</span> vibration sensors. Anomalies are detected with a
-            <span class="key-software">scikit-learn</span> model and surfaced as natural-language alerts via
-            <span class="key-software">Llama 3.3-70b</span> through the <span class="key-software">Groq API</span>.
-            Data is persisted in <span class="key-software">PostgreSQL</span> and visualised on a live dashboard
-             reducing unplanned downtime on the production floor.
-          </p>
-                    <a href="https://demo-hackathon.vercel.app" target="_blank" class="project-link">VIEW PROJECT</a>
-
-        </div>
-      </div>
-
-      <div class="project-card">
-        <img src="images/poster/raym-poster.jpg" alt="RAYM Sneaker Store">
-        <div class="project-description">
-          <h3>RAYM SNEAKER</h3>
-          <p>A fullstack web project created for a school assignment, starting with a complete UI/UX design in <span>Figma</span>. The site was developed using semantic <span class="key-software">HTML</span>, modern <span class="key-software">CSS</span>, and interactive <span class="key-software">JavaScript</span>. Backend functionality was implemented with <span class="key-software">PHP</span>, including form handling and dynamic content. Data was stored and managed using a <span class="key-software">MySQL</span> database, demonstrating CRUD operations and structured data flow across the application.</p>
-          <a href="https://raym-project.onrender.com/" target="_blank" class="project-link">VIEW PROJECT</a>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <img src="images/poster/casio-poster.jpg" alt="Casio Watch">
-        <div class="project-description">
-          <h3>CASIO WATCH</h3>
-          <p>A frontend web project developed using <span class="key-software">HTML</span>, <span class="key-software">CSS</span>, and <span class="key-software">JavaScript</span>, focusing on clean layout structure, responsive design, and interactive UI elements. All visual assets including graphics, product images, and layout elements were created and refined in <span class="key-software">Photoshop</span> to maintain a polished and cohesive aesthetic.</p>
-          <a href="https://tyyy09.github.io/Casio-Micro-Project/" target="_blank" class="project-link">VIEW PROJECT</a>
-        </div>
-      </div>
-
-      <h3 class="project-title">DESIGNING PROJECTS</h3>
-
-      <div class="project-card">
-        <img src="images/poster/design project.jpg" alt="Branding Design">
-        <div class="project-description">
-          <h3>BRANDING DESIGN</h3>
-          <p>A complete branding and visual identity project for OKI MOCHI and Daylight Donuts, created using <span class="key-software">Adobe Creative Suite</span> and <span class="key-software">Affinity</span>. OKI MOCHI features a soft, modern identity inspired by Japanese desserts, highlighting mochi donuts, milk tea, and matcha. Daylight Donuts carries a bright, character‑driven style that showcases its donuts, pastries, and bubble tea. The work includes logo development, promotional materials, and cohesive visual systems tailored to each shop's unique personality.</p>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <img src="images/poster/design project 1.jpg" alt="Social Media Design">
-        <div class="project-description">
-          <h3>SOCIAL MEDIA DESIGN</h3>
-          <p>A Social Media Design project crafted using <span class="key-software">Photoshop</span> and <span class="key-software">Illustrator</span>, blending bold typography, cultural storytelling, and product-focused visuals. Each panel highlights a distinct flavor experience: Canadian poutine, traditional Japanese sushi, and energizing coffee. The layout balances educational snippets with punchy calls to action, making it ideal for engaging scroll-stopping content across platforms.</p>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section id="contact" class="section reveal">
-    <div class="container narrow">
-      <h2 class="section-title">LET'S WORK TOGETHER.</h2>
-      <div class="socials">
-        <a class="social" href="https://www.facebook.com/te.ichty/" target="_blank">FACEBOOK</a>
-        <a class="social" href="https://www.instagram.com/ichtyyy/" target="_blank">INSTAGRAM</a>
-        <a class="social" href="https://www.linkedin.com/in/ichty-te-14b823261/" target="_blank">LINKIN</a>
-        <a class="social" href="https://github.com/Tyyy09" target="_blank">GITHUB</a>
-      </div>
-      <div class="contact-info">
-        <a class="contact-item" href="mailto:ichty086@email.com">ichty086@email.com</a>
-        <a class="contact-item" href="tel:7057701303">+1 (705) 770 1303</a>
+      <div class="hero-scroll" aria-hidden="true">
+        <span class="scroll-line"></span>
+        <span class="scroll-label">Scroll</span>
       </div>
     </div>
   </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="about-section" data-counter>
+    <div class="container">
+      <div class="about-grid">
+
+        <div class="about-img-col">
+          <div class="about-photo-wrap">
+            <img src="./images/profile.jpg" alt="Ichty Te" class="about-photo" data-parallax="0.08" />
+          </div>
+        </div>
+
+        <div class="about-text-col section-reveal">
+          <p class="label">About</p>
+          <h2 class="about-heading">I build things that<br>work well and look right.</h2>
+          <div class="about-body">
+            <p>I'm Ichty Te, a Computer Programming student with a dual focus on software engineering and design. I don't just write code or create visuals. I think about the whole product: how it functions, how it feels, and why it matters.</p>
+            <p>From firmware and machine learning at a Honda hackathon to brand identity and UI, I work across the full stack of building digital products. I care about the details that most skip: spacing, hierarchy, performance, and the small interactions that make something feel finished.</p>
+          </div>
+          <div class="about-stats">
+            <div class="stat">
+              <div class="stat-num-row">
+                <span class="stat-num" data-target="6">0</span>
+              </div>
+              <span class="stat-label">Projects shipped</span>
+            </div>
+            <div class="stat">
+              <div class="stat-num-row">
+                <span class="stat-num" data-target="2">0</span><span class="stat-suffix">+</span>
+              </div>
+              <span class="stat-label">Years building</span>
+            </div>
+            <div class="stat">
+              <div class="stat-num-row">
+                <span class="stat-num" data-target="2">0</span>
+              </div>
+              <span class="stat-label">Core disciplines</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section id="skills" class="skills-section">
+    <div class="skills-header container section-reveal">
+      <p class="label">Tools &amp; Languages</p>
+    </div>
+    <div class="marquee-block">
+      <p class="marquee-cat">Programming</p>
+      <div class="marquee-outer">
+        <div class="marquee-track" id="prog-track"></div>
+      </div>
+    </div>
+    <div class="marquee-block">
+      <p class="marquee-cat">Design</p>
+      <div class="marquee-outer">
+        <div class="marquee-track marquee-rev" id="design-track"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="projects-section">
+    <div class="container">
+
+      <header class="section-header section-reveal">
+        <p class="label">Selected Work</p>
+        <h2 class="section-title">Things I've built.</h2>
+      </header>
+
+      <div class="projects-list">
+
+        <!-- 01 Honda EQM -->
+        <article class="project-item section-reveal">
+          <div class="project-img-wrap">
+            <img src="images/Honda.webp" alt="Honda EQM predictive monitoring dashboard" class="project-img" loading="lazy" data-parallax="0.06" />
+            <span class="project-award">2nd Place · AutoHack 2.0</span>
+          </div>
+          <div class="project-info">
+            <div class="project-top">
+              <span class="project-num">01</span>
+              <ul class="tag-list" role="list">
+                <li class="tag">C++ / Arduino</li>
+                <li class="tag">scikit-learn</li>
+                <li class="tag">Llama 3.3-70b</li>
+                <li class="tag">Groq API</li>
+                <li class="tag">PostgreSQL</li>
+              </ul>
+            </div>
+            <h3 class="project-name">Honda EQM</h3>
+            <p class="project-desc">As UX Lead on Team Ctrl Alt Elite, I helped build a predictive equipment failure monitoring system in 24 hours at Honda of Canada Mfg., Alliston ON. Firmware reads real-time machine health from DS18B20 temperature and MPU-6050 vibration sensors. Anomalies are detected with a scikit-learn model and surfaced as natural-language alerts via Llama 3.3-70b, reducing unplanned downtime on the production floor.</p>
+            <a href="https://demo-hackathon.vercel.app" target="_blank" rel="noopener noreferrer" class="project-link">
+              View Project <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- 02 KromTrip -->
+        <article class="project-item project-item--rev section-reveal">
+          <div class="project-img-wrap">
+            <img src="images/poster/kromtrip.svg" alt="KromTrip travel planner" class="project-img" loading="lazy" data-parallax="0.06" />
+          </div>
+          <div class="project-info">
+            <div class="project-top">
+              <span class="project-num">02</span>
+              <ul class="tag-list" role="list">
+                <li class="tag">React</li>
+                <li class="tag">Vite</li>
+                <li class="tag">JavaScript</li>
+                <li class="tag">CSS</li>
+                <li class="tag">localStorage</li>
+              </ul>
+            </div>
+            <h3 class="project-name">KromTrip</h3>
+            <p class="project-desc">A group travel management app built in React and Vite, where users sign in and organize trips together in one place. Trip data persists in the browser through localStorage, wrapped in a clean, focused planning flow from sign in to itinerary.</p>
+            <a href="https://krom-trip.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link">
+              View Project <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- 03 VERDE Energy Bowl Builder -->
+        <article class="project-item section-reveal">
+          <div class="project-img-wrap">
+            <img src="images/poster/energybowl.png" alt="VERDE custom energy bowl builder" class="project-img" loading="lazy" data-parallax="0.06" />
+          </div>
+          <div class="project-info">
+            <div class="project-top">
+              <span class="project-num">03</span>
+              <ul class="tag-list" role="list">
+                <li class="tag">HTML</li>
+                <li class="tag">CSS</li>
+                <li class="tag">JavaScript</li>
+              </ul>
+            </div>
+            <h3 class="project-name">VERDE</h3>
+            <p class="project-desc">A custom energy bowl builder where users compose an order step by step: base, fruits, toppings, protein, and size. Built in vanilla JavaScript with real-time price updates, form validation, and locally saved order history for a guided, polished ordering flow.</p>
+            <a href="https://energy-bowl-builder.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link">
+              View Project <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- 04 NASA Space Explorer -->
+        <article class="project-item project-item--rev section-reveal">
+          <div class="project-img-wrap">
+            <img src="images/poster/nasa-apod.png" alt="NASA Space Explorer" class="project-img" loading="lazy" data-parallax="0.06" />
+          </div>
+          <div class="project-info">
+            <div class="project-top">
+              <span class="project-num">04</span>
+              <ul class="tag-list" role="list">
+                <li class="tag">JavaScript</li>
+                <li class="tag">NASA API</li>
+                <li class="tag">HTML</li>
+                <li class="tag">CSS</li>
+              </ul>
+            </div>
+            <h3 class="project-name">NASA Space Explorer</h3>
+            <p class="project-desc">A space imagery explorer built in vanilla JavaScript against two NASA APIs. Browse the Astronomy Picture of the Day back to 1995, or search across 140,000+ images in NASA's media library. Dependency free, with keyboard support and accessible screen reader announcements.</p>
+            <a href="https://nasa-apod-12re.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link">
+              View Project <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DESIGN WORK -->
+  <section id="design" class="design-section">
+    <div class="container">
+      <header class="section-header section-reveal">
+        <p class="label">Design Work</p>
+        <h2 class="section-title">Visual &amp; brand projects.</h2>
+      </header>
+      <div class="design-grid">
+        <article class="design-card section-reveal">
+          <div class="design-img-wrap">
+            <img src="images/poster/branding-poster.jpg" alt="Branding for OKI MOCHI and Daylight Donuts" class="design-img" loading="lazy" />
+          </div>
+          <div class="design-card-body">
+            <h3 class="design-card-name">Branding Design</h3>
+            <p class="design-card-desc">Complete brand identity for OKI MOCHI and Daylight Donuts, spanning logos, promotional materials, and cohesive visual systems tailored to each shop's unique personality.</p>
+            <ul class="tag-list" role="list">
+              <li class="tag">Illustrator</li>
+              <li class="tag">Photoshop</li>
+              <li class="tag">Affinity</li>
+            </ul>
+          </div>
+        </article>
+        <article class="design-card section-reveal">
+          <div class="design-img-wrap">
+            <img src="images/poster/social-poster.jpg" alt="Social media design panels" class="design-img" loading="lazy" />
+          </div>
+          <div class="design-card-body">
+            <h3 class="design-card-name">Social Media Design</h3>
+            <p class="design-card-desc">Bold typography, cultural storytelling, and product-focused visuals for social platforms, featuring Canadian poutine, Japanese sushi, and coffee content panels.</p>
+            <ul class="tag-list" role="list">
+              <li class="tag">Photoshop</li>
+              <li class="tag">Illustrator</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" class="education-section">
+    <div class="container">
+      <header class="section-header section-reveal">
+        <p class="label">Education</p>
+      </header>
+      <div class="edu-item section-reveal">
+        <div class="edu-left">
+          <span class="edu-year">May 2025 to Dec 2026 (Expected)</span>
+        </div>
+        <div class="edu-right">
+          <h3 class="edu-program">Diploma in Computer Programming &amp; Co-op</h3>
+          <p class="edu-school">Georgian College · Barrie, Ontario, Canada · GPA 3.3 / 4.0</p>
+          <p class="edu-detail">Coursework in object-oriented programming, web development, data structures and algorithms, and networking. Building full-stack skills across Java, web technologies, and SQL, with a personal focus on bridging clean engineering and thoughtful UI/UX.</p>
+        </div>
+      </div>
+      <div class="edu-item section-reveal">
+        <div class="edu-left">
+          <span class="edu-year">Jan 2023 to Sep 2024</span>
+        </div>
+        <div class="edu-right">
+          <h3 class="edu-program">Bachelor of Architectural Design</h3>
+          <p class="edu-school">SETEC Institute · Phnom Penh, Cambodia · GPA 3.4 / 4.0</p>
+          <p class="edu-detail">Design-focused degree covering 2D and 3D modelling, visual design, and UX/UI design. The foundation of my eye for layout, hierarchy, and spatial composition that now carries into digital product work.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact-section">
+    <div class="container">
+      <div class="contact-inner section-reveal">
+        <p class="label">Contact</p>
+        <h2 class="contact-heading">Let's work<br>together.</h2>
+        <p class="contact-sub">Open to internships, freelance projects, and full-time roles.<br>I respond within 24 hours.</p>
+        <a href="mailto:ichty086@gmail.com" class="contact-email">ichty086@gmail.com</a>
+        <nav class="contact-links" aria-label="Social links">
+          <a href="https://www.linkedin.com/in/ichty-te-14b823261/" target="_blank" rel="noopener noreferrer" class="social-link">LinkedIn</a>
+          <span class="social-sep" aria-hidden="true">·</span>
+          <a href="https://github.com/Tyyy09" target="_blank" rel="noopener noreferrer" class="social-link">GitHub</a>
+          <span class="social-sep" aria-hidden="true">·</span>
+          <a href="tel:+17057701303" class="social-link">+1 (705) 770-1303</a>
+        </nav>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer class="site-footer">
-  <div class="footer-inner">
-    <p class="copy">&copy; <span id="year"></span> ICHTY TE. ALL RIGHTS RESERVED.</p>
-    <p class="design">DESIGNED & DEVELOPED BY <span class="name">ICHTY TE</span></p>
+  <div class="container footer-inner">
+    <p class="footer-copy">&copy; <span id="year"></span> Ichty Te. All rights reserved.</p>
+    <p class="footer-credit">Designed &amp; developed by <span>Ichty Te</span></p>
   </div>
 </footer>
 
 <script src="script.js"></script>
-
 </body>
 </html>
