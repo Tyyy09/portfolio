@@ -105,11 +105,20 @@ if (FINE_POINTER && !REDUCED) {
   }
   ringLoop();
 
-  // Grow on interactive elements
-  const interactive = document.querySelectorAll('a, button, .project-img-wrap, .design-card');
-  interactive.forEach(el => {
+  // Grow on generic interactive elements
+  document.querySelectorAll('a, button').forEach(el => {
     el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
     el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+
+  // 'View' label on project + design cards
+  const cursorLabel = document.getElementById('cursor-label');
+  document.querySelectorAll('.project-img-wrap, .design-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      if (cursorLabel) cursorLabel.textContent = 'View';
+      document.body.classList.add('cursor-view');
+    });
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-view'));
   });
 
   document.addEventListener('mouseleave', () => document.body.classList.remove('cursor-ready'));
@@ -308,6 +317,147 @@ if (!REDUCED) {
     skewLoop();
   }
 }
+
+/* ── SCROLL PROGRESS + SCROLL-SPY NAV ─────────────────────── */
+(function () {
+  const progress = document.getElementById('scroll-progress');
+  const navLinkEls = [...document.querySelectorAll('#nav-links a')];
+  const sections = navLinkEls
+    .map(a => ({ a, el: document.querySelector(a.getAttribute('href')) }))
+    .filter(s => s.el);
+
+  let ticking = false;
+  function update() {
+    const sh = document.documentElement.scrollHeight - window.innerHeight;
+    const y = window.scrollY;
+    if (progress) progress.style.transform = `scaleX(${sh > 0 ? Math.min(y / sh, 1) : 0})`;
+
+    const mid = y + window.innerHeight * 0.35;
+    let active = null;
+    sections.forEach(s => {
+      const top = s.el.getBoundingClientRect().top + window.scrollY;
+      if (top <= mid) active = s;
+    });
+    navLinkEls.forEach(a => a.classList.remove('active'));
+    if (active) active.a.classList.add('active');
+    ticking = false;
+  }
+  function onScroll() { if (!ticking) { requestAnimationFrame(update); ticking = true; } }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  if (lenis) lenis.on('scroll', onScroll);
+  update();
+})();
+
+/* ── THEME TOGGLE (dark / light) ──────────────────────────── */
+(function () {
+  const btn = document.getElementById('theme-toggle');
+  if (!btn) return;
+  const root = document.documentElement;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  function apply(theme) {
+    if (theme === 'light') root.setAttribute('data-theme', 'light');
+    else root.removeAttribute('data-theme');
+    if (meta) meta.setAttribute('content', theme === 'light' ? '#f7f6f3' : '#0a0a0a');
+  }
+  btn.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.classList.add('theme-anim');
+    apply(next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    setTimeout(() => root.classList.remove('theme-anim'), 440);
+  });
+})();
+
+/* ── 3D TILT + CURSOR GLARE ───────────────────────────────── */
+if (FINE_POINTER && !REDUCED) {
+  function addTilt(el, max) {
+    el.classList.add('tilt');
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      el.style.transition = 'none';
+      el.style.transform =
+        `perspective(1000px) rotateX(${(-(py - 0.5) * max * 2).toFixed(2)}deg) rotateY(${((px - 0.5) * max * 2).toFixed(2)}deg)`;
+      el.style.setProperty('--gx', (px * 100).toFixed(1) + '%');
+      el.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
+      el.style.setProperty('--go', '1');
+    });
+    el.addEventListener('mouseleave', () => {
+      el.style.transition = '';
+      el.style.transform = '';
+      el.style.setProperty('--go', '0');
+    });
+  }
+  document.querySelectorAll('.project-img-wrap').forEach(el => addTilt(el, 5));
+  document.querySelectorAll('.design-card').forEach(el => addTilt(el, 4));
+}
+
+/* ── CONTACT FORM (validation + Web3Forms submit) ─────────── */
+(function () {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+  const status = form.querySelector('.cf-status');
+  const btn = form.querySelector('.cf-submit');
+
+  function setError(el, msg) {
+    const field = el.closest('.field');
+    if (!field) return;
+    field.classList.toggle('invalid', !!msg);
+    field.querySelector('.field-error').textContent = msg || '';
+  }
+  function validate() {
+    let ok = true;
+    if (!form.name.value.trim()) { setError(form.name, 'Please enter your name'); ok = false; }
+    else setError(form.name, '');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.value.trim())) { setError(form.email, 'Enter a valid email'); ok = false; }
+    else setError(form.email, '');
+    if (form.message.value.trim().length < 10) { setError(form.message, 'Message is a bit short'); ok = false; }
+    else setError(form.message, '');
+    return ok;
+  }
+
+  form.querySelectorAll('input, textarea').forEach(el => {
+    el.addEventListener('input', () => { if (el.name) setError(el, ''); });
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    const key = form.access_key.value;
+    if (!key || key.indexOf('YOUR_') !== -1) {
+      status.className = 'cf-status err';
+      status.textContent = 'Form not configured yet — add your Web3Forms key.';
+      return;
+    }
+
+    btn.disabled = true;
+    status.className = 'cf-status';
+    status.textContent = 'Sending…';
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+      });
+      const data = await res.json();
+      if (data.success) {
+        form.reset();
+        status.className = 'cf-status ok';
+        status.textContent = 'Thanks! Your message has been sent.';
+      } else {
+        status.className = 'cf-status err';
+        status.textContent = 'Something went wrong. Please email me directly.';
+      }
+    } catch (err) {
+      status.className = 'cf-status err';
+      status.textContent = 'Network error. Please email me directly.';
+    }
+    btn.disabled = false;
+  });
+})();
 
 /* ── FOOTER YEAR ──────────────────────────────────────────── */
 document.getElementById('year').textContent = new Date().getFullYear();
