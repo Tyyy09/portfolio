@@ -163,16 +163,15 @@ else window.addEventListener('scroll', () => onScrollHeader(window.scrollY), { p
 /* ── HAMBURGER ────────────────────────────────────────────── */
 const hamburger = document.getElementById('hamburger');
 const navLinks  = document.getElementById('nav-links');
-hamburger.addEventListener('click', () => {
-  const open = navLinks.classList.toggle('open');
+function setMenu(open) {
+  navLinks.classList.toggle('open', open);
   hamburger.classList.toggle('open', open);
   hamburger.setAttribute('aria-expanded', String(open));
-});
-function closeMenu() {
-  navLinks.classList.remove('open');
-  hamburger.classList.remove('open');
-  hamburger.setAttribute('aria-expanded', 'false');
+  document.body.classList.toggle('menu-open', open);
+  if (lenis) { open ? lenis.stop() : lenis.start(); }
 }
+hamburger.addEventListener('click', () => setMenu(!navLinks.classList.contains('open')));
+function closeMenu() { setMenu(false); }
 navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu(); });
 
