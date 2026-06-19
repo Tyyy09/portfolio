@@ -175,6 +175,47 @@ function closeMenu() { setMenu(false); }
 navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu(); });
 
+/* ── HERO: LIVE LOCAL TIME ────────────────────────────────── */
+(function () {
+  const el = document.getElementById('hero-time');
+  if (!el) return;
+  function tick() {
+    try {
+      el.textContent = new Intl.DateTimeFormat('en-GB', {
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
+      }).format(new Date());
+    } catch (e) {
+      el.textContent = new Date().toLocaleTimeString();
+    }
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
+/* ── HERO: ROTATING ROLE WORDS ────────────────────────────── */
+(function () {
+  const rotator = document.getElementById('hero-rotator');
+  if (!rotator || REDUCED) return;
+  const word = rotator.querySelector('.rot-word');
+  if (!word) return;
+  const words = ['web experiences', 'user interfaces', 'brand systems', 'digital products', 'clean code'];
+  let i = 0;
+  function rotate() {
+    word.classList.remove('is-active');
+    word.classList.add('is-out');
+    setTimeout(() => {
+      i = (i + 1) % words.length;
+      word.style.transition = 'none';
+      word.classList.remove('is-out');     // jump to start position (below)
+      word.textContent = words[i];
+      void word.offsetWidth;               // force reflow
+      word.style.transition = '';
+      word.classList.add('is-active');     // slide up into view
+    }, 500);
+  }
+  setInterval(rotate, 2800);
+})();
+
 /* ── WORD-BY-WORD HEADING REVEAL ──────────────────────────── */
 function splitWords(el) {
   const text = el.textContent;
