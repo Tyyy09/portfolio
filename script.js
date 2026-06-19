@@ -78,8 +78,8 @@ if (!REDUCED && typeof Lenis !== 'undefined') {
       const target = document.querySelector(id);
       if (!target) return;
       e.preventDefault();
-      lenis.scrollTo(target, { offset: -10, duration: 1.4 });
-      closeMenu();
+      closeMenu();              // also restarts Lenis (it was stopped while menu open)
+      lenis.scrollTo(target, { offset: -10, duration: 1.2, force: true });
     });
   });
 }
