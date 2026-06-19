@@ -264,7 +264,8 @@ if (!REDUCED) {
 /* ── SCROLL PROGRESS + SCROLL-SPY NAV ─────────────────────── */
 (function () {
   const progress = document.getElementById('scroll-progress');
-  const navLinkEls = [...document.querySelectorAll('#nav-links a')];
+  const navLinkEls = [...document.querySelectorAll('#nav-links a')]
+    .filter(a => (a.getAttribute('href') || '').startsWith('#'));
   const sections = navLinkEls
     .map(a => ({ a, el: document.querySelector(a.getAttribute('href')) }))
     .filter(s => s.el);
