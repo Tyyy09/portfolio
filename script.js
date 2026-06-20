@@ -35,17 +35,43 @@ const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
   tick();
 })();
 
-/* ── HERO NAME: CHARACTER BLUR-IN ─────────────────────────── */
+/* ── HERO NAME: SCRAMBLE / DECODE ─────────────────────────── */
 function animateHeroName() {
   const nameEl = document.querySelector('.hero-name');
   if (!nameEl) return;
-  const raw = nameEl.textContent.trim();
-  nameEl.innerHTML = raw.split('').map((ch, i) => {
-    const delay = i * 38 + 80;
-    const c = ch === ' ' ? '&nbsp;' : ch;
-    return `<span class="char" style="transition-delay:${delay}ms">${c}</span>`;
-  }).join('');
-  requestAnimationFrame(() => requestAnimationFrame(() => nameEl.classList.add('animate')));
+  const finalText = nameEl.textContent.trim();
+  nameEl.textContent = finalText;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÆØ#%&@*/<>';
+  let rafId = null;
+
+  function scramble(duration) {
+    cancelAnimationFrame(rafId);
+    const start = performance.now();
+    const len = finalText.length;
+    function frame(now) {
+      const t = (now - start) / duration;
+      let out = '';
+      for (let i = 0; i < len; i++) {
+        const ch = finalText[i];
+        if (ch === ' ') { out += ' '; continue; }
+        const revealAt = 0.2 + (i / len) * 0.72;   // lock left → right
+        out += (t >= revealAt) ? ch : glyphs[(Math.random() * glyphs.length) | 0];
+      }
+      nameEl.textContent = out;
+      if (t < 1) { rafId = requestAnimationFrame(frame); }
+      else { nameEl.textContent = finalText; }
+    }
+    rafId = requestAnimationFrame(frame);
+  }
+
+  scramble(1500);
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (fine) {
+    nameEl.style.cursor = 'pointer';
+    nameEl.addEventListener('mouseenter', () => scramble(800));
+  }
 }
 
 /* ── LENIS SMOOTH SCROLL ──────────────────────────────────── */
@@ -257,6 +283,13 @@ const revealObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.section-reveal, .reveal-words')
   .forEach(el => revealObserver.observe(el));
+
+// scroll-driven image reveals (revealed when their parent .section-reveal card becomes visible)
+if (!REDUCED) {
+  document.querySelectorAll('.project-img-wrap, .design-img-wrap').forEach(el => {
+    if (el.closest('.section-reveal')) el.classList.add('reveal-img');
+  });
+}
 
 function countUp(el) {
   if (el.dataset.counted) return;
