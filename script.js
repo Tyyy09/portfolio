@@ -477,5 +477,41 @@ if (FINE_POINTER && !REDUCED) {
   });
 })();
 
+/* ── SKILLS KEYCAPS (press a key) ─────────────────────────── */
+(function () {
+  const caps = [...document.querySelectorAll('.keycap')];
+  if (!caps.length) return;
+  const byKey = {};
+  caps.forEach(c => { if (c.dataset.key) byKey[c.dataset.key] = c; });
+
+  function press(cap) {
+    if (!cap) return;
+    cap.classList.add('pressed');
+    clearTimeout(cap._pt);
+    cap._pt = setTimeout(() => cap.classList.remove('pressed'), 170);
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const tag = (document.activeElement || {}).tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    const k = (e.key || '').toLowerCase();
+    if (k.length !== 1) return;
+    press(byKey[k] || caps[(Math.random() * caps.length) | 0]);
+  });
+
+  caps.forEach(c => c.addEventListener('click', () => press(c)));
+
+  // Auto-ripple: keys light up on their own so the board feels alive
+  if (!REDUCED) {
+    let i = 0;
+    const order = caps.map((_, idx) => idx); // sequential ripple
+    setInterval(() => {
+      press(caps[order[i % order.length]]);
+      i++;
+    }, 240);
+  }
+})();
+
 /* ── FOOTER YEAR ──────────────────────────────────────────── */
 document.getElementById('year').textContent = new Date().getFullYear();

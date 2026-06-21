@@ -19,6 +19,14 @@
   --accent-glow: rgba(200, 169, 126, 0.22);
   --accent-border: rgba(200, 169, 126, 0.25);
 
+  /* keyboard deck + keycaps (theme-aware, matches site surfaces) */
+  --deck-face:  linear-gradient(180deg, #161616 0%, #0b0b0b 100%);
+  --deck-drop:  rgba(0, 0, 0, 0.6);
+  --key-face:   linear-gradient(180deg, #1c1c1c 0%, #101010 100%);
+  --key-side:   #050505;
+  --key-drop:   rgba(0, 0, 0, 0.5);
+  --key-hi:     rgba(255, 255, 255, 0.05);
+
   --font:      'Geist', 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'Space Mono', 'Geist Mono', monospace;
 
@@ -147,6 +155,29 @@ html[data-theme="light"] .site-header.scrolled .nav-inner {
 }
 /* Slightly smaller logo when condensed */
 .site-header.scrolled .nav-logo { font-size: var(--t-base); }
+
+/* Desktop: floating glass pill nav (always detached) */
+@media (min-width: 769px) {
+  .nav-inner {
+    margin: var(--s-4) auto 0;
+    max-width: 1080px;
+    height: 58px;
+    padding: 0 var(--s-3) 0 var(--s-6);
+    border-color: var(--border);
+    border-radius: 999px;
+    background: rgba(10, 10, 10, 0.5);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.22);
+  }
+  html[data-theme="light"] .nav-inner {
+    background: rgba(247, 246, 243, 0.55);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.08);
+  }
+  /* active link gets a soft pill instead of just an underline */
+  .nav-link.active { background: var(--accent-dim); border-radius: 999px; }
+  .nav-link.active::before { display: none; }
+}
 .nav-logo {
   font-size: var(--t-lg);
   font-weight: 700;
@@ -490,13 +521,21 @@ body.loaded .hero-foot    { animation: fadeUp 0.6s var(--ease-out) 0.85s forward
 
 /* ── SHARED SECTION ELEMENTS ─────────────────────────────── */
 .label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
   font-size: var(--t-xs);
   font-family: var(--font-mono);
   color: var(--accent);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   margin-bottom: var(--s-5);
-  display: block;
+}
+.label::before {
+  content: "";
+  width: 28px; height: 1px;
+  background: var(--accent);
+  opacity: 0.55;
 }
 .section-header { margin-bottom: var(--s-16); }
 .section-title {
@@ -670,6 +709,106 @@ body.loaded .hero-foot    { animation: fadeUp 0.6s var(--ease-out) 0.85s forward
   width: 18px; height: 18px;
   object-fit: contain;
 }
+
+/* ── KEYCAP KEYBOARD ─────────────────────────────────────── */
+.skills-hint {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  color: var(--text-3);
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+  margin-top: var(--s-4);
+}
+/* skill tiles — flat, matches the site's card language */
+.keyboard-wrap {
+  width: 100%;
+  max-width: 820px;
+  margin: var(--s-16) auto 0;
+}
+.keyboard-deck { display: block; }
+.keycaps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(10px, 1.4vw, 16px);
+}
+.keycap {
+  position: relative;
+  width: clamp(60px, 8.5vw, 86px);
+  height: clamp(60px, 8.5vw, 86px);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease-out), border-color 0.25s ease,
+              background 0.25s ease, box-shadow 0.3s ease;
+}
+.keycap img {
+  width: 44%; height: 44%;
+  object-fit: contain;
+  pointer-events: none;
+  transition: transform 0.3s var(--ease-out);
+}
+.keycap[data-key="b"] img { filter: invert(1) brightness(1.7); }
+.keycap-text {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  letter-spacing: -0.01em;
+  color: var(--text-1);
+  pointer-events: none;
+}
+.keycap:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+  background: var(--surface-raised);
+}
+/* auto-ripple + active highlight, in brand gold */
+.keycap.pressed {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  transform: translateY(-5px);
+  box-shadow: 0 0 0 1px var(--accent-border), 0 8px 26px var(--accent-glow);
+}
+.keycap:hover img,
+.keycap.pressed img { transform: scale(1.14); }
+.keycap:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ── Animated underline on text links (feels alive) ──────── */
+.contact-email,
+.social-link,
+.hero-socials a,
+.edu-school {
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 0% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size 0.4s var(--ease-out), color var(--dur-fast);
+}
+.contact-email:hover,
+.social-link:hover,
+.hero-socials a:hover { background-size: 100% 1px; color: var(--accent); }
+.keycap-tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  background: var(--surface-raised);
+  color: var(--text-1);
+  border: 1px solid var(--border-strong);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 5;
+}
+.keycap:hover .keycap-tip { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* ── PROJECTS ────────────────────────────────────────────── */
 .projects-section {
@@ -1032,25 +1171,22 @@ body.loaded .hero-spotlight { opacity: 1; }
 
 /* ── RESPONSIVE: MOBILE ──────────────────────────────────── */
 @media (max-width: 768px) {
-  /* Keep a simple full-width bar on mobile (no condense pill) */
   .hamburger { display: flex; }
-  .site-header.scrolled .nav-inner {
-    max-width: none;
-    height: 64px;
-    margin-top: 0;
-    padding: 0 var(--container-pad);
-    border-radius: 0;
-    box-shadow: none;
-    border-color: transparent;
-    border-bottom: 1px solid var(--border);
-    background: rgba(10, 10, 10, 0.92);
-    /* No backdrop-filter on mobile: it would trap the fixed overlay menu */
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+  /* Floating pill nav on mobile. NO backdrop-filter — it would trap the
+     fixed overlay menu — so use a more opaque background instead. */
+  .nav-inner {
+    margin: var(--s-3) auto 0;
+    max-width: calc(100% - var(--s-8));
+    height: 54px;
+    padding: 0 var(--s-2) 0 var(--s-5);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: rgba(10, 10, 10, 0.9);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32);
   }
-  html[data-theme="light"] .site-header.scrolled .nav-inner {
-    background: rgba(247, 246, 243, 0.82);
-  }
+  html[data-theme="light"] .nav-inner { background: rgba(247, 246, 243, 0.92); }
+  .site-header.scrolled .nav-inner { background: rgba(10, 10, 10, 0.96); }
+  html[data-theme="light"] .site-header.scrolled .nav-inner { background: rgba(247, 246, 243, 0.96); }
   .site-header.scrolled .nav-logo { font-size: var(--t-lg); }
 
   /* Full-screen overlay menu */
@@ -1141,6 +1277,20 @@ body.loaded .hero-spotlight { opacity: 1; }
 
   /* Footer */
   .footer-inner { flex-direction: column; gap: var(--s-3); text-align: center; }
+
+  /* ── Mobile refinement: compact tags, tighter rhythm ──── */
+  .tag { font-size: 0.72rem; padding: 4px 11px; border-radius: 7px; }
+  .tag-list { gap: 7px; }
+  .section-header { margin-bottom: var(--s-8); }
+  .section-title { letter-spacing: -0.045em; }
+
+  /* skill tiles: tighter, more refined grid */
+  .keycaps { gap: 9px; }
+  .keycap { width: clamp(54px, 16.5vw, 70px); height: clamp(54px, 16.5vw, 70px); border-radius: 12px; }
+
+  /* project cards: punchier number + cleaner rhythm */
+  .project-num { color: var(--accent); }
+  .skills-hint { margin-top: var(--s-3); }
 }
 
 /* ── HERO: small screens ─────────────────────────────────── */
@@ -1172,6 +1322,7 @@ body.loaded .hero-spotlight { opacity: 1; }
   .section-reveal { opacity: 1 !important; transform: none !important; }
   .reveal-img { clip-path: none !important; }
   .design-img-wrap.reveal-img .design-img { transform: none !important; }
+  .keyboard-deck { transform: none !important; }
   .scroll-line::after { animation: none !important; }
   body.loaded .hero-meta,
   body.loaded .hero-kicker,
@@ -1205,7 +1356,17 @@ html[data-theme="light"] {
   --accent-dim:    rgba(143, 107, 56, 0.10);
   --accent-glow:   rgba(143, 107, 56, 0.28);
   --accent-border: rgba(143, 107, 56, 0.35);
+
+  /* keyboard deck + keycaps — light */
+  --deck-face:  linear-gradient(180deg, #e9e6df 0%, #d4cfc4 100%);
+  --deck-drop:  rgba(70, 62, 48, 0.20);
+  --key-face:   linear-gradient(180deg, #ffffff 0%, #ece8e1 100%);
+  --key-side:   #c3bdb0;
+  --key-drop:   rgba(70, 62, 48, 0.16);
+  --key-hi:     rgba(255, 255, 255, 0.9);
 }
+/* GitHub mark stays dark in light mode (don't invert) */
+html[data-theme="light"] .keycap[data-key="b"] img { filter: none; }
 
 /* Smooth, temporary transition while switching themes */
 html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after {
