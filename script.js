@@ -74,6 +74,39 @@ function animateHeroName() {
   }
 }
 
+/* ── PAGE TRANSITION CURTAIN ──────────────────────────────── */
+let ptBusy = false;
+function runPageTransition(target, labelText) {
+  const pt = document.getElementById('page-transition');
+  const label = document.getElementById('page-transition-label');
+  const jump = () => {
+    if (lenis) lenis.scrollTo(target, { immediate: true, force: true });
+    else target.scrollIntoView();
+  };
+  if (!pt || ptBusy) { jump(); return; }
+  ptBusy = true;
+  const EASE = 'cubic-bezier(0.76, 0, 0.24, 1)';
+  if (label) label.textContent = labelText || '';
+
+  // 1) cover — slide up from the bottom
+  pt.style.transition = `transform 0.55s ${EASE}`;
+  pt.style.transform = 'translateY(0)';
+  pt.classList.add('is-cover');
+
+  // 2) once covered, jump to the target, then reveal
+  setTimeout(() => {
+    jump();
+    pt.classList.remove('is-cover');
+    requestAnimationFrame(() => { pt.style.transform = 'translateY(-100%)'; });
+    // 3) reset off-screen (bottom) for next time
+    setTimeout(() => {
+      pt.style.transition = 'none';
+      pt.style.transform = 'translateY(100%)';
+      ptBusy = false;
+    }, 600);
+  }, 600);
+}
+
 /* ── LENIS SMOOTH SCROLL ──────────────────────────────────── */
 let lenis = null;
 let scrollVelocity = 0;
@@ -104,8 +137,13 @@ if (!REDUCED && typeof Lenis !== 'undefined') {
       const target = document.querySelector(id);
       if (!target) return;
       e.preventDefault();
+      const isNav = a.closest('#nav-links') || a.classList.contains('nav-logo');
       closeMenu();              // also restarts Lenis (it was stopped while menu open)
-      lenis.scrollTo(target, { offset: -10, duration: 1.2, force: true });
+      if (isNav && !REDUCED) {
+        runPageTransition(target, a.dataset.label || a.textContent.trim());
+      } else {
+        lenis.scrollTo(target, { offset: -10, duration: 1.2, force: true });
+      }
     });
   });
 }
@@ -272,14 +310,17 @@ if (!REDUCED) {
 /* ── INTERSECTION OBSERVER: reveals + counters + words ────── */
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    entry.target.classList.add('visible');
-    if (entry.target.closest('[data-counter]')) {
-      document.querySelectorAll('.stat-num[data-target]').forEach(countUp);
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      if (entry.target.closest('[data-counter]')) {
+        document.querySelectorAll('.stat-num[data-target]').forEach(countUp);
+      }
+    } else if (entry.intersectionRatio === 0) {
+      // fully out of view → reset so it replays when scrolled back into view
+      entry.target.classList.remove('visible');
     }
-    revealObserver.unobserve(entry.target);
   });
-}, { threshold: 0.12 });
+}, { threshold: [0, 0.15] });
 
 document.querySelectorAll('.section-reveal, .reveal-words')
   .forEach(el => revealObserver.observe(el));
