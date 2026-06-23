@@ -12,26 +12,48 @@ const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
 (function () {
   const loader = document.getElementById('loader');
   const numEl  = document.getElementById('loader-number');
+  const barEl  = document.getElementById('loader-bar-fill');
+  const roles  = Array.from(document.querySelectorAll('.loader-role'));
   let p = 0;
 
+  // Cycle the role words while loading
+  let roleIdx = 0;
+  const roleTimer = roles.length > 1 && !REDUCED ? setInterval(() => {
+    const cur = roles[roleIdx];
+    roleIdx = (roleIdx + 1) % roles.length;
+    const next = roles[roleIdx];
+    cur.classList.remove('is-active');
+    cur.classList.add('is-out');
+    next.classList.remove('is-out');
+    next.classList.add('is-active');
+    setTimeout(() => cur.classList.remove('is-out'), 500);
+  }, 1200) : null;
+
+  function render() {
+    numEl.textContent = p;
+    if (barEl) barEl.style.width = p + '%';
+  }
   function tick() {
-    p += Math.floor(Math.random() * 16) + 4;
+    p += Math.floor(Math.random() * 6) + 2;
     if (p >= 100) {
       p = 100;
-      numEl.textContent = '100';
-      setTimeout(finish, 260);
+      render();
+      setTimeout(finish, 420);
     } else {
-      numEl.textContent = p;
-      setTimeout(tick, Math.random() * 100 + 30);
+      render();
+      setTimeout(tick, Math.random() * 130 + 130);
     }
   }
   function finish() {
-    loader.classList.add('hide');
+    if (roleTimer) clearInterval(roleTimer);
+    loader.classList.add('hide');         // fades content + slides panels up
     setTimeout(() => {
       document.body.classList.add('loaded');
       animateHeroName();
-    }, REDUCED ? 0 : 820);
+    }, REDUCED ? 0 : 700);
+    setTimeout(() => loader.classList.add('gone'), REDUCED ? 0 : 1100);
   }
+  render();
   tick();
 })();
 

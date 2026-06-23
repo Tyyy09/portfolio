@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();</script>
+  <title>KromTrip Case Study · Ichty Te</title>
+  <meta name="description" content="KromTrip, a real-time group travel management app. A case study by Ichty Te: architecture, features, and design." />
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Ctext x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter,Arial,sans-serif' font-size='30' font-weight='700' fill='%23ededed'%3EIT%3C/text%3E%3Ccircle cx='48' cy='44' r='3' fill='%23c8a97e'/%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=JetBrains+Mono:wght@400;500&family=Space+Mono:wght@400;700&family=Inter:wght@300..600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <style>
+    /* ── Case-study page styles (reuses portfolio tokens) ── */
+    .cs-page { padding-top: 64px; }
+
+    /* Top bar */
+    .cs-bar {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px; padding: 0 var(--container-pad);
+      background: rgba(10,10,10,0.6); backdrop-filter: blur(14px) saturate(160%);
+      border-bottom: 1px solid var(--border);
+    }
+    html[data-theme="light"] .cs-bar { background: rgba(247,246,243,0.6); }
+    .cs-back {
+      display: inline-flex; align-items: center; gap: var(--s-2);
+      font-family: var(--font-mono); font-size: var(--t-xs); text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-2); text-decoration: none;
+      transition: color var(--dur-fast);
+    }
+    .cs-back:hover { color: var(--accent); }
+
+    /* Section rhythm */
+    .cs-section { padding: clamp(56px, 9vw, 110px) 0; border-top: 1px solid var(--border); }
+    .cs-section:first-of-type { border-top: none; }
+    .cs-lead { max-width: 760px; }
+    .cs-lead p { font-size: var(--t-lg); line-height: 1.7; color: var(--text-2); margin-top: var(--s-5); }
+    .cs-lead p strong { color: var(--text-1); font-weight: 600; }
+
+    /* Hero */
+    .cs-hero { padding: clamp(80px, 14vw, 160px) 0 clamp(40px, 6vw, 72px); }
+    .cs-title { font-size: clamp(3rem, 11vw, 8rem); font-weight: 700; letter-spacing: -0.05em; line-height: 0.92; margin: var(--s-4) 0 var(--s-3); }
+    .cs-sub { font-size: var(--t-xl); color: var(--text-2); font-weight: 300; }
+    .cs-meta { display: flex; flex-wrap: wrap; gap: clamp(24px, 4vw, 56px); margin-top: var(--s-12); }
+    .cs-meta-item .k { font-family: var(--font-mono); font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-bottom: var(--s-2); }
+    .cs-meta-item .v { font-size: var(--t-base); color: var(--text-1); font-weight: 500; }
+    .cs-meta-item .v a { color: var(--accent); text-decoration: none; }
+    .cs-meta-item .v a:hover { text-decoration: underline; }
+
+    /* Screenshot frames (placeholders until images are dropped in) */
+    .cs-fig { margin: 0; }
+    .cs-shot {
+      position: relative; aspect-ratio: 16 / 10; overflow: hidden;
+      border: 1px solid var(--border); border-radius: 16px; background: var(--surface);
+    }
+    .cs-shot.tall { aspect-ratio: 4 / 3; }
+    .cs-shot .ph {
+      position: absolute; inset: 0; display: grid; place-content: center; gap: 10px;
+      text-align: center; color: var(--text-3);
+      font-family: var(--font-mono); font-size: var(--t-xs); letter-spacing: 0.08em; text-transform: uppercase;
+      background: repeating-linear-gradient(45deg, transparent 0 12px, rgba(200,169,126,0.04) 12px 24px);
+    }
+    .cs-shot .ph span { font-size: 1.6rem; opacity: 0.5; }
+    .cs-shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+    .cs-fig figcaption { margin-top: var(--s-3); font-family: var(--font-mono); font-size: var(--t-xs); color: var(--text-3); }
+    .cs-hero-shot { margin-top: clamp(40px, 6vw, 72px); }
+
+    /* Highlight cards */
+    .cs-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-5); margin-top: var(--s-12); }
+    .cs-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: var(--s-8); transition: border-color var(--dur-med), transform var(--dur-med); }
+    .cs-card:hover { border-color: var(--border-strong); transform: translateY(-3px); }
+    .cs-card .n { font-family: var(--font-mono); font-size: var(--t-xs); color: var(--accent); }
+    .cs-card h3 { font-size: var(--t-lg); font-weight: 600; margin: var(--s-3) 0 var(--s-3); letter-spacing: -0.01em; }
+    .cs-card p { font-size: var(--t-sm); line-height: 1.7; color: var(--text-2); }
+
+    /* Feature list */
+    .cs-features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: var(--s-12); }
+    .cs-feat { background: var(--bg); padding: var(--s-6) var(--s-7); }
+    .cs-feat h4 { font-size: var(--t-base); font-weight: 600; display: flex; align-items: center; gap: var(--s-3); }
+    .cs-feat h4::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .cs-feat p { font-size: var(--t-sm); color: var(--text-2); line-height: 1.6; margin-top: var(--s-2); padding-left: 18px; }
+
+    /* Gallery */
+    .cs-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s-6); margin-top: var(--s-12); }
+
+    /* CTA */
+    .cs-cta { text-align: center; }
+    .cs-cta .cs-title { font-size: clamp(2.5rem, 7vw, 5rem); }
+    .cs-ctas { display: flex; gap: var(--s-4); justify-content: center; flex-wrap: wrap; margin-top: var(--s-8); }
+
+    /* Reveal */
+    .cs-reveal { opacity: 0; transform: translateY(40px); filter: blur(5px); transition: opacity .8s var(--ease-out), transform .9s var(--ease-out), filter .8s var(--ease-out); }
+    .cs-reveal.visible { opacity: 1; transform: none; filter: blur(0); }
+    @media (prefers-reduced-motion: reduce) { .cs-reveal { opacity:1!important; transform:none!important; filter:none!important; } }
+
+    @media (max-width: 820px) {
+      .cs-cards { grid-template-columns: 1fr; }
+      .cs-features { grid-template-columns: 1fr; }
+      .cs-gallery { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="cs-page">
+
+  <header class="cs-bar">
+    <a class="nav-logo" href="index.html">IT.</a>
+    <a class="cs-back" href="index.html#projects">← Back to work</a>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme" title="Toggle theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="cs-hero">
+      <div class="container cs-reveal">
+        <p class="label">Case Study</p>
+        <h1 class="cs-title">KromTrip</h1>
+        <p class="cs-sub">A real-time group travel management app.</p>
+
+        <div class="cs-meta">
+          <div class="cs-meta-item"><div class="k">Role</div><div class="v">Design &amp; build, end to end</div></div>
+          <div class="cs-meta-item"><div class="k">Type</div><div class="v">Personal product</div></div>
+          <div class="cs-meta-item"><div class="k">Stack</div><div class="v">React 19 · Firebase · Vite</div></div>
+          <div class="cs-meta-item"><div class="k">Live</div><div class="v"><a href="https://krom-trip.vercel.app" target="_blank" rel="noopener noreferrer">krom-trip.vercel.app ↗</a></div></div>
+        </div>
+      </div>
+
+      <div class="container cs-hero-shot cs-reveal">
+        <figure class="cs-fig">
+          <div class="cs-shot">
+            <div class="ph"><span>◧</span>Dashboard screenshot<br>images/kromtrip/dashboard.png</div>
+            <img src="images/kromtrip/dashboard.png" alt="KromTrip dashboard" loading="lazy" onerror="this.remove()">
+          </div>
+          <figcaption>The dashboard: live trip stats, trip cards, and a real-time activity feed.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- OVERVIEW -->
+    <section class="cs-section">
+      <div class="container">
+        <div class="cs-lead cs-reveal">
+          <p class="label">Overview</p>
+          <p>
+            Coordinating a group trip is chaos. The itinerary lives in one chat, expenses in a
+            spreadsheet, and who-paid-what in everyone's head. <strong>KromTrip pulls it all into one
+            shared, real-time workspace</strong> where every member sees the same live plan, budget,
+            and balances. Build an itinerary together, split expenses with automatic settle-up, chat,
+            and keep documents and packing lists in sync, all updating instantly across the group.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section class="cs-section">
+      <div class="container cs-reveal">
+        <p class="label">Built with</p>
+        <ul class="tag-list" role="list" style="margin-top: var(--s-6); max-width: 720px;">
+          <li class="tag">React 19</li>
+          <li class="tag">Vite</li>
+          <li class="tag">Firebase Auth</li>
+          <li class="tag">Cloud Firestore</li>
+          <li class="tag">React Router</li>
+          <li class="tag">Context API</li>
+          <li class="tag">EmailJS</li>
+          <li class="tag">JavaScript</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section class="cs-section">
+      <div class="container">
+        <header class="cs-reveal">
+          <p class="label">Architecture</p>
+          <h2 class="section-title">Engineered to scale.</h2>
+        </header>
+        <div class="cs-cards">
+          <article class="cs-card cs-reveal">
+            <div class="n">01</div>
+            <h3>Real-time everything</h3>
+            <p>Firestore <code>onSnapshot</code> listeners stream every change live to every member, with no refresh. A new expense, a chat message, an itinerary edit: it appears for everyone instantly.</p>
+          </article>
+          <article class="cs-card cs-reveal">
+            <div class="n">02</div>
+            <h3>Per-trip subcollection model</h3>
+            <p>Each trip owns its own <code>itinerary / members / expenses / chat / packing / notes / documents / activity</code> collections, so data stays scoped, secure, and scales cleanly.</p>
+          </article>
+          <article class="cs-card cs-reveal">
+            <div class="n">03</div>
+            <h3>Multi-currency money layer</h3>
+            <p>Expense splitting with automatic settle-up and live currency conversion, so balances are correct whether the group spends in USD, EUR, or THB.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="cs-section">
+      <div class="container">
+        <header class="cs-reveal">
+          <p class="label">Features</p>
+          <h2 class="section-title">One hub, eight modules.</h2>
+        </header>
+        <div class="cs-features">
+          <div class="cs-feat cs-reveal"><h4>Dashboard</h4><p>Live stats, trip cards, and an activity feed.</p></div>
+          <div class="cs-feat cs-reveal"><h4>Itinerary</h4><p>Day-by-day planning with typed activities.</p></div>
+          <div class="cs-feat cs-reveal"><h4>Expenses</h4><p>Budget tracking, splitting, and settle-up.</p></div>
+          <div class="cs-feat cs-reveal"><h4>Members</h4><p>Invite by email, roles, live per-person balances.</p></div>
+          <div class="cs-feat cs-reveal"><h4>Group Chat</h4><p>Real-time messaging per trip.</p></div>
+          <div class="cs-feat cs-reveal"><h4>Packing &amp; Notes</h4><p>Shared lists and notes the whole group edits.</p></div>
+          <div class="cs-feat cs-reveal"><h4>Documents</h4><p>Keep tickets and bookings in one place.</p></div>
+          <div class="cs-feat cs-reveal"><h4>Explore</h4><p>Discover destinations to add to the plan.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="cs-section">
+      <div class="container">
+        <header class="cs-reveal">
+          <p class="label">Screens</p>
+          <h2 class="section-title">A look inside.</h2>
+        </header>
+        <div class="cs-gallery">
+          <figure class="cs-fig cs-reveal">
+            <div class="cs-shot tall">
+              <div class="ph"><span>◧</span>Itinerary<br>images/kromtrip/itinerary.png</div>
+              <img src="images/kromtrip/itinerary.png" alt="KromTrip itinerary" loading="lazy" onerror="this.remove()">
+            </div>
+            <figcaption>Itinerary: day-by-day planning with typed activities.</figcaption>
+          </figure>
+          <figure class="cs-fig cs-reveal">
+            <div class="cs-shot tall">
+              <div class="ph"><span>◧</span>Expenses<br>images/kromtrip/expenses.png</div>
+              <img src="images/kromtrip/expenses.png" alt="KromTrip expenses" loading="lazy" onerror="this.remove()">
+            </div>
+            <figcaption>Expenses: split costs and auto settle-up.</figcaption>
+          </figure>
+          <figure class="cs-fig cs-reveal">
+            <div class="cs-shot tall">
+              <div class="ph"><span>◧</span>Members<br>images/kromtrip/members.png</div>
+              <img src="images/kromtrip/members.png" alt="KromTrip members" loading="lazy" onerror="this.remove()">
+            </div>
+            <figcaption>Members: live balances showing who owes and who's owed.</figcaption>
+          </figure>
+          <figure class="cs-fig cs-reveal">
+            <div class="cs-shot tall">
+              <div class="ph"><span>◧</span>Chat<br>images/kromtrip/chat.png</div>
+              <img src="images/kromtrip/chat.png" alt="KromTrip chat" loading="lazy" onerror="this.remove()">
+            </div>
+            <figcaption>Group chat: real-time messaging per trip.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- REFLECTION -->
+    <section class="cs-section">
+      <div class="container">
+        <div class="cs-lead cs-reveal">
+          <p class="label">What I took from it</p>
+          <p>
+            KromTrip pushed me past coursework into <strong>real product engineering</strong>: designing
+            a real-time data model that scales, securing a client-only Firebase app with proper
+            rules, and reducing friction across eight tightly-connected modules. It's not a demo.
+            It's a working product with authentication, a live database, and 11 screens, built and
+            shipped end to end.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cs-section cs-cta">
+      <div class="container cs-reveal">
+        <p class="label" style="justify-content:center;">Explore it</p>
+        <h2 class="cs-title">See it live.</h2>
+        <div class="cs-ctas">
+          <a class="btn btn-primary" href="https://krom-trip.vercel.app" target="_blank" rel="noopener noreferrer">Open KromTrip ↗</a>
+          <a class="btn btn-ghost" href="index.html#projects">← Back to work</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="copy">&copy; <span id="year"></span> Ichty Te. All rights reserved.</p>
+      <p class="design">KromTrip, designed &amp; built by <span class="name">Ichty Te</span></p>
+    </div>
+  </footer>
+
+  <script>
+    // Theme toggle (shares the portfolio's localStorage key)
+    (function () {
+      const btn = document.getElementById('theme-toggle');
+      const root = document.documentElement;
+      const meta = document.querySelector('meta[name="theme-color"]');
+      btn && btn.addEventListener('click', () => {
+        const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        if (next === 'light') root.setAttribute('data-theme', 'light');
+        else root.removeAttribute('data-theme');
+        if (meta) meta.setAttribute('content', next === 'light' ? '#f7f6f3' : '#0a0a0a');
+        try { localStorage.setItem('theme', next); } catch (e) {}
+      });
+    })();
+
+    // Scroll reveals
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.cs-reveal').forEach(el => io.observe(el));
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

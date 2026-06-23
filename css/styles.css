@@ -90,24 +90,131 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 #loader {
   position: fixed;
   inset: 0;
-  background: var(--bg);
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
-  transition: opacity 0.8s var(--ease-out), visibility 0.8s;
+  background: transparent;
+  visibility: visible;
 }
-#loader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+/* When hidden, only the panels remain (they animate away themselves) */
+#loader.hide { pointer-events: none; }
+#loader.gone { visibility: hidden; }
+
+/* Centered intro content */
+.loader-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(18px, 3vw, 28px);
+  transition: opacity 0.5s var(--ease-out), transform 0.7s var(--ease-out);
+}
+#loader.hide .loader-inner { opacity: 0; transform: translateY(-14px); }
+
+.loader-mark {
+  font-family: var(--font-mono);
+  font-size: clamp(3.4rem, 11vw, 7rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  color: var(--text-1);
+  line-height: 1;
+  display: flex;
+  align-items: flex-end;
+  animation: loaderMarkIn 0.9s var(--ease-out) both;
+}
+.loader-dot {
+  color: var(--accent);
+  animation: loaderDotPulse 1.4s var(--ease-out) infinite;
+}
+@keyframes loaderMarkIn {
+  from { opacity: 0; letter-spacing: 0.35em; filter: blur(6px); }
+  to   { opacity: 1; letter-spacing: -0.05em; filter: blur(0); }
+}
+@keyframes loaderDotPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+/* Rotating role words */
+.loader-roles {
+  position: relative;
+  height: 1.4em;
+  width: 220px;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 1.4vw, 0.9rem);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+.loader-role {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-3);
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.4s var(--ease-out), transform 0.5s var(--ease-out);
+}
+.loader-role.is-active { opacity: 1; transform: translateY(0); }
+.loader-role.is-out    { opacity: 0; transform: translateY(-100%); }
+
+/* Progress bar */
+.loader-bar {
+  width: clamp(180px, 30vw, 280px);
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.loader-bar-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 0.25s var(--ease-out);
+}
+
 .loader-counter {
   font-family: var(--font-mono);
-  font-size: clamp(3rem, 8vw, 6rem);
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
   font-weight: 400;
-  letter-spacing: -0.04em;
+  letter-spacing: 0.1em;
   color: var(--text-3);
   line-height: 1;
 }
-#loader-number { color: var(--text-1); }
+#loader-number { color: var(--text-2); }
 .loader-pct    { color: var(--text-3); }
+
+/* Panel-wipe reveal */
+.loader-panels {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+}
+.loader-panels span {
+  flex: 1;
+  background: var(--bg);
+  transform: translateY(0);
+  transition: transform 0.7s var(--ease-out);
+}
+#loader.hide .loader-panels span { transform: translateY(-101%); }
+#loader.hide .loader-panels span:nth-child(1) { transition-delay: 0.00s; }
+#loader.hide .loader-panels span:nth-child(2) { transition-delay: 0.07s; }
+#loader.hide .loader-panels span:nth-child(3) { transition-delay: 0.14s; }
+#loader.hide .loader-panels span:nth-child(4) { transition-delay: 0.21s; }
+#loader.hide .loader-panels span:nth-child(5) { transition-delay: 0.28s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-mark, .loader-dot { animation: none; }
+  .loader-inner, .loader-role, .loader-bar-fill,
+  .loader-panels span { transition: none; }
+  #loader.hide .loader-panels span { transform: translateY(-101%); }
+}
 
 /* ── NAVBAR ──────────────────────────────────────────────── */
 .site-header {
@@ -901,6 +1008,9 @@ body.loaded .hero-foot    { animation: fadeUp 0.6s var(--ease-out) 0.85s forward
 .project-link:hover { color: var(--accent); border-color: var(--accent); }
 .arrow { transition: transform var(--dur-fast); display: inline-block; }
 .project-link:hover .arrow { transform: translateX(5px); }
+.project-links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-6); }
+.project-link--ghost { color: var(--text-3); border-bottom-color: var(--border); font-weight: 500; }
+.project-link--ghost:hover { color: var(--accent); border-color: var(--accent); }
 
 /* ── DESIGN WORK ─────────────────────────────────────────── */
 .design-section {

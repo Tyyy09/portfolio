@@ -44,8 +44,20 @@
 </div>
 
 <div id="loader" aria-hidden="true">
-  <div class="loader-counter">
-    <span id="loader-number">0</span><span class="loader-pct">%</span>
+  <div class="loader-inner">
+    <div class="loader-mark">IT<span class="loader-dot">.</span></div>
+    <div class="loader-roles" id="loader-roles">
+      <span class="loader-role is-active">Developer</span>
+      <span class="loader-role">Designer</span>
+      <span class="loader-role">Builder</span>
+    </div>
+    <div class="loader-bar"><span class="loader-bar-fill" id="loader-bar-fill"></span></div>
+    <div class="loader-counter">
+      <span id="loader-number">0</span><span class="loader-pct">%</span>
+    </div>
+  </div>
+  <div class="loader-panels" id="loader-panels" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
   </div>
 </div>
 
@@ -264,18 +276,23 @@
             <div class="project-top">
               <span class="project-num">02</span>
               <ul class="tag-list" role="list">
-                <li class="tag">React</li>
+                <li class="tag">React 19</li>
+                <li class="tag">Firebase</li>
+                <li class="tag">Firestore</li>
                 <li class="tag">Vite</li>
-                <li class="tag">JavaScript</li>
-                <li class="tag">CSS</li>
-                <li class="tag">localStorage</li>
+                <li class="tag">Real-time</li>
               </ul>
             </div>
             <h3 class="project-name">KromTrip</h3>
-            <p class="project-desc">A group travel management app built in React and Vite, where users sign in and organize trips together in one place. Trip data persists in the browser through localStorage, wrapped in a clean, focused planning flow from sign in to itinerary.</p>
-            <a href="https://krom-trip.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link">
-              View Project <span class="arrow" aria-hidden="true">→</span>
-            </a>
+            <p class="project-desc">A real-time group travel management app in React and Firebase. Members plan itineraries, split expenses with automatic settle-up, chat, and share documents, all syncing live across the group through Cloud Firestore. A full product with authentication, a live database, and eleven screens, built end to end.</p>
+            <div class="project-links">
+              <a href="kromtrip.html" class="project-link">
+                Read Case Study <span class="arrow" aria-hidden="true">→</span>
+              </a>
+              <a href="https://krom-trip.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link project-link--ghost">
+                Live Site <span class="arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
           </div>
         </article>
 
