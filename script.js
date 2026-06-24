@@ -12,9 +12,13 @@ const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
 (function () {
   const loader = document.getElementById('loader');
   const numEl  = document.getElementById('loader-number');
+  const barEl  = document.getElementById('loader-bar-fill');
   let p = 0;
 
-  const render = () => { numEl.textContent = String(p).padStart(3, '0'); };
+  const render = () => {
+    numEl.textContent = p;
+    if (barEl) barEl.style.width = p + '%';
+  };
   function tick() {
     p += Math.floor(Math.random() * 6) + 2;
     if (p >= 100) {
@@ -27,7 +31,7 @@ const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
     }
   }
   function finish() {
-    loader.classList.add('hide');         // lifts name + sweeps panels up as one
+    loader.classList.add('hide');         // fades counter, sweeps panels up
     // Reveal the hero just as the panels clear it, so it rises in from behind.
     setTimeout(() => {
       document.body.classList.add('loaded');
@@ -73,6 +77,42 @@ function animateHeroName() {
   const nameEl = document.querySelector('.hero-name');
   nameEl.addEventListener('mouseenter', () => lines.forEach(el => scramble(el, 700)));
 }
+
+/* ── NAV LINKS: SCRAMBLE ON HOVER (same effect as the name) ── */
+(function () {
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (!fine || REDUCED) return;
+  const targets = document.querySelectorAll('.nav-link span, .nav-cta');
+  if (!targets.length) return;
+
+  const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&/<>';
+  function scramble(el) {
+    const finalText = el.dataset.final;
+    cancelAnimationFrame(el._raf);
+    const start = performance.now();
+    const duration = 420;
+    function frame(now) {
+      const t = (now - start) / duration;
+      let out = '';
+      for (let i = 0; i < finalText.length; i++) {
+        const ch = finalText[i];
+        if (ch === ' ') { out += ' '; continue; }
+        const revealAt = 0.15 + (i / finalText.length) * 0.7;
+        out += (t >= revealAt) ? ch : glyphs[(Math.random() * glyphs.length) | 0];
+      }
+      el.textContent = out;
+      if (t < 1) { el._raf = requestAnimationFrame(frame); }
+      else { el.textContent = finalText; }
+    }
+    el._raf = requestAnimationFrame(frame);
+  }
+
+  targets.forEach(el => {
+    el.dataset.final = el.textContent.trim();
+    const trigger = el.closest('.nav-link') || el;
+    trigger.addEventListener('mouseenter', () => scramble(el));
+  });
+})();
 
 /* ── PAGE TRANSITION CURTAIN ──────────────────────────────── */
 let ptBusy = false;
