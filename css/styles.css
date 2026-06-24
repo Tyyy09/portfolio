@@ -27,8 +27,8 @@
   --key-drop:   rgba(0, 0, 0, 0.5);
   --key-hi:     rgba(255, 255, 255, 0.05);
 
-  --font:      'Geist', 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'Space Mono', 'Geist Mono', monospace;
+  --font:      'Geist', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Space Mono', monospace;
 
   /* Fluid type scale */
   --t-xs:   clamp(0.70rem,  0.65rem + 0.25vw, 0.78rem);
@@ -86,132 +86,132 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   padding: 0 var(--container-pad);
 }
 
-/* ── LOADER ──────────────────────────────────────────────── */
+/* ── SHARED BIG NAME ──────────────────────────────────────────
+   The same name renders in the loader AND the hero, in the same
+   place, so it can be handed off seamlessly. One anchor var keeps
+   both in sync. */
+:root { --name-bottom: clamp(290px, 40vh, 440px); }
+
+.big-name {
+  font-family: var(--font);
+  font-weight: 800;
+  font-size: clamp(2.6rem, 13.5vw, 12rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  color: var(--text-1);
+  text-transform: uppercase;
+  margin: 0;
+  white-space: nowrap;
+}
+.big-name .bn-line { display: block; overflow: hidden; }
+.big-name .bn-text { display: inline-block; }
+.big-name .bn-dot {
+  color: var(--accent);
+  font-style: normal;
+  animation: bnDotPulse 1.6s var(--ease-out) infinite;
+}
+@keyframes bnDotPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* ── LOADER · NAME HANDOFF ───────────────────────────────── */
 #loader {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
   visibility: visible;
+  background: transparent;
 }
-/* When hidden, only the panels remain (they animate away themselves) */
 #loader.hide { pointer-events: none; }
 #loader.gone { visibility: hidden; }
 
-/* Centered intro content */
-.loader-inner {
-  position: relative;
+/* shares .container so the name aligns with the hero name; uses the same
+   svh basis as .hero-inner so the bottom anchor lands in the same spot */
+.loader-stage {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 100svh;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: clamp(18px, 3vw, 28px);
-  transition: opacity 0.5s var(--ease-out), transform 0.7s var(--ease-out);
 }
-#loader.hide .loader-inner { opacity: 0; transform: translateY(-14px); }
 
-.loader-mark {
-  font-family: var(--font-mono);
-  font-size: clamp(3.4rem, 11vw, 7rem);
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  color: var(--text-1);
-  line-height: 1;
+/* name anchored bottom-left at the shared anchor (identical to hero) */
+.loader-name {
+  position: absolute;
+  left: var(--container-pad);
+  bottom: var(--name-bottom);
+}
+.loader-name .bn-text {
+  transform: translateY(110%);
+  animation: bnUp 0.9s var(--ease-out) forwards;
+}
+.loader-name .bn-line:nth-child(2) .bn-text { animation-delay: 0.12s; }
+@keyframes bnUp { to { transform: translateY(0); } }
+
+/* footer: status (left) + big counter (right), pinned bottom */
+.loader-foot {
+  position: absolute;
+  left: var(--container-pad);
+  right: var(--container-pad);
+  bottom: clamp(24px, 5vw, 48px);
   display: flex;
   align-items: flex-end;
-  animation: loaderMarkIn 0.9s var(--ease-out) both;
-}
-.loader-dot {
-  color: var(--accent);
-  animation: loaderDotPulse 1.4s var(--ease-out) infinite;
-}
-@keyframes loaderMarkIn {
-  from { opacity: 0; letter-spacing: 0.35em; filter: blur(6px); }
-  to   { opacity: 1; letter-spacing: -0.05em; filter: blur(0); }
-}
-@keyframes loaderDotPulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.35; }
-}
-
-/* Rotating role words */
-.loader-roles {
-  position: relative;
-  height: 1.4em;
-  width: 220px;
-  overflow: hidden;
+  justify-content: space-between;
   font-family: var(--font-mono);
-  font-size: clamp(0.75rem, 1.4vw, 0.9rem);
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-}
-.loader-role {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-3);
   opacity: 0;
-  transform: translateY(100%);
-  transition: opacity 0.4s var(--ease-out), transform 0.5s var(--ease-out);
+  animation: loaderFootIn 0.6s var(--ease-out) 0.5s forwards;
 }
-.loader-role.is-active { opacity: 1; transform: translateY(0); }
-.loader-role.is-out    { opacity: 0; transform: translateY(-100%); }
-
-/* Progress bar */
-.loader-bar {
-  width: clamp(180px, 30vw, 280px);
-  height: 2px;
-  background: var(--border);
-  border-radius: 2px;
-  overflow: hidden;
+@keyframes loaderFootIn { to { opacity: 1; } }
+.loader-status {
+  font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-3);
 }
-.loader-bar-fill {
-  display: block;
-  height: 100%;
-  width: 0%;
-  background: var(--accent);
-  transition: width 0.25s var(--ease-out);
+.loader-ellipsis::after { content: ''; animation: loaderDots 1.4s steps(1, end) infinite; }
+@keyframes loaderDots {
+  0%   { content: ''; }
+  25%  { content: '.'; }
+  50%  { content: '..'; }
+  75%  { content: '...'; }
 }
-
-.loader-counter {
-  font-family: var(--font-mono);
-  font-size: clamp(0.8rem, 1.5vw, 1rem);
-  font-weight: 400;
-  letter-spacing: 0.1em;
+.loader-count {
+  font-size: clamp(1.6rem, 5vw, 3.4rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
   color: var(--text-3);
   line-height: 1;
 }
-#loader-number { color: var(--text-2); }
-.loader-pct    { color: var(--text-3); }
+#loader-number { color: var(--accent); }
+
+/* HANDOFF: the name stays put and crossfades to the identical hero
+   name sitting in the same spot; only the footer lifts + panels sweep. */
+#loader.hide .loader-name {
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-out) 0.15s;
+}
+#loader.hide .loader-foot {
+  opacity: 0;
+  transform: translateY(-28px);
+  transition: opacity 0.4s var(--ease-out), transform 0.6s var(--ease-out);
+}
 
 /* Panel-wipe reveal */
-.loader-panels {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  display: flex;
-}
+.loader-panels { position: fixed; inset: 0; z-index: 1; display: flex; }
 .loader-panels span {
   flex: 1;
   background: var(--bg);
   transform: translateY(0);
-  transition: transform 0.7s var(--ease-out);
+  transition: transform 0.8s var(--ease-out);
 }
 #loader.hide .loader-panels span { transform: translateY(-101%); }
 #loader.hide .loader-panels span:nth-child(1) { transition-delay: 0.00s; }
-#loader.hide .loader-panels span:nth-child(2) { transition-delay: 0.07s; }
-#loader.hide .loader-panels span:nth-child(3) { transition-delay: 0.14s; }
-#loader.hide .loader-panels span:nth-child(4) { transition-delay: 0.21s; }
-#loader.hide .loader-panels span:nth-child(5) { transition-delay: 0.28s; }
+#loader.hide .loader-panels span:nth-child(2) { transition-delay: 0.06s; }
+#loader.hide .loader-panels span:nth-child(3) { transition-delay: 0.12s; }
+#loader.hide .loader-panels span:nth-child(4) { transition-delay: 0.18s; }
+#loader.hide .loader-panels span:nth-child(5) { transition-delay: 0.24s; }
 
 @media (prefers-reduced-motion: reduce) {
-  .loader-mark, .loader-dot { animation: none; }
-  .loader-inner, .loader-role, .loader-bar-fill,
+  .loader-name .bn-text { transform: none; animation: none; }
+  .bn-dot, .loader-ellipsis::after { animation: none; }
+  .loader-foot { opacity: 1; animation: none; }
   .loader-panels span { transition: none; }
   #loader.hide .loader-panels span { transform: translateY(-101%); }
 }
@@ -396,19 +396,22 @@ html[data-theme="light"] .site-header.scrolled .nav-inner {
   opacity: 0.6;
 }
 
-/* entrance animations */
+/* entrance animations — the name is handed off from the loader, so it
+   only fades in; the supporting elements rise in around it. */
+.hero-display,
 .hero-meta,
-.hero-kicker,
-.hero-roleline,
-.hero-tagline,
+.hero-rule,
+.hero-statement,
 .hero-ctas,
 .hero-foot { opacity: 0; }
-body.loaded .hero-meta    { animation: fadeUp 0.6s var(--ease-out) 0.05s forwards; }
-body.loaded .hero-kicker  { animation: fadeUp 0.6s var(--ease-out) 0.15s forwards; }
-body.loaded .hero-roleline{ animation: fadeUp 0.6s var(--ease-out) 0.40s forwards; }
-body.loaded .hero-tagline { animation: fadeUp 0.6s var(--ease-out) 0.52s forwards; }
-body.loaded .hero-ctas    { animation: fadeUp 0.6s var(--ease-out) 0.64s forwards; }
-body.loaded .hero-foot    { animation: fadeUp 0.6s var(--ease-out) 0.85s forwards; }
+body.loaded .hero-display { animation: fadeIn 0.5s var(--ease-out) 0.05s forwards; }
+body.loaded .hero-meta { animation: fadeUp 0.6s var(--ease-out) 0.28s forwards; }
+body.loaded .hero-rule { animation: ruleIn 0.7s var(--ease-out) 0.34s forwards; }
+body.loaded .hero-statement { animation: fadeUp 0.6s var(--ease-out) 0.44s forwards; }
+body.loaded .hero-ctas { animation: fadeUp 0.6s var(--ease-out) 0.56s forwards; }
+body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ruleIn { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
 
 /* top meta row */
 .hero-meta {
@@ -436,10 +439,10 @@ body.loaded .hero-foot    { animation: fadeUp 0.6s var(--ease-out) 0.85s forward
   gap: var(--s-2);
   width: fit-content;
   font-size: var(--t-xs);
-  font-family: var(--font);
-  font-weight: 500;
+  font-family: var(--font-mono);
+  font-weight: 400;
   color: var(--text-2);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   padding: var(--s-2) var(--s-4);
   border: 1px solid var(--border-strong);
@@ -456,48 +459,85 @@ body.loaded .hero-foot    { animation: fadeUp 0.6s var(--ease-out) 0.85s forward
 }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
-/* main block */
-.hero-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+/* ── EDITORIAL HERO LAYOUT ────────────────────────────────
+   The name is the shared element (.big-name), anchored bottom-left
+   exactly where the loader handed it off. Support sits to the right,
+   CTAs below, foot at the bottom. */
+
+/* Name block — role label + the shared name, anchored so the name's
+   baseline sits exactly where the loader handed it off. */
+.hero-display {
+  position: absolute;
+  left: var(--container-pad);
+  bottom: var(--name-bottom);
+  z-index: 2;
 }
+.hero-name { margin: 0; cursor: pointer; }
 .hero-kicker {
   display: flex;
   align-items: center;
   gap: var(--s-3);
-  font-family: 'JetBrains Mono', 'Space Mono', monospace;
+  font-family: var(--font-mono);
   font-size: var(--t-sm);
   color: var(--text-2);
-  letter-spacing: 0.01em;
-  margin-bottom: var(--s-5);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 var(--s-4);
 }
 .hero-kicker-line {
   display: inline-block;
-  width: 40px; height: 1px;
+  width: 40px; min-width: 40px; height: 1px;
   background: var(--accent);
 }
 
-/* Name — char-split animation */
-.hero-name {
-  font-size: clamp(3.5rem, 13vw, 12rem);
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  line-height: 0.86;
-  color: var(--text-1);
-  margin-bottom: var(--s-6);
+/* hairline at the name baseline tying the columns together */
+.hero-rule {
+  position: absolute;
+  left: var(--container-pad);
+  right: var(--container-pad);
+  bottom: calc(var(--name-bottom) - 1px);
+  height: 1px;
+  background: var(--border);
+  transform-origin: left center;
+  z-index: 1;
 }
-.hero-name .char {
-  display: inline-block;
-  opacity: 0;
-  filter: blur(10px);
-  transform: translateY(14px);
-  transition: opacity 0.7s var(--ease-out),
-              filter  0.7s var(--ease-out),
-              transform 0.7s var(--ease-out);
+
+/* Statement row under the rule: "I build ▸ X" (left) + tagline (right) */
+.hero-statement {
+  position: absolute;
+  left: var(--container-pad);
+  right: var(--container-pad);
+  bottom: clamp(200px, 27vh, 320px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-10);
+  z-index: 2;
 }
-.hero-name.animate .char { opacity: 1; filter: blur(0); transform: translateY(0); }
+.hero-statement .hero-roleline { margin: 0; }
+.hero-statement .hero-tagline {
+  max-width: 40ch;
+  text-align: right;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* CTAs sit near the bottom */
+.hero-ctas {
+  position: absolute;
+  left: var(--container-pad);
+  bottom: clamp(110px, 15vh, 180px);
+  z-index: 2;
+}
+
+/* meta right-side label (balances the eyebrow) */
+.hero-tag {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
 
 /* rotating role line */
 .hero-roleline {
@@ -570,13 +610,17 @@ body.loaded .hero-foot    { animation: fadeUp 0.6s var(--ease-out) 0.85s forward
 }
 .btn-ghost:hover { background: var(--surface-raised); border-color: var(--text-3); }
 
-/* bottom foot row */
+/* bottom foot row — pinned to the bottom of the hero */
 .hero-foot {
+  position: absolute;
+  left: var(--container-pad);
+  right: var(--container-pad);
+  bottom: clamp(24px, 5vh, 44px);
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--s-4);
-  padding: var(--s-6) 0 var(--s-8);
 }
 .hero-scroll {
   display: inline-flex;
@@ -661,7 +705,7 @@ body.loaded .hero-foot    { animation: fadeUp 0.6s var(--ease-out) 0.85s forward
   display: inline-flex;
   align-items: center;
   gap: var(--s-2);
-  font-family: 'JetBrains Mono', 'Space Mono', monospace;
+  font-family: var(--font-mono);
   font-size: var(--t-xs);
   font-weight: 400;
   color: var(--text-1);
@@ -1452,14 +1496,47 @@ body.loaded .hero-spotlight { opacity: 1; }
   .skills-hint { margin-top: var(--s-3); }
 }
 
+/* ── HERO: tablet & down → flow layout (no absolute anchors) ── */
+@media (max-width: 900px) {
+  .hero-inner {
+    justify-content: center;
+    gap: clamp(28px, 6vw, 48px);          /* generous vertical rhythm */
+    padding-top: 120px;
+    padding-bottom: var(--s-12);
+  }
+  .hero-display,
+  .hero-statement,
+  .hero-ctas,
+  .hero-foot {
+    position: static;
+    left: auto; right: auto; bottom: auto;
+    width: auto;
+  }
+  .hero-rule { display: none; }
+  .hero-tag  { display: none; }            /* drop label that duplicates the kicker */
+  .hero-meta { order: 1; }
+  .hero-display { order: 2; }
+  .hero-kicker { margin-bottom: var(--s-5); }
+  .hero-statement { order: 3; max-width: 540px; flex-direction: column; align-items: flex-start; gap: var(--s-5); }
+  .hero-statement .hero-roleline { margin-bottom: 0; }
+  .hero-statement .hero-tagline { text-align: left; max-width: 42ch; }
+  .hero-ctas { order: 4; display: flex; flex-wrap: wrap; gap: var(--s-4); }
+  .hero-foot { order: 5; margin-top: var(--s-8); }
+  .big-name  { font-size: clamp(2.4rem, 12.5vw, 6rem); }  /* eased off the edges */
+  /* loader matches the flow name position on small screens */
+  .loader-stage { display: flex; flex-direction: column; justify-content: center; }
+  .loader-name  { position: static; }
+}
+
 /* ── HERO: small screens ─────────────────────────────────── */
 @media (max-width: 560px) {
   .hero-meta { flex-direction: column; align-items: flex-start; gap: var(--s-4); }
   .hero-roleline { font-size: var(--t-xl); }
   .hero-tagline br { display: none; }
-  .hero-ctas { flex-direction: column; align-items: stretch; max-width: 320px; }
-  .hero-ctas .btn { justify-content: center; }
-  .hero-foot { flex-direction: column; align-items: flex-start; gap: var(--s-4); }
+  .hero-tagline { font-size: var(--t-base); line-height: 1.6; }
+  .hero-ctas { flex-direction: column; align-items: stretch; max-width: 340px; gap: var(--s-3); }
+  .hero-ctas .btn { justify-content: center; padding: calc(var(--s-4) + 1px) var(--s-6); }
+  .hero-foot { flex-direction: column; align-items: flex-start; gap: var(--s-4); margin-top: var(--s-10); }
 }
 
 /* ── TOUCH / NO-HOVER: hide custom cursor, keep native ───── */
@@ -1484,13 +1561,13 @@ body.loaded .hero-spotlight { opacity: 1; }
   .design-img-wrap.reveal-img .design-img { transform: none !important; }
   .keyboard-deck { transform: none !important; }
   .scroll-line::after { animation: none !important; }
+  body.loaded .hero-display,
   body.loaded .hero-meta,
-  body.loaded .hero-kicker,
-  body.loaded .hero-roleline,
-  body.loaded .hero-tagline,
+  body.loaded .hero-rule,
+  body.loaded .hero-statement,
   body.loaded .hero-ctas,
-  body.loaded .hero-foot { opacity: 1 !important; animation: none !important; }
-  .hero-name .char { opacity: 1 !important; filter: none !important; transform: none !important; }
+  body.loaded .hero-foot { opacity: 1 !important; animation: none !important; transform: none !important; }
+  .loader-name .bn-text { transform: none !important; }
   .hero-rotator .rot-word { transform: none !important; opacity: 1 !important; }
   .tilt { transform: none !important; }
 }
@@ -1559,6 +1636,16 @@ html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *
   gap: var(--s-3);
 }
 .nav-menu-foot { display: none; }
+
+/* live local time in the nav */
+.nav-time {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  color: var(--text-2);
+  padding-right: var(--s-2);
+}
 .theme-toggle {
   display: inline-flex;
   align-items: center;

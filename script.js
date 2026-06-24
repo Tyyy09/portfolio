@@ -12,88 +12,66 @@ const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
 (function () {
   const loader = document.getElementById('loader');
   const numEl  = document.getElementById('loader-number');
-  const barEl  = document.getElementById('loader-bar-fill');
-  const roles  = Array.from(document.querySelectorAll('.loader-role'));
   let p = 0;
 
-  // Cycle the role words while loading
-  let roleIdx = 0;
-  const roleTimer = roles.length > 1 && !REDUCED ? setInterval(() => {
-    const cur = roles[roleIdx];
-    roleIdx = (roleIdx + 1) % roles.length;
-    const next = roles[roleIdx];
-    cur.classList.remove('is-active');
-    cur.classList.add('is-out');
-    next.classList.remove('is-out');
-    next.classList.add('is-active');
-    setTimeout(() => cur.classList.remove('is-out'), 500);
-  }, 1200) : null;
-
-  function render() {
-    numEl.textContent = p;
-    if (barEl) barEl.style.width = p + '%';
-  }
+  const render = () => { numEl.textContent = String(p).padStart(3, '0'); };
   function tick() {
     p += Math.floor(Math.random() * 6) + 2;
     if (p >= 100) {
       p = 100;
       render();
-      setTimeout(finish, 420);
+      setTimeout(finish, 460);
     } else {
       render();
       setTimeout(tick, Math.random() * 130 + 130);
     }
   }
   function finish() {
-    if (roleTimer) clearInterval(roleTimer);
-    loader.classList.add('hide');         // fades content + slides panels up
+    loader.classList.add('hide');         // lifts name + sweeps panels up as one
+    // Reveal the hero just as the panels clear it, so it rises in from behind.
     setTimeout(() => {
       document.body.classList.add('loaded');
       animateHeroName();
-    }, REDUCED ? 0 : 700);
-    setTimeout(() => loader.classList.add('gone'), REDUCED ? 0 : 1100);
+    }, REDUCED ? 0 : 620);
+    setTimeout(() => loader.classList.add('gone'), REDUCED ? 0 : 1200);
   }
   render();
   tick();
 })();
 
-/* ── HERO NAME: SCRAMBLE / DECODE ─────────────────────────── */
+/* ── HERO NAME: SCRAMBLE ON HOVER ──────────────────────────
+   The name is handed off clean from the loader, so it does NOT
+   scramble on load (that would break the seamless transition).
+   Each line scrambles independently on hover, leaving the dot intact. */
 function animateHeroName() {
-  const nameEl = document.querySelector('.hero-name');
-  if (!nameEl) return;
-  const finalText = nameEl.textContent.trim();
-  nameEl.textContent = finalText;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const lines = document.querySelectorAll('.hero-name .bn-text');
+  if (!lines.length) return;
+  lines.forEach(el => { el.dataset.final = el.textContent.trim(); });
+
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (!fine || REDUCED) return;
 
   const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÆØ#%&@*/<>';
-  let rafId = null;
-
-  function scramble(duration) {
-    cancelAnimationFrame(rafId);
+  function scramble(el, duration) {
+    const finalText = el.dataset.final;
+    cancelAnimationFrame(el._raf);
     const start = performance.now();
-    const len = finalText.length;
     function frame(now) {
       const t = (now - start) / duration;
       let out = '';
-      for (let i = 0; i < len; i++) {
-        const ch = finalText[i];
-        if (ch === ' ') { out += ' '; continue; }
-        const revealAt = 0.2 + (i / len) * 0.72;   // lock left → right
-        out += (t >= revealAt) ? ch : glyphs[(Math.random() * glyphs.length) | 0];
+      for (let i = 0; i < finalText.length; i++) {
+        const revealAt = 0.15 + (i / finalText.length) * 0.7;
+        out += (t >= revealAt) ? finalText[i] : glyphs[(Math.random() * glyphs.length) | 0];
       }
-      nameEl.textContent = out;
-      if (t < 1) { rafId = requestAnimationFrame(frame); }
-      else { nameEl.textContent = finalText; }
+      el.textContent = out;
+      if (t < 1) { el._raf = requestAnimationFrame(frame); }
+      else { el.textContent = finalText; }
     }
-    rafId = requestAnimationFrame(frame);
+    el._raf = requestAnimationFrame(frame);
   }
 
-  scramble(1500);
-  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (fine) {
-    nameEl.style.cursor = 'pointer';
-    nameEl.addEventListener('mouseenter', () => scramble(800));
-  }
+  const nameEl = document.querySelector('.hero-name');
+  nameEl.addEventListener('mouseenter', () => lines.forEach(el => scramble(el, 700)));
 }
 
 /* ── PAGE TRANSITION CURTAIN ──────────────────────────────── */
@@ -261,14 +239,14 @@ function closeMenu() { setMenu(false); }
 navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu(); });
 
-/* ── HERO: LIVE LOCAL TIME ────────────────────────────────── */
+/* ── NAV: LIVE LOCAL TIME ─────────────────────────────────── */
 (function () {
-  const el = document.getElementById('hero-time');
+  const el = document.getElementById('nav-time');
   if (!el) return;
   function tick() {
     try {
       el.textContent = new Intl.DateTimeFormat('en-GB', {
-        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
+        hour: '2-digit', minute: '2-digit', hour12: false,
       }).format(new Date());
     } catch (e) {
       el.textContent = new Date().toLocaleTimeString();

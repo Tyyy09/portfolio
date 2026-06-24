@@ -11,7 +11,7 @@
   <meta name="theme-color" content="#0a0a0a" />
 
   <!-- Favicon: inline SVG monogram -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Ctext x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter,Arial,sans-serif' font-size='30' font-weight='700' fill='%23ededed'%3EIT%3C/text%3E%3Ccircle cx='48' cy='44' r='3' fill='%23c8a97e'/%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Ctext x='50%25' y='52%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-size='30' font-weight='700' fill='%23ededed'%3EIT%3C/text%3E%3Ccircle cx='48' cy='44' r='3' fill='%23c8a97e'/%3E%3C/svg%3E" />
 
   <!-- Open Graph / social preview -->
   <meta property="og:type" content="website" />
@@ -25,7 +25,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=JetBrains+Mono:wght@400;500&family=Space+Mono:wght@400;700&family=Inter:wght@300..600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css" />
 
@@ -44,16 +44,11 @@
 </div>
 
 <div id="loader" aria-hidden="true">
-  <div class="loader-inner">
-    <div class="loader-mark">IT<span class="loader-dot">.</span></div>
-    <div class="loader-roles" id="loader-roles">
-      <span class="loader-role is-active">Developer</span>
-      <span class="loader-role">Designer</span>
-      <span class="loader-role">Builder</span>
-    </div>
-    <div class="loader-bar"><span class="loader-bar-fill" id="loader-bar-fill"></span></div>
-    <div class="loader-counter">
-      <span id="loader-number">0</span><span class="loader-pct">%</span>
+  <div class="loader-stage">
+    <div class="loader-center">
+      <span class="loader-label">Loading Portfolio<i class="loader-ellipsis"></i></span>
+      <div class="loader-count"><span id="loader-number">0</span><span class="loader-pct">%</span></div>
+      <div class="loader-bar"><span class="loader-bar-fill" id="loader-bar-fill"></span></div>
     </div>
   </div>
   <div class="loader-panels" id="loader-panels" aria-hidden="true">
@@ -77,6 +72,7 @@
           <a href="mailto:ichty086@gmail.com">ichty086@gmail.com</a>
         </li>
       </ul>
+      <span class="nav-time" id="nav-time" aria-label="Local time">--:--</span>
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme" title="Toggle theme">
         <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
@@ -104,16 +100,22 @@
       <!-- top meta row -->
       <div class="hero-meta">
         <span class="hero-eyebrow">Open to opportunities</span>
-        <span class="hero-clock">
-          <span class="hero-clock-label">Local time</span>
-          <span class="hero-clock-time" id="hero-time">--:--:--</span>
-        </span>
+        <span class="hero-tag">Developer &amp; Designer</span>
       </div>
 
-      <!-- main -->
-      <div class="hero-main">
-        <p class="hero-kicker">Computer Programming Student, Developer &amp; Designer</p>
-        <h1 class="hero-name">ICHTY TE</h1>
+      <!-- name block: role label + shared name handed off from the loader -->
+      <div class="hero-display">
+        <p class="hero-kicker">Computer Programming Student</p>
+        <h1 class="hero-name big-name" id="hero-name">
+          <span class="bn-line"><span class="bn-text">ICHTY TE</span><i class="bn-dot">.</i></span>
+        </h1>
+      </div>
+
+      <!-- hairline at the name's baseline, tying the two columns -->
+      <div class="hero-rule" aria-hidden="true"></div>
+
+      <!-- statement row under the rule: what + why -->
+      <div class="hero-statement">
         <div class="hero-roleline">
           <span class="hero-roleline-pre">I build</span>
           <span class="hero-rotator" id="hero-rotator" aria-live="polite">
@@ -121,14 +123,15 @@
           </span>
         </div>
         <p class="hero-tagline">
-          Polished digital products where engineering<br>
-          precision meets design clarity.
+          Polished digital products where engineering precision meets design clarity.
         </p>
-        <div class="hero-ctas">
-          <a href="#projects" class="btn btn-primary">View Work <span class="btn-arrow" aria-hidden="true">↗</span></a>
-          <a href="assets/Ichty-Te-Resume.pdf" target="_blank" rel="noopener" class="btn btn-ghost" download>Download CV</a>
-          <a href="mailto:ichty086@gmail.com" class="btn btn-ghost">Get in Touch</a>
-        </div>
+      </div>
+
+      <!-- CTAs below the name -->
+      <div class="hero-ctas">
+        <a href="#projects" class="btn btn-primary">View Work <span class="btn-arrow" aria-hidden="true">↗</span></a>
+        <a href="assets/Ichty-Te-Resume.pdf" target="_blank" rel="noopener" class="btn btn-ghost" download>Download CV</a>
+        <a href="mailto:ichty086@gmail.com" class="btn btn-ghost">Get in Touch</a>
       </div>
 
       <!-- bottom row -->
