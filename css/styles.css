@@ -92,7 +92,11 @@ img  { display: block; max-width: 100%; }
   transition: opacity 1.2s ease;
   will-change: background;
 }
-body.loaded .page-aura { opacity: 1; }
+body.loaded .page-aura { opacity: 1; animation: auraBreath 10s ease-in-out infinite; }
+@keyframes auraBreath {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.07); }
+}
 html[data-theme="light"] .page-aura {
   background:
     radial-gradient(38vmax 38vmax at var(--aura-x, 50%) var(--aura-y, 22%),
@@ -100,7 +104,7 @@ html[data-theme="light"] .page-aura {
   mix-blend-mode: multiply;
 }
 @media (prefers-reduced-motion: reduce) {
-  .page-aura { transition: none; }
+  .page-aura { transition: none; animation: none; }
 }
 a    { color: inherit; }
 ul, ol { list-style: none; }
