@@ -423,6 +423,7 @@ if (FINE_POINTER && !REDUCED) {
   const ring = document.getElementById('cursor-ring');
   let mx = window.innerWidth / 2, my = window.innerHeight / 2;
   let rx = mx, ry = my; // ring trails behind
+  let magnetEl = null;  // element the ring is currently drawn toward
 
   window.addEventListener('mousemove', (e) => {
     mx = e.clientX; my = e.clientY;
@@ -431,17 +432,25 @@ if (FINE_POINTER && !REDUCED) {
   });
 
   function ringLoop() {
-    rx = lerp(rx, mx, 0.18);
-    ry = lerp(ry, my, 0.18);
+    // When hovering an interactive element, the ring is drawn toward its
+    // center, so it "snaps" onto buttons and links like a magnet.
+    let tx = mx, ty = my;
+    if (magnetEl) {
+      const r = magnetEl.getBoundingClientRect();
+      tx = mx + ((r.left + r.width / 2) - mx) * 0.35;
+      ty = my + ((r.top + r.height / 2) - my) * 0.35;
+    }
+    rx = lerp(rx, tx, magnetEl ? 0.24 : 0.18);
+    ry = lerp(ry, ty, magnetEl ? 0.24 : 0.18);
     ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
     requestAnimationFrame(ringLoop);
   }
   ringLoop();
 
-  // Grow on generic interactive elements
+  // Grow on generic interactive elements + magnetize the ring onto them
   document.querySelectorAll('a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    el.addEventListener('mouseenter', () => { document.body.classList.add('cursor-hover'); magnetEl = el; });
+    el.addEventListener('mouseleave', () => { document.body.classList.remove('cursor-hover'); if (magnetEl === el) magnetEl = null; });
   });
 
   // 'View' label on project + design cards
@@ -458,19 +467,8 @@ if (FINE_POINTER && !REDUCED) {
   document.addEventListener('mouseenter', () => document.body.classList.add('cursor-ready'));
 }
 
-/* ── MAGNETIC BUTTONS ─────────────────────────────────────── */
-if (FINE_POINTER && !REDUCED) {
-  document.querySelectorAll('.btn, .nav-cta').forEach(btn => {
-    const strength = 0.35;
-    btn.addEventListener('mousemove', (e) => {
-      const r = btn.getBoundingClientRect();
-      const x = e.clientX - (r.left + r.width / 2);
-      const y = e.clientY - (r.top + r.height / 2);
-      btn.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
-    });
-    btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
-  });
-}
+/* Magnetic buttons live in the consolidated MAGNETIC ELEMENTS block above
+   (clamped, pointer-events, wider element set). */
 
 /* ── HERO SPOTLIGHT (follows mouse) ───────────────────────── */
 if (FINE_POINTER && !REDUCED) {
