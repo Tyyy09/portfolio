@@ -114,6 +114,235 @@ function animateHeroName() {
   });
 })();
 
+/* ── HOLD-TO-CONNECT (hold-to-charge → opens email) ──────── */
+(function () {
+  const btn = document.getElementById('hold-btn');
+  if (!btn) return;
+  const text = document.querySelector('.hold-text');
+  const DURATION = 1000;
+  let timer = null, done = false;
+
+  function start(e) {
+    if (done) return;
+    if (e && e.pointerId != null && btn.setPointerCapture) {
+      try { btn.setPointerCapture(e.pointerId); } catch (_) {}
+    }
+    btn.classList.add('holding');
+    timer = setTimeout(complete, DURATION);
+  }
+  function cancel() {
+    if (done) return;
+    btn.classList.remove('holding');
+    clearTimeout(timer);
+  }
+  function complete() {
+    done = true;
+    btn.classList.remove('holding');
+    btn.classList.add('done');
+    if (text) text.textContent = 'Opening mail…';
+    window.location.href = 'mailto:ichty086@gmail.com';
+    setTimeout(() => {
+      done = false;
+      btn.classList.remove('done');
+      if (text) text.textContent = 'Hold to connect';
+    }, 2600);
+  }
+  btn.addEventListener('pointerdown', start);
+  btn.addEventListener('pointerup', cancel);
+  btn.addEventListener('pointerleave', cancel);
+  btn.addEventListener('pointercancel', cancel);
+  btn.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ' ') && !done) { e.preventDefault(); complete(); }
+  });
+})();
+
+/* ── HERO AURA: animated mesh gradient ─────────────────────
+   Soft drifting gold light field that eases toward the cursor. */
+(function () {
+  const canvas = document.getElementById('hero-aura-canvas');
+  const hero = document.getElementById('home');
+  if (!canvas || !hero) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let w = 0, h = 0, raf = null, running = false, t = 0;
+  const target = { x: 0.42, y: 0.45 }, cur = { x: 0.42, y: 0.45 };
+  const blobs = [
+    { c: [200, 169, 126], r: 0.55, ax: 0.16, ay: 0.12, sx: 0.00022, sy: 0.00017, px: 0, py: 0 },
+    { c: [178, 138, 92],  r: 0.45, ax: 0.18, ay: 0.16, sx: 0.00015, sy: 0.00024, px: 2, py: 1 },
+    { c: [110, 88, 64],   r: 0.62, ax: 0.20, ay: 0.10, sx: 0.00012, sy: 0.00019, px: 4, py: 3 },
+  ];
+
+  function resize() {
+    w = hero.offsetWidth; h = hero.offsetHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    ctx.globalCompositeOperation = 'lighter';
+    cur.x += (target.x - cur.x) * 0.06;
+    cur.y += (target.y - cur.y) * 0.06;
+    for (const b of blobs) {
+      const cx = (0.4 + Math.sin(t * b.sx + b.px) * b.ax + (cur.x - 0.5) * 0.42) * w;
+      const cy = (0.46 + Math.cos(t * b.sy + b.py) * b.ay + (cur.y - 0.5) * 0.42) * h;
+      const rad = b.r * Math.max(w, h);
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rad);
+      g.addColorStop(0, `rgba(${b.c[0]},${b.c[1]},${b.c[2]},0.17)`);
+      g.addColorStop(0.5, `rgba(${b.c[0]},${b.c[1]},${b.c[2]},0.05)`);
+      g.addColorStop(1, `rgba(${b.c[0]},${b.c[1]},${b.c[2]},0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  function loop() { t += 16; draw(); if (running) raf = requestAnimationFrame(loop); }
+  function start() { if (!running) { running = true; loop(); } }
+  function stop() { running = false; if (raf) cancelAnimationFrame(raf); }
+
+  resize();
+  window.addEventListener('resize', resize);
+  if (REDUCED) { draw(); return; }
+  window.addEventListener('mousemove', e => {
+    const rect = hero.getBoundingClientRect();
+    target.x = (e.clientX - rect.left) / w;
+    target.y = (e.clientY - rect.top) / h;
+  });
+  new IntersectionObserver(([en]) => { if (en.isIntersecting) start(); else stop(); }, { threshold: 0 }).observe(hero);
+})();
+
+/* ── PAGE-WIDE AMBIENT AURA ────────────────────────────────
+   A soft accent glow that eases toward the cursor across every
+   section, so the whole page breathes with the same light. */
+(function () {
+  const aura = document.getElementById('page-aura');
+  if (!aura) return;
+  // Reduced motion: park a gentle static glow and stop.
+  if (REDUCED) { aura.style.setProperty('--aura-x', '50%'); aura.style.setProperty('--aura-y', '20%'); return; }
+  let tx = 50, ty = 20, cx = 50, cy = 20, raf = null;
+  function loop() {
+    cx += (tx - cx) * 0.07;
+    cy += (ty - cy) * 0.07;
+    aura.style.setProperty('--aura-x', cx.toFixed(2) + '%');
+    aura.style.setProperty('--aura-y', cy.toFixed(2) + '%');
+    if (Math.abs(tx - cx) > 0.05 || Math.abs(ty - cy) > 0.05) {
+      raf = requestAnimationFrame(loop);
+    } else { raf = null; }
+  }
+  window.addEventListener('pointermove', (e) => {
+    tx = (e.clientX / window.innerWidth) * 100;
+    ty = (e.clientY / window.innerHeight) * 100;
+    if (!raf) raf = requestAnimationFrame(loop);
+  }, { passive: true });
+})();
+
+/* ── INTERACTIVE HERO GRID ─────────────────────────────────
+   A dot grid (aligned to the line grid) that glows + grows near
+   the cursor. The signature hero interaction. */
+(function () {
+  const canvas = document.getElementById('hero-canvas');
+  const hero = document.getElementById('home');
+  if (!canvas || !hero) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  const GAP = 64, BASE_R = 1.1, GLOW_R = 3.6, RADIUS = 150;
+  let w = 0, h = 0, dots = [], raf = null, running = false;
+  const mouse = { x: -9999, y: -9999 };
+  let base = 'rgba(136,136,136,0.18)', accent = '200,169,126';
+
+  function readColors() {
+    const cs = getComputedStyle(document.documentElement);
+    accent = (cs.getPropertyValue('--accent-rgb').trim()) || '200,169,126';
+    base = (document.documentElement.getAttribute('data-theme') === 'light')
+      ? 'rgba(0,0,0,0.14)' : 'rgba(160,160,160,0.16)';
+  }
+  function resize() {
+    w = hero.offsetWidth; h = hero.offsetHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    dots = [];
+    for (let y = GAP; y < h; y += GAP)
+      for (let x = GAP; x < w; x += GAP) dots.push({ x, y });
+    draw();
+  }
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    for (const d of dots) {
+      const dist = Math.hypot(d.x - mouse.x, d.y - mouse.y);
+      const t = Math.max(0, 1 - dist / RADIUS);
+      const r = BASE_R + t * t * (GLOW_R - BASE_R);
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = t > 0.04
+        ? `rgba(${accent}, ${0.2 + t * 0.8})`
+        : base;
+      ctx.fill();
+    }
+  }
+  function loop() { draw(); if (running) raf = requestAnimationFrame(loop); }
+  function start() { if (!running) { running = true; loop(); } }
+  function stop() { running = false; if (raf) cancelAnimationFrame(raf); }
+
+  readColors();
+  resize();
+  window.addEventListener('resize', resize);
+
+  if (fine && !REDUCED) {
+    window.addEventListener('mousemove', e => {
+      const rect = hero.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+    // only animate while the hero is on screen
+    new IntersectionObserver(([en]) => {
+      if (en.isIntersecting) start(); else { stop(); mouse.x = mouse.y = -9999; draw(); }
+    }, { threshold: 0 }).observe(hero);
+  }
+  // repaint base colors on theme change
+  const themeBtn = document.getElementById('theme-toggle');
+  if (themeBtn) themeBtn.addEventListener('click', () => setTimeout(() => { readColors(); draw(); }, 50));
+})();
+
+/* ── CURSOR SPOTLIGHT ON CARDS ─────────────────────────────
+   Feeds --mx/--my to each card so the CSS glow tracks the cursor. */
+(function () {
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (REDUCED || !fine) return;
+  const cards = document.querySelectorAll('.project-img-wrap, .design-card');
+  cards.forEach(card => {
+    card.addEventListener('pointermove', (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', ((e.clientX - r.left) / r.width) * 100 + '%');
+      card.style.setProperty('--my', ((e.clientY - r.top) / r.height) * 100 + '%');
+    }, { passive: true });
+  });
+})();
+
+/* ── MAGNETIC ELEMENTS ─────────────────────────────────────
+   Buttons and the nav CTA drift toward the cursor, then spring
+   back on leave — the signature "premium" micro-interaction. */
+(function () {
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (REDUCED || !fine) return;
+  const STRENGTH = 0.32, MAX = 9;
+  const els = document.querySelectorAll('.btn, .nav-cta, .hold-btn, .project-link');
+  els.forEach(el => {
+    el.style.willChange = 'transform';
+    el.addEventListener('pointermove', (e) => {
+      const r = el.getBoundingClientRect();
+      let x = (e.clientX - (r.left + r.width / 2)) * STRENGTH;
+      let y = (e.clientY - (r.top + r.height / 2)) * STRENGTH;
+      const d = Math.hypot(x, y);
+      if (d > MAX) { x = (x / d) * MAX; y = (y / d) * MAX; }
+      el.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px)`;
+    });
+    el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+  });
+})();
+
 /* ── PAGE TRANSITION CURTAIN ──────────────────────────────── */
 let ptBusy = false;
 function runPageTransition(target, labelText) {
@@ -381,7 +610,7 @@ function countUp(el) {
   function frame(now) {
     const t = Math.min((now - start) / duration, 1);
     const eased = 1 - Math.pow(1 - t, 3);
-    el.textContent = Math.round(eased * target);
+    el.textContent = String(Math.round(eased * target)).padStart(2, '0');
     if (t < 1) requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
