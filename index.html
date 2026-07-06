@@ -34,6 +34,8 @@
 </head>
 <body>
 
+<div class="page-aura" id="page-aura" aria-hidden="true"></div>
+
 <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
 <div class="cursor-ring" id="cursor-ring" aria-hidden="true"><span class="cursor-label" id="cursor-label"></span></div>
 
@@ -93,14 +95,16 @@
   <!-- HERO -->
   <section id="home" class="hero-section">
     <div class="hero-aura" aria-hidden="true"></div>
+    <canvas class="hero-aura-canvas" id="hero-aura-canvas" aria-hidden="true"></canvas>
     <div class="hero-spotlight" id="hero-spotlight" aria-hidden="true"></div>
     <div class="hero-grid" aria-hidden="true"></div>
+    <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
 
     <div class="hero-inner container">
       <!-- top meta row -->
       <div class="hero-meta">
         <span class="hero-eyebrow">Open to opportunities</span>
-        <span class="hero-tag">Developer &amp; Designer</span>
+        <span class="hero-tag">Engineer <i>·</i> Designer <i>·</i> Builder</span>
       </div>
 
       <!-- name block: role label + shared name handed off from the loader -->
@@ -170,22 +174,32 @@
           <div class="about-stats">
             <div class="stat">
               <div class="stat-num-row">
-                <span class="stat-num" data-target="6">0</span>
+                <span class="stat-num" data-target="6">00</span>
               </div>
               <span class="stat-label">Projects shipped</span>
             </div>
             <div class="stat">
               <div class="stat-num-row">
-                <span class="stat-num" data-target="2">0</span><span class="stat-suffix">+</span>
+                <span class="stat-num" data-target="2">00</span><span class="stat-suffix">+</span>
               </div>
               <span class="stat-label">Years building</span>
             </div>
             <div class="stat">
               <div class="stat-num-row">
-                <span class="stat-num" data-target="2">0</span>
+                <span class="stat-num" data-target="2">00</span>
               </div>
               <span class="stat-label">Core disciplines</span>
             </div>
+          </div>
+
+          <div class="recognition section-reveal">
+            <span class="recognition-label">Recognition &amp; experience</span>
+            <ul class="recognition-list" role="list">
+              <li>AutoHack 2.0</li>
+              <li>Honda Canada</li>
+              <li>NASA</li>
+              <li>Georgian College</li>
+            </ul>
           </div>
         </div>
 
@@ -437,6 +451,17 @@
         <p class="label">Contact</p>
         <h2 class="contact-heading">Let's work<br>together.</h2>
         <p class="contact-sub">Open to internships, freelance projects, and full-time roles.<br>I respond within 24 hours.</p>
+
+        <div class="hold-connect">
+          <button class="hold-btn" id="hold-btn" type="button" aria-label="Hold to email me">
+            <svg class="hold-ring" viewBox="0 0 72 72" aria-hidden="true">
+              <circle class="hold-track" cx="36" cy="36" r="33"></circle>
+              <circle class="hold-fill" cx="36" cy="36" r="33"></circle>
+            </svg>
+            <span class="hold-icon" aria-hidden="true">→</span>
+          </button>
+          <span class="hold-text">Hold to connect</span>
+        </div>
 
         <form class="contact-form" id="contact-form" novalidate>
           <input type="hidden" name="access_key" value="8556b13a-ebbc-4805-b184-c5d67b2ffb3b">
