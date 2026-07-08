@@ -196,8 +196,19 @@ function animateHeroName() {
     }
     ctx.globalCompositeOperation = 'source-over';
   }
-  function loop() { t += 16; draw(); if (running) raf = requestAnimationFrame(loop); }
-  function start() { if (!running) { running = true; loop(); } }
+  // Throttle to ~33fps — the aura is a slow drift, so recreating its three
+  // radial gradients 60x/sec is wasted work on lower-end machines.
+  let lastFrame = 0;
+  function loop(now) {
+    if (!running) return;
+    raf = requestAnimationFrame(loop);
+    now = now || performance.now();
+    if (now - lastFrame < 30) return;
+    t += now - lastFrame;
+    lastFrame = now;
+    draw();
+  }
+  function start() { if (!running) { running = true; lastFrame = performance.now(); raf = requestAnimationFrame(loop); } }
   function stop() { running = false; if (raf) cancelAnimationFrame(raf); }
 
   resize();
@@ -217,21 +228,25 @@ function animateHeroName() {
 (function () {
   const aura = document.getElementById('page-aura');
   if (!aura) return;
-  // Reduced motion: park a gentle static glow and stop.
-  if (REDUCED) { aura.style.setProperty('--aura-x', '50%'); aura.style.setProperty('--aura-y', '20%'); return; }
-  let tx = 50, ty = 20, cx = 50, cy = 20, raf = null;
+  const setPos = (x, y) => {
+    aura.style.setProperty('--ax', x.toFixed(1) + 'px');
+    aura.style.setProperty('--ay', y.toFixed(1) + 'px');
+  };
+  let tx = innerWidth * 0.5, ty = innerHeight * 0.22, cx = tx, cy = ty;
+  setPos(cx, cy);
+  // Reduced motion: park a static glow and stop.
+  if (REDUCED) return;
+  let raf = null;
   function loop() {
-    cx += (tx - cx) * 0.07;
-    cy += (ty - cy) * 0.07;
-    aura.style.setProperty('--aura-x', cx.toFixed(2) + '%');
-    aura.style.setProperty('--aura-y', cy.toFixed(2) + '%');
-    if (Math.abs(tx - cx) > 0.05 || Math.abs(ty - cy) > 0.05) {
+    cx += (tx - cx) * 0.08;
+    cy += (ty - cy) * 0.08;
+    setPos(cx, cy);
+    if (Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5) {
       raf = requestAnimationFrame(loop);
     } else { raf = null; }
   }
   window.addEventListener('pointermove', (e) => {
-    tx = (e.clientX / window.innerWidth) * 100;
-    ty = (e.clientY / window.innerHeight) * 100;
+    tx = e.clientX; ty = e.clientY;
     if (!raf) raf = requestAnimationFrame(loop);
   }, { passive: true });
 })();
@@ -282,8 +297,17 @@ function animateHeroName() {
       ctx.fill();
     }
   }
-  function loop() { draw(); if (running) raf = requestAnimationFrame(loop); }
-  function start() { if (!running) { running = true; loop(); } }
+  // Only repaint when the cursor actually moved — the dots are a pure function
+  // of mouse position, so idle frames would redraw an identical image.
+  let lastMx = NaN, lastMy = NaN;
+  function loop() {
+    if (!running) return;
+    raf = requestAnimationFrame(loop);
+    if (mouse.x === lastMx && mouse.y === lastMy) return;
+    lastMx = mouse.x; lastMy = mouse.y;
+    draw();
+  }
+  function start() { if (!running) { running = true; lastMx = lastMy = NaN; raf = requestAnimationFrame(loop); } }
   function stop() { running = false; if (raf) cancelAnimationFrame(raf); }
 
   readColors();
