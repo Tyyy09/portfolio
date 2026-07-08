@@ -82,29 +82,35 @@ img  { display: block; max-width: 100%; }
    but behind all content (transparent sections let it bleed through). */
 .page-aura {
   position: fixed;
-  inset: -10%;
+  inset: 0;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(38vmax 38vmax at var(--aura-x, 50%) var(--aura-y, 22%),
-      rgba(var(--accent-rgb), 0.10), rgba(var(--accent-rgb), 0.03) 34%, transparent 60%);
+  overflow: hidden;
   opacity: 0;
   transition: opacity 1.2s ease;
-  will-change: background;
 }
-body.loaded .page-aura { opacity: 1; animation: auraBreath 10s ease-in-out infinite; }
-@keyframes auraBreath {
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.07); }
+body.loaded .page-aura { opacity: 1; }
+/* A single fixed-size glow blob translated to the cursor. Moving it with
+   transform is GPU-composited (no per-frame repaint like a moving gradient). */
+.page-aura::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 75vmax; height: 75vmax;
+  margin: -37.5vmax 0 0 -37.5vmax;
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    rgba(var(--accent-rgb), 0.13), rgba(var(--accent-rgb), 0.04) 46%, transparent 72%);
+  transform: translate3d(var(--ax, 50vw), var(--ay, 22vh), 0);
+  will-change: transform;
 }
-html[data-theme="light"] .page-aura {
-  background:
-    radial-gradient(38vmax 38vmax at var(--aura-x, 50%) var(--aura-y, 22%),
-      rgba(var(--accent-rgb), 0.12), rgba(var(--accent-rgb), 0.04) 34%, transparent 60%);
-  mix-blend-mode: multiply;
+html[data-theme="light"] .page-aura { mix-blend-mode: multiply; }
+html[data-theme="light"] .page-aura::before {
+  background: radial-gradient(closest-side,
+    rgba(var(--accent-rgb), 0.16), rgba(var(--accent-rgb), 0.05) 46%, transparent 72%);
 }
 @media (prefers-reduced-motion: reduce) {
-  .page-aura { transition: none; animation: none; }
+  .page-aura { transition: none; }
 }
 a    { color: inherit; }
 ul, ol { list-style: none; }
@@ -1957,26 +1963,20 @@ html[data-theme="light"] .tilt::after {
 }
 .project-award { z-index: 4; }
 
-/* ── FILM GRAIN OVERLAY ──────────────────────────────────── */
+/* ── FILM GRAIN OVERLAY ──────────────────────────────────────
+   Static (no animation) and viewport-sized. The old version was 4x the
+   viewport with an infinite animation under a blend mode, which forced the
+   compositor to re-blend a huge layer every frame — a major FPS drain. */
 .grain {
   position: fixed;
-  inset: -50%;
-  width: 200%;
-  height: 200%;
+  inset: 0;
   z-index: 9998;
   pointer-events: none;
-  opacity: 0.045;
+  opacity: 0.05;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: grainShift 0.7s steps(3) infinite;
 }
 html[data-theme="light"] .grain { opacity: 0.06; mix-blend-mode: multiply; }
-@keyframes grainShift {
-  0%   { transform: translate(0, 0); }
-  33%  { transform: translate(-3%, 2%); }
-  66%  { transform: translate(2%, -3%); }
-  100% { transform: translate(-2%, -1%); }
-}
 
 /* ── HERO AMBIENT AURA ───────────────────────────────────── */
 .hero-aura {
