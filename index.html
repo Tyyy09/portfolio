@@ -248,116 +248,129 @@
     </div>
   </section>
 
-  <!-- PROJECTS -->
+  <!-- PROJECTS — pinned horizontal gallery -->
   <section id="projects" class="projects-section">
-    <div class="container">
+    <div class="hscroll" id="work-hscroll">
+      <div class="hscroll-sticky">
 
-      <header class="section-header section-reveal">
-        <p class="label">Selected Work</p>
-        <h2 class="section-title">Things I've built.</h2>
-      </header>
-
-      <div class="projects-list">
-
-        <!-- 01 Honda EQM -->
-        <article class="project-item section-reveal">
-          <div class="project-img-wrap">
-            <img src="images/Honda.webp" alt="Honda EQM predictive monitoring dashboard" class="project-img" loading="lazy" data-parallax="0.06" />
-            <span class="project-award">2nd Place · AutoHack 2.0</span>
-          </div>
-          <div class="project-info">
-            <div class="project-top">
-              <span class="project-num">01</span>
-              <ul class="tag-list" role="list">
-                <li class="tag">C++ / Arduino</li>
-                <li class="tag">scikit-learn</li>
-                <li class="tag">Llama 3.3-70b</li>
-                <li class="tag">Groq API</li>
-                <li class="tag">PostgreSQL</li>
-              </ul>
+        <div class="hscroll-head">
+          <div class="container hscroll-head-inner">
+            <div>
+              <p class="label">Selected Work</p>
+              <h2 class="section-title">Things I've built.</h2>
             </div>
-            <h3 class="project-name">Honda EQM</h3>
-            <p class="project-desc">As UX Lead on Team Ctrl Alt Elite, I helped build a predictive equipment failure monitoring system in 24 hours at Honda of Canada Mfg., Alliston ON. Firmware reads real-time machine health from DS18B20 temperature and MPU-6050 vibration sensors. Anomalies are detected with a scikit-learn model and surfaced as natural-language alerts via Llama 3.3-70b, reducing unplanned downtime on the production floor.</p>
-            <a href="https://demo-hackathon.vercel.app" target="_blank" rel="noopener noreferrer" class="project-link">
-              View Project <span class="arrow" aria-hidden="true">→</span>
-            </a>
-          </div>
-        </article>
-
-        <!-- 02 KromTrip -->
-        <article class="project-item project-item--rev section-reveal">
-          <div class="project-img-wrap">
-            <img src="images/poster/kromtrip.svg" alt="KromTrip travel planner" class="project-img" loading="lazy" data-parallax="0.06" />
-          </div>
-          <div class="project-info">
-            <div class="project-top">
-              <span class="project-num">02</span>
-              <ul class="tag-list" role="list">
-                <li class="tag">React 19</li>
-                <li class="tag">Firebase</li>
-                <li class="tag">Firestore</li>
-                <li class="tag">Vite</li>
-                <li class="tag">Real-time</li>
-              </ul>
-            </div>
-            <h3 class="project-name">KromTrip</h3>
-            <p class="project-desc">A real-time group travel management app in React and Firebase. Members plan itineraries, split expenses with automatic settle-up, chat, and share documents, all syncing live across the group through Cloud Firestore. A full product with authentication, a live database, and eleven screens, built end to end.</p>
-            <div class="project-links">
-              <a href="kromtrip.html" class="project-link">
-                Read Case Study <span class="arrow" aria-hidden="true">→</span>
-              </a>
-              <a href="https://krom-trip.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link project-link--ghost">
-                Live Site <span class="arrow" aria-hidden="true">↗</span>
-              </a>
+            <div class="hscroll-meta">
+              <span class="hscroll-count"><span id="work-index">01</span> <span class="hscroll-sep">/</span> 04</span>
+              <span class="hscroll-hint">Scroll <span class="arrow" aria-hidden="true">→</span></span>
             </div>
           </div>
-        </article>
+          <div class="hscroll-progress" aria-hidden="true"><span class="hscroll-progress-bar" id="work-progress"></span></div>
+        </div>
 
-        <!-- 03 VERDE Energy Bowl Builder -->
-        <article class="project-item section-reveal">
-          <div class="project-img-wrap">
-            <img src="images/poster/energybowl.png" alt="VERDE custom energy bowl builder" class="project-img" loading="lazy" data-parallax="0.06" />
-          </div>
-          <div class="project-info">
-            <div class="project-top">
-              <span class="project-num">03</span>
-              <ul class="tag-list" role="list">
-                <li class="tag">HTML</li>
-                <li class="tag">CSS</li>
-                <li class="tag">JavaScript</li>
-              </ul>
-            </div>
-            <h3 class="project-name">VERDE</h3>
-            <p class="project-desc">A custom energy bowl builder where users compose an order step by step: base, fruits, toppings, protein, and size. Built in vanilla JavaScript with real-time price updates, form validation, and locally saved order history for a guided, polished ordering flow.</p>
-            <a href="https://energy-bowl-builder.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link">
-              View Project <span class="arrow" aria-hidden="true">→</span>
-            </a>
-          </div>
-        </article>
+        <div class="hscroll-viewport">
+          <div class="hscroll-track" id="work-track">
 
-        <!-- 04 NASA Space Explorer -->
-        <article class="project-item project-item--rev section-reveal">
-          <div class="project-img-wrap">
-            <img src="images/poster/nasa-apod.png" alt="NASA Space Explorer" class="project-img" loading="lazy" data-parallax="0.06" />
-          </div>
-          <div class="project-info">
-            <div class="project-top">
-              <span class="project-num">04</span>
-              <ul class="tag-list" role="list">
-                <li class="tag">JavaScript</li>
-                <li class="tag">NASA API</li>
-                <li class="tag">HTML</li>
-                <li class="tag">CSS</li>
-              </ul>
-            </div>
-            <h3 class="project-name">NASA Space Explorer</h3>
-            <p class="project-desc">A space imagery explorer built in vanilla JavaScript against two NASA APIs. Browse the Astronomy Picture of the Day back to 1995, or search across 140,000+ images in NASA's media library. Dependency free, with keyboard support and accessible screen reader announcements.</p>
-            <a href="https://nasa-apod-12re.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link">
-              View Project <span class="arrow" aria-hidden="true">→</span>
-            </a>
-          </div>
-        </article>
+            <!-- 01 Honda EQM -->
+            <article class="work-panel">
+              <div class="project-img-wrap">
+                <img src="images/Honda.webp" alt="Honda EQM predictive monitoring dashboard" class="project-img" loading="lazy" />
+                <span class="project-award">2nd Place · AutoHack 2.0</span>
+              </div>
+              <div class="project-info">
+                <div class="project-top">
+                  <span class="project-num">01</span>
+                  <ul class="tag-list" role="list">
+                    <li class="tag">C++ / Arduino</li>
+                    <li class="tag">scikit-learn</li>
+                    <li class="tag">Llama 3.3-70b</li>
+                    <li class="tag">Groq API</li>
+                    <li class="tag">PostgreSQL</li>
+                  </ul>
+                </div>
+                <h3 class="project-name">Honda EQM</h3>
+                <p class="project-desc">As UX Lead on Team Ctrl Alt Elite, I helped build a predictive equipment failure monitoring system in 24 hours at Honda of Canada Mfg. Firmware reads real-time machine health from temperature and vibration sensors; anomalies are detected with scikit-learn and surfaced as natural-language alerts via Llama 3.3-70b.</p>
+                <a href="https://demo-hackathon.vercel.app" target="_blank" rel="noopener noreferrer" class="project-link">
+                  View Project <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </div>
+            </article>
 
+            <!-- 02 KromTrip -->
+            <article class="work-panel">
+              <div class="project-img-wrap">
+                <img src="images/poster/kromtrip.svg" alt="KromTrip travel planner" class="project-img" loading="lazy" />
+              </div>
+              <div class="project-info">
+                <div class="project-top">
+                  <span class="project-num">02</span>
+                  <ul class="tag-list" role="list">
+                    <li class="tag">React 19</li>
+                    <li class="tag">Firebase</li>
+                    <li class="tag">Firestore</li>
+                    <li class="tag">Vite</li>
+                    <li class="tag">Real-time</li>
+                  </ul>
+                </div>
+                <h3 class="project-name">KromTrip</h3>
+                <p class="project-desc">A real-time group travel management app in React and Firebase. Members plan itineraries, split expenses with automatic settle-up, chat, and share documents, all syncing live through Cloud Firestore. A full product with auth, a live database, and eleven screens.</p>
+                <div class="project-links">
+                  <a href="kromtrip.html" class="project-link">
+                    Read Case Study <span class="arrow" aria-hidden="true">→</span>
+                  </a>
+                  <a href="https://krom-trip.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link project-link--ghost">
+                    Live Site <span class="arrow" aria-hidden="true">↗</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- 03 VERDE Energy Bowl Builder -->
+            <article class="work-panel">
+              <div class="project-img-wrap">
+                <img src="images/poster/energybowl.png" alt="VERDE custom energy bowl builder" class="project-img" loading="lazy" />
+              </div>
+              <div class="project-info">
+                <div class="project-top">
+                  <span class="project-num">03</span>
+                  <ul class="tag-list" role="list">
+                    <li class="tag">HTML</li>
+                    <li class="tag">CSS</li>
+                    <li class="tag">JavaScript</li>
+                  </ul>
+                </div>
+                <h3 class="project-name">VERDE</h3>
+                <p class="project-desc">A custom energy bowl builder where users compose an order step by step: base, fruits, toppings, protein, and size. Built in vanilla JavaScript with real-time price updates, form validation, and locally saved order history.</p>
+                <a href="https://energy-bowl-builder.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link">
+                  View Project <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </div>
+            </article>
+
+            <!-- 04 NASA Space Explorer -->
+            <article class="work-panel">
+              <div class="project-img-wrap">
+                <img src="images/poster/nasa-apod.png" alt="NASA Space Explorer" class="project-img" loading="lazy" />
+              </div>
+              <div class="project-info">
+                <div class="project-top">
+                  <span class="project-num">04</span>
+                  <ul class="tag-list" role="list">
+                    <li class="tag">JavaScript</li>
+                    <li class="tag">NASA API</li>
+                    <li class="tag">HTML</li>
+                    <li class="tag">CSS</li>
+                  </ul>
+                </div>
+                <h3 class="project-name">NASA Space Explorer</h3>
+                <p class="project-desc">A space imagery explorer built in vanilla JavaScript against two NASA APIs. Browse the Astronomy Picture of the Day back to 1995, or search across 140,000+ images in NASA's media library. Dependency free, with full keyboard support.</p>
+                <a href="https://nasa-apod-12re.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link">
+                  View Project <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </div>
+            </article>
+
+          </div>
+        </div>
       </div>
     </div>
   </section>

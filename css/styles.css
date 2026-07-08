@@ -1212,6 +1212,84 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
 .project-link--ghost { color: var(--text-3); border-bottom-color: var(--border); font-weight: 500; }
 .project-link--ghost:hover { color: var(--accent); border-color: var(--accent); }
 
+/* ── HORIZONTAL WORK GALLERY ───────────────────────────────
+   The Work section pins to the viewport and the project cards
+   translate left as you scroll down (driven by JS). */
+.projects-section { padding: 0; }
+.hscroll { position: relative; }        /* height set by JS = 100vh + travel */
+.hscroll-sticky {
+  position: sticky; top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.hscroll-head { padding-top: clamp(72px, 12vh, 132px); flex-shrink: 0; }
+.hscroll-head-inner {
+  display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s-6);
+}
+.hscroll-head .section-header { margin: 0; }
+.hscroll-meta {
+  display: flex; flex-direction: column; align-items: flex-end; gap: var(--s-2);
+  font-family: var(--font-mono); white-space: nowrap;
+}
+.hscroll-count { font-size: var(--t-sm); color: var(--text-2); letter-spacing: 0.08em; }
+.hscroll-count #work-index { color: var(--accent); }
+.hscroll-count .hscroll-sep { color: var(--text-3); margin: 0 2px; }
+.hscroll-hint {
+  font-size: var(--t-xs); color: var(--text-3); letter-spacing: 0.14em; text-transform: uppercase;
+}
+.hscroll-hint .arrow { animation: hintNudge 1.6s var(--ease-out) infinite; }
+@keyframes hintNudge { 0%,100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
+.hscroll-progress {
+  margin-top: var(--s-6);
+  height: 2px; background: var(--border);
+  max-width: var(--container-max); margin-left: auto; margin-right: auto;
+  width: calc(100% - var(--container-pad) * 2);
+}
+.hscroll-progress-bar {
+  display: block; height: 100%; width: 0%;
+  background: var(--accent); transition: width 0.1s linear;
+}
+.hscroll-viewport { flex: 1; display: flex; align-items: center; overflow: hidden; min-height: 0; }
+.hscroll-track {
+  display: flex; align-items: stretch;
+  gap: clamp(20px, 3vw, 44px);
+  padding: 0 clamp(20px, 6vw, 120px);
+  will-change: transform;
+}
+.work-panel {
+  flex: 0 0 auto;
+  width: min(440px, 84vw);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.work-panel .project-img-wrap { border-radius: 10px; }
+.work-panel .project-img { aspect-ratio: 4 / 3; }
+.work-panel .project-item:hover .project-img,
+.work-panel:hover .project-img { transform: scale(1.04); }
+.work-panel .project-info { padding-top: var(--s-6); }
+.work-panel .project-top { margin-bottom: var(--s-4); }
+.work-panel .project-name { font-size: var(--t-2xl); margin-bottom: var(--s-3); }
+.work-panel .project-desc {
+  font-size: var(--t-sm); line-height: 1.7; margin-bottom: var(--s-5); max-width: none;
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+}
+.work-panel .tag-list { gap: var(--s-2); }
+
+/* Mobile / narrow: fall back to a normal vertical stack (no pin) */
+@media (max-width: 899px) {
+  .hscroll { height: auto !important; }
+  .hscroll-sticky { position: static; height: auto; overflow: visible; }
+  .hscroll-head { padding-top: var(--section-gap); margin-bottom: var(--s-10); }
+  .hscroll-progress, .hscroll-hint { display: none; }
+  .hscroll-viewport { overflow: visible; }
+  .hscroll-track {
+    flex-direction: column; gap: clamp(48px, 9vw, 80px);
+    padding: 0 var(--container-pad); transform: none !important;
+    max-width: var(--container-max); margin: 0 auto;
+  }
+  .work-panel { width: 100%; max-width: 560px; }
+}
+
 /* ── DESIGN WORK ─────────────────────────────────────────── */
 .design-section {
   padding: var(--section-gap) 0;
