@@ -14,11 +14,11 @@
   --text-2: #999999;
   --text-3: #555555;
 
-  --accent:      #c8a97e;
-  --accent-rgb:  200, 169, 126;
-  --accent-dim:  rgba(200, 169, 126, 0.08);
-  --accent-glow: rgba(200, 169, 126, 0.22);
-  --accent-border: rgba(200, 169, 126, 0.25);
+  --accent:      #9fb4d4;
+  --accent-rgb:  159, 180, 212;
+  --accent-dim:  rgba(159, 180, 212, 0.08);
+  --accent-glow: rgba(159, 180, 212, 0.22);
+  --accent-border: rgba(159, 180, 212, 0.28);
 
   /* keyboard deck + keycaps (theme-aware, matches site surfaces) */
   --deck-face:  linear-gradient(180deg, #161616 0%, #0b0b0b 100%);
@@ -1161,7 +1161,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
 .project-award {
   position: absolute;
   top: var(--s-4); left: var(--s-4);
-  background: rgba(200,169,126,0.95);
+  background: rgba(159,180,212,0.95);
   color: #0a0a0a;
   font-size: var(--t-xs);
   font-weight: 700;
@@ -1602,7 +1602,7 @@ body.cursor-hover .cursor-dot { width: 0; height: 0; }
   opacity: 0;
   background: radial-gradient(
     420px circle at var(--mx, 50%) var(--my, 40%),
-    rgba(200, 169, 126, 0.10),
+    rgba(159, 180, 212, 0.10),
     transparent 70%
   );
   transition: opacity 0.6s var(--ease-out);
@@ -1864,11 +1864,11 @@ html[data-theme="light"] {
   --text-2: #5c574e;
   --text-3: #9a9388;
 
-  --accent:        #8f6b38;
-  --accent-rgb:    143, 107, 56;
-  --accent-dim:    rgba(143, 107, 56, 0.10);
-  --accent-glow:   rgba(143, 107, 56, 0.28);
-  --accent-border: rgba(143, 107, 56, 0.35);
+  --accent:        #4f6785;
+  --accent-rgb:    79, 103, 133;
+  --accent-dim:    rgba(79, 103, 133, 0.10);
+  --accent-glow:   rgba(79, 103, 133, 0.28);
+  --accent-border: rgba(79, 103, 133, 0.35);
 
   /* keyboard deck + keycaps — light */
   --deck-face:  linear-gradient(180deg, #e9e6df 0%, #d4cfc4 100%);
@@ -2002,7 +2002,7 @@ html[data-theme="light"] .grain { opacity: 0.06; mix-blend-mode: multiply; }
 .hero-aura::after {
   width: 38vw; height: 38vw;
   right: -6vw; bottom: -10vw;
-  background: radial-gradient(circle, rgba(200, 169, 126, 0.10), transparent 62%);
+  background: radial-gradient(circle, rgba(159, 180, 212, 0.10), transparent 62%);
   opacity: 0.6;
   animation: aura2 23s ease-in-out infinite alternate;
 }

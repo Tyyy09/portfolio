@@ -167,9 +167,9 @@ function animateHeroName() {
   let w = 0, h = 0, raf = null, running = false, t = 0;
   const target = { x: 0.42, y: 0.45 }, cur = { x: 0.42, y: 0.45 };
   const blobs = [
-    { c: [200, 169, 126], r: 0.55, ax: 0.16, ay: 0.12, sx: 0.00022, sy: 0.00017, px: 0, py: 0 },
-    { c: [178, 138, 92],  r: 0.45, ax: 0.18, ay: 0.16, sx: 0.00015, sy: 0.00024, px: 2, py: 1 },
-    { c: [110, 88, 64],   r: 0.62, ax: 0.20, ay: 0.10, sx: 0.00012, sy: 0.00019, px: 4, py: 3 },
+    { c: [159, 180, 212], r: 0.55, ax: 0.16, ay: 0.12, sx: 0.00022, sy: 0.00017, px: 0, py: 0 },
+    { c: [120, 150, 200], r: 0.45, ax: 0.18, ay: 0.16, sx: 0.00015, sy: 0.00024, px: 2, py: 1 },
+    { c: [72, 98, 150],   r: 0.62, ax: 0.20, ay: 0.10, sx: 0.00012, sy: 0.00019, px: 4, py: 3 },
   ];
 
   function resize() {
@@ -265,11 +265,11 @@ function animateHeroName() {
   const GAP = 64, BASE_R = 1.1, GLOW_R = 3.6, RADIUS = 150;
   let w = 0, h = 0, dots = [], raf = null, running = false;
   const mouse = { x: -9999, y: -9999 };
-  let base = 'rgba(136,136,136,0.18)', accent = '200,169,126';
+  let base = 'rgba(136,136,136,0.18)', accent = '159,180,212';
 
   function readColors() {
     const cs = getComputedStyle(document.documentElement);
-    accent = (cs.getPropertyValue('--accent-rgb').trim()) || '200,169,126';
+    accent = (cs.getPropertyValue('--accent-rgb').trim()) || '159,180,212';
     base = (document.documentElement.getAttribute('data-theme') === 'light')
       ? 'rgba(0,0,0,0.14)' : 'rgba(160,160,160,0.16)';
   }
