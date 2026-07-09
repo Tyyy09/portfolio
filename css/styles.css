@@ -278,77 +278,41 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 100%;
   z-index: 1000;
   border-bottom: 1px solid transparent;
-  transition: background var(--dur-med), border-color var(--dur-med);
+  transition: background var(--dur-med), border-color var(--dur-med),
+              backdrop-filter var(--dur-med);
 }
-/* Background sits on the inner pill, not the full bar */
+/* On scroll: a flat translucent bar for legibility (no pill) */
+.site-header.scrolled {
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border-bottom-color: var(--border);
+}
 .nav-inner {
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 var(--container-pad);
-  height: 64px;
+  height: 68px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid transparent;
-  border-radius: 0;
-  transition: max-width var(--dur-med) var(--ease-out),
-              height var(--dur-med) var(--ease-out),
-              margin var(--dur-med) var(--ease-out),
-              padding var(--dur-med) var(--ease-out),
-              background var(--dur-med), border-color var(--dur-med),
-              border-radius var(--dur-med), box-shadow var(--dur-med);
 }
-/* On scroll: condense into a smaller floating pill pulled in from the sides */
-.site-header.scrolled .nav-inner {
-  max-width: 880px;
-  height: 52px;
-  margin-top: var(--s-3);
-  padding: 0 var(--s-4) 0 var(--s-6);
-  background: rgba(10, 10, 10, 0.7);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-color: var(--border);
-  border-radius: 999px;
-  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.28);
-}
-html[data-theme="light"] .site-header.scrolled .nav-inner {
-  background: rgba(247, 246, 243, 0.72);
-  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.10);
-}
-/* Slightly smaller logo when condensed */
-.site-header.scrolled .nav-logo { font-size: var(--t-base); }
 
-/* Desktop: floating glass pill nav (always detached) */
-@media (min-width: 769px) {
-  .nav-inner {
-    margin: var(--s-4) auto 0;
-    max-width: 1080px;
-    height: 58px;
-    padding: 0 var(--s-3) 0 var(--s-6);
-    border-color: var(--border);
-    border-radius: 999px;
-    background: rgba(10, 10, 10, 0.5);
-    backdrop-filter: blur(14px) saturate(160%);
-    -webkit-backdrop-filter: blur(14px) saturate(160%);
-    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.22);
-  }
-  html[data-theme="light"] .nav-inner {
-    background: rgba(247, 246, 243, 0.55);
-    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.08);
-  }
-  /* active link gets a soft pill instead of just an underline */
-  .nav-link.active { background: var(--accent-dim); border-radius: 999px; }
-  .nav-link.active::before { display: none; }
-}
+/* Left identity: name_city + live local time (mono, editorial) */
 .nav-logo {
-  font-size: var(--t-lg);
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  font-weight: 400;
+  letter-spacing: 0.12em;
   text-decoration: none;
-  color: var(--text-1);
+  color: var(--text-2);
   transition: color var(--dur-fast);
 }
-.nav-logo:hover { color: var(--accent); }
+.nav-logo .nav-id { color: var(--text-1); font-weight: 700; }
+.nav-logo:hover .nav-id { color: var(--accent); }
 
 .nav-links {
   display: flex;
@@ -1673,22 +1637,17 @@ body.loaded .hero-spotlight { opacity: 1; }
 /* ── RESPONSIVE: MOBILE ──────────────────────────────────── */
 @media (max-width: 768px) {
   .hamburger { display: flex; }
-  /* Floating pill nav on mobile. NO backdrop-filter — it would trap the
-     fixed overlay menu — so use a more opaque background instead. */
+  /* Flat full-width bar on mobile. No backdrop-filter (it would trap the
+     fixed overlay menu) — use a more opaque solid background on scroll. */
   .nav-inner {
-    margin: var(--s-3) auto 0;
-    max-width: calc(100% - var(--s-8));
-    height: 54px;
-    padding: 0 var(--s-2) 0 var(--s-5);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    background: rgba(10, 10, 10, 0.9);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32);
+    height: 58px;
+    padding: 0 var(--container-pad);
   }
-  html[data-theme="light"] .nav-inner { background: rgba(247, 246, 243, 0.92); }
-  .site-header.scrolled .nav-inner { background: rgba(10, 10, 10, 0.96); }
-  html[data-theme="light"] .site-header.scrolled .nav-inner { background: rgba(247, 246, 243, 0.96); }
-  .site-header.scrolled .nav-logo { font-size: var(--t-lg); }
+  .site-header.scrolled {
+    background: color-mix(in srgb, var(--bg) 94%, transparent);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 
   /* Full-screen overlay menu */
   .nav-links {
@@ -1936,14 +1895,14 @@ html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *
 }
 .nav-menu-foot { display: none; }
 
-/* live local time in the nav */
+/* live local time in the nav identity */
 .nav-time {
   font-family: var(--font-mono);
   font-size: var(--t-xs);
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--text-2);
-  padding-right: var(--s-2);
 }
 .theme-toggle {
   display: inline-flex;
