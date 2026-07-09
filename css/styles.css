@@ -292,7 +292,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 var(--container-pad);
-  height: 68px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -330,12 +330,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   justify-content: center;
   overflow: visible;
   font-family: var(--font-mono);
-  font-size: var(--t-xs);
+  font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-2);
-  padding: var(--s-2) var(--s-4);
+  padding: var(--s-2) var(--s-3);
 }
 .nav-link span {
   display: block;
@@ -359,9 +359,10 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .nav-cta {
   color: var(--bg) !important;
   background: var(--text-1) !important;
-  padding: var(--s-2) var(--s-5) !important;
-  border-radius: 6px;
+  padding: 7px 14px !important;
+  border-radius: 5px;
   font-family: var(--font-mono);
+  font-size: 11px;
   font-weight: 500 !important;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1641,7 +1642,7 @@ body.loaded .hero-spotlight { opacity: 1; }
   /* Flat full-width bar on mobile. No backdrop-filter (it would trap the
      fixed overlay menu) — use a more opaque solid background on scroll. */
   .nav-inner {
-    height: 58px;
+    height: 52px;
     padding: 0 var(--container-pad);
   }
   .site-header.scrolled {
@@ -1909,8 +1910,8 @@ html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px; height: 38px;
-  border-radius: 8px;
+  width: 32px; height: 32px;
+  border-radius: 7px;
   color: var(--text-2);
   border: 1px solid var(--border-strong);
   background: transparent;
