@@ -136,7 +136,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   line-height: 1;
   letter-spacing: -0.045em;
   color: var(--text-1);
-  text-transform: uppercase;
   margin: 0;
   white-space: nowrap;
 }
