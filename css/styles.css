@@ -717,10 +717,15 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   z-index: 2;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: var(--s-4);
 }
+/* Scroll hint centered in the row */
 .hero-scroll {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   display: inline-flex;
   align-items: center;
   gap: var(--s-3);
@@ -748,8 +753,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   font-size: var(--t-xs);
   font-family: var(--font-mono);
   color: var(--text-3);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.06em;
   transition: color var(--dur-fast);
 }
 .hero-scroll:hover .scroll-label { color: var(--text-1); }
@@ -758,8 +762,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   gap: var(--s-5);
   font-family: var(--font-mono);
   font-size: var(--t-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
 }
 .hero-socials a {
   color: var(--text-1);
