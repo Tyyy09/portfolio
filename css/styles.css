@@ -231,7 +231,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-family: var(--font-mono);
   font-size: var(--t-xs);
   letter-spacing: 0.34em;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-3);
 }
 .loader-ellipsis::after { content: ''; animation: loaderDots 1.4s steps(1, end) infinite; }
@@ -336,7 +336,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.14em;
-  text-transform: uppercase;
+  text-transform: none;
   text-decoration: none;
   color: var(--text-2);
   transition: color var(--dur-fast);
@@ -362,7 +362,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.14em;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-1);
   padding: var(--s-2) var(--s-3);
 }
@@ -394,7 +394,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-size: 11px;
   font-weight: 500 !important;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  text-transform: none;
   transition: background var(--dur-fast), color var(--dur-fast) !important;
 }
 .nav-cta:hover { background: var(--accent) !important; color: var(--bg) !important; }
@@ -493,7 +493,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   font-family: var(--font-mono);
   font-size: var(--t-xs);
   letter-spacing: 0.08em;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-3);
 }
 .hero-clock-time { color: var(--text-1); font-variant-numeric: tabular-nums; }
@@ -508,7 +508,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   font-weight: 400;
   color: var(--text-2);
   letter-spacing: 0.16em;
-  text-transform: uppercase;
+  text-transform: none;
   padding: var(--s-2) var(--s-4);
   border: 1px solid var(--border-strong);
   border-radius: 999px;
@@ -546,7 +546,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   font-size: var(--t-sm);
   color: var(--text-2);
   letter-spacing: 0.04em;
-  text-transform: uppercase;
+  text-transform: none;
   margin: 0 0 var(--s-4);
 }
 .hero-kicker-line {
@@ -609,7 +609,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   font-family: var(--font-mono);
   font-size: var(--t-xs);
   letter-spacing: 0.18em;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-1);
 }
 .hero-tag i { color: var(--text-3); font-style: normal; padding: 0 0.15em; }
@@ -780,7 +780,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   font-family: var(--font-mono);
   color: var(--accent);
   letter-spacing: 0.14em;
-  text-transform: uppercase;
+  text-transform: none;
   margin-bottom: var(--s-5);
 }
 .label::before {
@@ -911,7 +911,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   font-family: var(--font-mono);
   font-size: var(--t-xs);
   letter-spacing: 0.2em;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-3);
   margin-bottom: var(--s-4);
 }
@@ -987,7 +987,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   font-family: var(--font-mono);
   font-size: var(--t-sm);
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-3);
 }
 
@@ -1270,7 +1270,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
 .hscroll-count #work-index { color: var(--accent); }
 .hscroll-count .hscroll-sep { color: var(--text-3); margin: 0 2px; }
 .hscroll-hint {
-  font-size: var(--t-xs); color: var(--text-3); letter-spacing: 0.14em; text-transform: uppercase;
+  font-size: var(--t-xs); color: var(--text-3); letter-spacing: 0.14em; text-transform: none;
 }
 .hscroll-hint .arrow { animation: hintNudge 1.6s var(--ease-out) infinite; }
 @keyframes hintNudge { 0%,100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
@@ -1613,7 +1613,7 @@ body.cursor-hover .cursor-dot { width: 0; height: 0; }
   font-size: clamp(2rem, 9vw, 5.5rem);
   font-weight: 700;
   letter-spacing: -0.03em;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--accent);
   opacity: 0;
   transform: translateY(20px);
@@ -1935,7 +1935,7 @@ html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *
   font-size: var(--t-xs);
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.12em;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-2);
 }
 .theme-toggle {
@@ -2031,7 +2031,7 @@ html[data-theme="light"] .grain { opacity: 0.06; mix-blend-mode: multiply; }
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
+  text-transform: none;
   color: #0a0a0a;
   opacity: 0;
   transform: scale(0.4);
@@ -2107,7 +2107,7 @@ body.cursor-view .cursor-label { opacity: 1; transform: scale(1); }
 .contact-or {
   font-family: var(--font-mono);
   font-size: var(--t-xs);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.1em;
   color: var(--text-3);
   margin-bottom: var(--s-3);
