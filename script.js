@@ -570,7 +570,7 @@ function setMenu(open) {
 hamburger.addEventListener('click', () => setMenu(!navLinks.classList.contains('open')));
 function closeMenu() { setMenu(false); }
 navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu(); });
 
 /* ── NAV: LIVE LOCAL TIME ─────────────────────────────────── */
 (function () {
