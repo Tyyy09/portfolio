@@ -90,6 +90,29 @@ img  { display: block; max-width: 100%; }
   transition: opacity 1.2s ease;
 }
 body.loaded .page-aura { opacity: 1; }
+
+/* Background column grid — faint dashed vertical guides, fixed behind content,
+   aligned to the content container (Eva Sanchez style). */
+.bg-grid {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(var(--container-max), calc(100% - var(--container-pad) * 2));
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(to right,
+    rgba(255, 255, 255, 0.06) 0 1px,
+    transparent 1px calc(100% / 6));
+  -webkit-mask-image: repeating-linear-gradient(to bottom, #000 0 6px, transparent 6px 13px);
+  mask-image: repeating-linear-gradient(to bottom, #000 0 6px, transparent 6px 13px);
+}
+html[data-theme="light"] .bg-grid {
+  background-image: repeating-linear-gradient(to right,
+    rgba(0, 0, 0, 0.07) 0 1px,
+    transparent 1px calc(100% / 6));
+}
 /* A single fixed-size glow blob translated to the cursor. Moving it with
    transform is GPU-composited (no per-frame repaint like a moving gradient). */
 .page-aura::before {
