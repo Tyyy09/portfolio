@@ -345,10 +345,9 @@ function animateHeroName() {
   });
 })();
 
-/* ── MAGNETIC ELEMENTS ─────────────────────────────────────
-   Buttons and the nav CTA drift toward the cursor, then spring
-   back on leave — the signature "premium" micro-interaction. */
+/* ── MAGNETIC ELEMENTS (disabled) ────────────────────────── */
 (function () {
+  return; // magnetic mouse-follow disabled
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   if (REDUCED || !fine) return;
   const STRENGTH = 0.32, MAX = 9;
@@ -441,8 +440,8 @@ if (!REDUCED && typeof Lenis !== 'undefined') {
   });
 }
 
-/* ── CUSTOM MAGNETIC CURSOR ───────────────────────────────── */
-if (FINE_POINTER && !REDUCED) {
+/* ── CUSTOM MAGNETIC CURSOR (removed — guarded on missing elements) ── */
+if (FINE_POINTER && !REDUCED && document.getElementById('cursor-dot')) {
   const dot  = document.getElementById('cursor-dot');
   const ring = document.getElementById('cursor-ring');
   let mx = window.innerWidth / 2, my = window.innerHeight / 2;
