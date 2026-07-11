@@ -82,7 +82,7 @@ function animateHeroName() {
 (function () {
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   if (!fine || REDUCED) return;
-  const targets = document.querySelectorAll('.nav-link span, .nav-cta');
+  const targets = document.querySelectorAll('.nav-link span, .nav-cta, .hero-socials a');
   if (!targets.length) return;
 
   const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&/<>';
