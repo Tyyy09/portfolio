@@ -48,8 +48,8 @@
   --s-12: 48px;  --s-16: 64px;  --s-20: 80px;  --s-24: 96px;
 
   --container-max: 1480px;
-  --container-pad: clamp(24px, 7vw, 140px);
-  --pgrid:         clamp(24px, 7vw, 140px);
+  --container-pad: clamp(20px, 4vw, 72px);
+  --pgrid:         clamp(20px, 4vw, 72px);
   --section-gap:   clamp(80px, 11vw, 140px);
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
