@@ -8,39 +8,67 @@ const lerp = (a, b, t) => a + (b - a) * t;
 const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
 
 /* ── LOADER ────────────────────────────────────────────────
-   Counts to 100, fades, then releases the hero. */
+   Real progress: waits on the actual fonts + preloads every image
+   on the page, so the percentage reflects genuine load state rather
+   than a scripted count. The displayed number eases toward the real
+   fraction for a smooth read. */
 (function () {
   const loader = document.getElementById('loader');
   const numEl  = document.getElementById('loader-number');
   const barEl  = document.getElementById('loader-bar-fill');
-  let p = 0;
+  const statusEl = document.getElementById('loader-status');
+  if (!loader || !numEl) return;
 
-  const render = () => {
-    numEl.textContent = p;
-    if (barEl) barEl.style.width = p + '%';
-  };
-  function tick() {
-    p += Math.floor(Math.random() * 6) + 2;
-    if (p >= 100) {
-      p = 100;
-      render();
-      setTimeout(finish, 460);
-    } else {
-      render();
-      setTimeout(tick, Math.random() * 130 + 130);
+  // Collect the real things we're waiting on: web fonts + every image src.
+  const srcs = [...new Set(
+    [...document.querySelectorAll('img')]
+      .map(img => img.getAttribute('src'))
+      .filter(Boolean)
+  )];
+
+  const tasks = [];
+  if (document.fonts && document.fonts.ready) {
+    tasks.push(document.fonts.ready.catch(() => {}));
+  }
+  srcs.forEach(src => {
+    tasks.push(new Promise(resolve => {
+      const img = new Image();
+      img.onload = img.onerror = () => resolve();
+      img.src = src;
+    }));
+  });
+
+  const total = tasks.length || 1;
+  let done = 0;
+  let target = 0;   // real fraction * 100
+  tasks.forEach(p => p.then(() => { done++; target = Math.round((done / total) * 100); }));
+
+  // Failsafes so the site always reveals even if an asset stalls.
+  window.addEventListener('load', () => { target = 100; });
+  setTimeout(() => { target = 100; }, 8000);
+
+  let shown = 0, finished = false;
+  function loop() {
+    shown += (target - shown) * 0.14;
+    if (target - shown < 0.6) shown = target;
+    const pct = Math.min(100, Math.round(shown));
+    numEl.textContent = pct;
+    if (barEl) barEl.style.width = pct + '%';
+    if (statusEl && pct >= 100) statusEl.textContent = 'Ready';
+    if (target >= 100 && pct >= 100) {
+      if (!finished) { finished = true; setTimeout(finish, REDUCED ? 0 : 300); }
+      return;
     }
+    requestAnimationFrame(loop);
   }
+  requestAnimationFrame(loop);
+
   function finish() {
-    loader.classList.add('hide');         // fades counter, sweeps panels up
-    // Reveal the hero just as the panels clear it, so it rises in from behind.
-    setTimeout(() => {
-      document.body.classList.add('loaded');
-      animateHeroName();
-    }, REDUCED ? 0 : 620);
-    setTimeout(() => loader.classList.add('gone'), REDUCED ? 0 : 1200);
+    document.body.classList.add('loaded');
+    animateHeroName();
+    loader.classList.add('hide');                 // fades out, revealing the hero
+    setTimeout(() => loader.classList.add('gone'), REDUCED ? 0 : 700);
   }
-  render();
-  tick();
 })();
 
 /* ── HERO NAME: handed off clean from the loader ───────────
