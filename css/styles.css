@@ -336,7 +336,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.14em;
-  text-transform: uppercase;
+  text-transform: none;
   text-decoration: none;
   color: var(--text-2);
   transition: color var(--dur-fast);
@@ -753,7 +753,8 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   font-size: var(--t-xs);
   font-family: var(--font-mono);
   color: var(--text-3);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   transition: color var(--dur-fast);
 }
 .hero-scroll:hover .scroll-label { color: var(--text-1); }
@@ -762,7 +763,8 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   gap: var(--s-5);
   font-family: var(--font-mono);
   font-size: var(--t-xs);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 .hero-socials a {
   color: var(--text-1);
