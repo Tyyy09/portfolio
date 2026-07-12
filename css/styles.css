@@ -320,7 +320,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .nav-inner {
   max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 clamp(24px, 7vw, 140px);
+  padding: 0;
   height: 56px;
   display: flex;
   align-items: center;
@@ -1672,7 +1672,7 @@ body.loaded .hero-spotlight { opacity: 1; }
   .hamburger { display: flex; }
   .nav-inner {
     height: 52px;
-    padding: 0 var(--container-pad);
+    padding: 0;
   }
 
   /* Full-screen overlay menu */
