@@ -323,7 +323,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   max-width: var(--container-max);
   width: 100%;
   margin: 0 auto;
-  padding: 1.4rem var(--pgrid);
+  padding: 0.7rem var(--pgrid);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1679,7 +1679,7 @@ body.loaded .hero-spotlight { opacity: 1; }
 @media (max-width: 768px) {
   .hamburger { display: flex; }
   .nav-inner {
-    padding: 1.1rem var(--pgrid);
+    padding: 0.7rem var(--pgrid);
   }
 
   /* Full-screen overlay menu */
