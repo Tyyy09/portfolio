@@ -584,9 +584,9 @@ window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu
   if (!el) return;
   function tick() {
     try {
-      el.textContent = new Intl.DateTimeFormat('en-GB', {
-        hour: '2-digit', minute: '2-digit', hour12: false,
-      }).format(new Date());
+      el.textContent = new Intl.DateTimeFormat('en-US', {
+        hour: '2-digit', minute: '2-digit', hour12: true,
+      }).format(new Date()).toUpperCase();
     } catch (e) {
       el.textContent = new Date().toLocaleTimeString();
     }
