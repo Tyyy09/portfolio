@@ -537,7 +537,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   bottom: var(--name-bottom);
   z-index: 2;
 }
-.hero-name { margin: 0; cursor: pointer; }
+.hero-name { margin: 0; }
 .hero-kicker {
   display: flex;
   align-items: center;
@@ -731,33 +731,15 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   gap: var(--s-3);
   text-decoration: none;
 }
-.scroll-line {
-  width: 44px; height: 1px;
-  background: var(--border-strong);
-  position: relative;
-  overflow: hidden;
-}
-.scroll-line::after {
-  content: "";
-  position: absolute; inset: 0;
-  background: var(--accent);
-  transform: translateX(-100%);
-  animation: scrollLine 2.2s ease-in-out infinite;
-}
-@keyframes scrollLine {
-  0%   { transform: translateX(-100%); }
-  50%  { transform: translateX(0); }
-  100% { transform: translateX(100%); }
-}
 .scroll-label {
   font-size: var(--t-xs);
   font-family: var(--font-mono);
-  color: var(--text-3);
+  color: var(--text-1);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   transition: color var(--dur-fast);
 }
-.hero-scroll:hover .scroll-label { color: var(--text-1); }
+.hero-scroll:hover .scroll-label { color: var(--accent); }
 .hero-socials {
   display: flex;
   gap: var(--s-5);
@@ -767,11 +749,19 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   text-transform: uppercase;
 }
 .hero-socials a {
-  color: var(--text-1);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-2);
   text-decoration: none;
   transition: color var(--dur-fast);
 }
 .hero-socials a:hover { color: var(--accent); }
+.social-arrow {
+  display: inline-block;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.hero-socials a:hover .social-arrow { transform: translate(2px, -2px); }
 
 /* ── SHARED SECTION ELEMENTS ─────────────────────────────── */
 .label {

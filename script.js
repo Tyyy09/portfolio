@@ -43,20 +43,27 @@ const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
   tick();
 })();
 
-/* ── HERO NAME: SCRAMBLE ON HOVER ──────────────────────────
-   The name is handed off clean from the loader, so it does NOT
-   scramble on load (that would break the seamless transition).
-   Each line scrambles independently on hover, leaving the dot intact. */
+/* ── HERO NAME: handed off clean from the loader ───────────
+   No hover scramble here anymore — that effect now lives on the
+   "Scroll to explore" link instead (see below). */
 function animateHeroName() {
   const lines = document.querySelectorAll('.hero-name .bn-text');
-  if (!lines.length) return;
   lines.forEach(el => { el.dataset.final = el.textContent.trim(); });
+}
+
+/* ── SCROLL-TO-EXPLORE: SCRAMBLE ON HOVER (name-style effect) ──
+   Same scramble treatment the hero name used to have. */
+(function () {
+  const el = document.querySelector('.hero-scroll .scroll-label');
+  const trigger = document.querySelector('.hero-scroll');
+  if (!el || !trigger) return;
+  el.dataset.final = el.textContent.trim();
 
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   if (!fine || REDUCED) return;
 
   const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÆØ#%&@*/<>';
-  function scramble(el, duration) {
+  function scramble(duration) {
     const finalText = el.dataset.final;
     cancelAnimationFrame(el._raf);
     const start = performance.now();
@@ -64,8 +71,10 @@ function animateHeroName() {
       const t = (now - start) / duration;
       let out = '';
       for (let i = 0; i < finalText.length; i++) {
+        const ch = finalText[i];
+        if (ch === ' ') { out += ' '; continue; }
         const revealAt = 0.15 + (i / finalText.length) * 0.7;
-        out += (t >= revealAt) ? finalText[i] : glyphs[(Math.random() * glyphs.length) | 0];
+        out += (t >= revealAt) ? ch : glyphs[(Math.random() * glyphs.length) | 0];
       }
       el.textContent = out;
       if (t < 1) { el._raf = requestAnimationFrame(frame); }
@@ -73,16 +82,14 @@ function animateHeroName() {
     }
     el._raf = requestAnimationFrame(frame);
   }
-
-  const nameEl = document.querySelector('.hero-name');
-  nameEl.addEventListener('mouseenter', () => lines.forEach(el => scramble(el, 700)));
-}
+  trigger.addEventListener('mouseenter', () => scramble(700));
+})();
 
 /* ── NAV LINKS: SCRAMBLE ON HOVER (same effect as the name) ── */
 (function () {
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   if (!fine || REDUCED) return;
-  const targets = document.querySelectorAll('.nav-link span, .nav-cta, .hero-socials a');
+  const targets = document.querySelectorAll('.nav-link span, .nav-cta, .hero-socials .social-label');
   if (!targets.length) return;
 
   const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&/<>';
@@ -109,7 +116,7 @@ function animateHeroName() {
 
   targets.forEach(el => {
     el.dataset.final = el.textContent.trim();
-    const trigger = el.closest('.nav-link') || el;
+    const trigger = el.closest('.nav-link') || el.closest('a') || el;
     trigger.addEventListener('mouseenter', () => scramble(el));
   });
 })();
