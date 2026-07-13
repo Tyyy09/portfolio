@@ -570,7 +570,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
 /* Minimalist two-line subtitle under the name */
 .hero-subtitle {
   margin: 0;
-  font-size: var(--t-lg);
+  font-size: var(--t-base);
   font-weight: 400;
   line-height: 1.5;
   letter-spacing: -0.01em;
@@ -713,7 +713,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   text-decoration: none;
 }
 .scroll-label {
-  font-size: var(--t-xs);
+  font-size: 10px;
   font-family: var(--font-mono);
   color: var(--text-1);
   letter-spacing: 0.12em;
@@ -725,7 +725,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   display: flex;
   gap: var(--s-5);
   font-family: var(--font-mono);
-  font-size: var(--t-xs);
+  font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
