@@ -81,13 +81,6 @@ body {
 }
 img  { display: block; max-width: 100%; }
 
-/* Black & white only: desaturate all content imagery (project shots, design
-   work, profile, and the tech keycaps + their colored faces). */
-.about-photo,
-.project-img,
-.design-img,
-.keycap { filter: grayscale(1); }
-
 /* Page-wide ambient aura — a soft accent glow that trails the cursor across
    every section, tying the whole page together. Sits above the body backdrop
    but behind all content (transparent sections let it bleed through). */
