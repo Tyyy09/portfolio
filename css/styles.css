@@ -1382,6 +1382,11 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   padding: var(--section-gap) 0;
   border-top: 1px solid var(--border);
 }
+/* Education block nested inside About */
+.about-edu {
+  margin-top: clamp(48px, 7vw, 100px);
+}
+.about-edu .label { margin-bottom: var(--s-6); }
 .edu-item {
   display: grid;
   grid-template-columns: 180px 1fr;
