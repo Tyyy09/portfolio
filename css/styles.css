@@ -14,11 +14,11 @@
   --text-2: #999999;
   --text-3: #555555;
 
-  --accent:      #9fb4d4;
-  --accent-rgb:  159, 180, 212;
-  --accent-dim:  rgba(159, 180, 212, 0.08);
-  --accent-glow: rgba(159, 180, 212, 0.22);
-  --accent-border: rgba(159, 180, 212, 0.28);
+  --accent:      #ffffff;
+  --accent-rgb:  255, 255, 255;
+  --accent-dim:  rgba(255, 255, 255, 0.08);
+  --accent-glow: rgba(255, 255, 255, 0.20);
+  --accent-border: rgba(255, 255, 255, 0.30);
 
   /* keyboard deck + keycaps (theme-aware, matches site surfaces) */
   --deck-face:  linear-gradient(180deg, #161616 0%, #0b0b0b 100%);
@@ -80,6 +80,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 img  { display: block; max-width: 100%; }
+
+/* Black & white only: desaturate all content imagery (project shots, design
+   work, profile, and the tech keycaps + their colored faces). */
+.about-photo,
+.project-img,
+.design-img,
+.keycap { filter: grayscale(1); }
 
 /* Page-wide ambient aura — a soft accent glow that trails the cursor across
    every section, tying the whole page together. Sits above the body backdrop
@@ -1162,7 +1169,7 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
 .project-award {
   position: absolute;
   top: var(--s-4); left: var(--s-4);
-  background: rgba(159,180,212,0.95);
+  background: rgba(255,255,255,0.95);
   color: #0a0a0a;
   font-size: var(--t-xs);
   font-weight: 700;
@@ -1603,7 +1610,7 @@ body.cursor-hover .cursor-dot { width: 0; height: 0; }
   opacity: 0;
   background: radial-gradient(
     420px circle at var(--mx, 50%) var(--my, 40%),
-    rgba(159, 180, 212, 0.10),
+    rgba(255, 255, 255, 0.10),
     transparent 70%
   );
   transition: opacity 0.6s var(--ease-out);
@@ -1850,11 +1857,11 @@ html[data-theme="light"] {
   --text-2: #5c574e;
   --text-3: #9a9388;
 
-  --accent:        #4f6785;
-  --accent-rgb:    79, 103, 133;
-  --accent-dim:    rgba(79, 103, 133, 0.10);
-  --accent-glow:   rgba(79, 103, 133, 0.28);
-  --accent-border: rgba(79, 103, 133, 0.35);
+  --accent:        #111111;
+  --accent-rgb:    17, 17, 17;
+  --accent-dim:    rgba(17, 17, 17, 0.08);
+  --accent-glow:   rgba(17, 17, 17, 0.16);
+  --accent-border: rgba(17, 17, 17, 0.30);
 
   /* keyboard deck + keycaps — light */
   --deck-face:  linear-gradient(180deg, #e9e6df 0%, #d4cfc4 100%);
@@ -1988,7 +1995,7 @@ html[data-theme="light"] .grain { opacity: 0.06; mix-blend-mode: multiply; }
 .hero-aura::after {
   width: 38vw; height: 38vw;
   right: -6vw; bottom: -10vw;
-  background: radial-gradient(circle, rgba(159, 180, 212, 0.10), transparent 62%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.10), transparent 62%);
   opacity: 0.6;
   animation: aura2 23s ease-in-out infinite alternate;
 }
