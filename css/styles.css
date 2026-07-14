@@ -300,8 +300,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   height: 64px;
   z-index: -1;
   pointer-events: none;
-  backdrop-filter: blur(7px);
-  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(11px);
+  -webkit-backdrop-filter: blur(11px);
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.55) 45%, transparent 100%);
           mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.55) 45%, transparent 100%);
 }
