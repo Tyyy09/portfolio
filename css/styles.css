@@ -358,7 +358,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 400;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-1);
   padding: var(--s-2) var(--s-3);
@@ -385,12 +385,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .nav-cta {
   color: var(--bg) !important;
   background: var(--text-1) !important;
-  padding: 7px 14px !important;
-  border-radius: 5px;
+  padding: 3px 8px 2px !important;
+  border-radius: 0;
   font-family: var(--font-mono);
   font-size: 11px;
-  font-weight: 500 !important;
-  letter-spacing: 0.1em;
+  font-weight: 400 !important;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   transition: background var(--dur-fast), color var(--dur-fast) !important;
 }
