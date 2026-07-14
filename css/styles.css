@@ -279,6 +279,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 /* A gradient from the background color down to transparent, so content
    dissolves under the nav instead of hitting a hard blurred bar. */
+/* Short black gradient — the dark tint at the very top. */
 .site-header::before {
   content: "";
   position: absolute;
@@ -290,10 +291,19 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
     rgba(0, 0, 0, 0.55) 0%,
     rgba(0, 0, 0, 0.22) 55%,
     transparent 100%);
+}
+/* Blur — its own longer layer, strongest at the top, fading down. */
+.site-header::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 64px;
+  z-index: -1;
+  pointer-events: none;
   backdrop-filter: blur(7px);
   -webkit-backdrop-filter: blur(7px);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 100%);
-          mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.55) 45%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.55) 45%, transparent 100%);
 }
 .nav-inner {
   position: relative;
