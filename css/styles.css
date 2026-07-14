@@ -344,7 +344,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: var(--s-1);
+  gap: clamp(14px, 1.6vw, 26px);
 }
 .nav-links a { text-decoration: none; }
 
@@ -361,7 +361,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-1);
-  padding: var(--s-2) var(--s-3);
+  padding: var(--s-2) var(--s-1);
 }
 .nav-link span {
   display: block;
@@ -372,7 +372,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .nav-link::before {
   content: "";
   position: absolute;
-  left: var(--s-4); right: var(--s-4);
+  left: var(--s-1); right: var(--s-1);
   bottom: 5px; height: 1.5px;
   background: var(--accent);
   transform: scaleX(0);
