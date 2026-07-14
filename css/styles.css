@@ -748,19 +748,12 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
 .label {
   display: inline-flex;
   align-items: center;
-  gap: var(--s-3);
   font-size: var(--t-xs);
   font-family: var(--font-mono);
   color: var(--accent);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   margin-bottom: var(--s-5);
-}
-.label::before {
-  content: "";
-  width: 28px; height: 1px;
-  background: var(--accent);
-  opacity: 0.55;
 }
 .section-header { margin-bottom: var(--s-16); }
 .section-title {
@@ -1093,7 +1086,6 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
 .keycap:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* ── Animated underline on text links (feels alive) ──────── */
-.contact-email,
 .social-link,
 .edu-school {
   background-image: linear-gradient(var(--accent), var(--accent));
@@ -1102,7 +1094,6 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   background-position: 0 100%;
   transition: background-size 0.4s var(--ease-out), color var(--dur-fast);
 }
-.contact-email:hover,
 .social-link:hover { background-size: 100% 1px; color: var(--accent); }
 .keycap-tip {
   position: absolute;
@@ -1428,11 +1419,8 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   padding: var(--section-gap) 0;
   border-top: 1px solid var(--border);
 }
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(40px, 7vw, 110px);
-  align-items: start;
+.contact-inner {
+  max-width: 60ch;
 }
 .contact-heading {
   font-size: var(--t-4xl);
@@ -1446,52 +1434,43 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   font-size: var(--t-base);
   color: var(--text-2);
   line-height: 1.65;
-  margin-bottom: var(--s-12);
-  max-width: 40ch;
+  margin-bottom: clamp(40px, 6vw, 72px);
+  max-width: 42ch;
 }
-/* Direct details — labelled rows */
-.contact-direct { display: flex; flex-direction: column; }
-.contact-item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-2);
-  padding: var(--s-5) 0;
-  border-top: 1px solid var(--border);
-}
-.contact-item:last-child { border-bottom: 1px solid var(--border); }
-.contact-item-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-3);
-}
-.contact-email,
-.contact-value {
-  font-size: var(--t-lg);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+/* Big email — focal point */
+.contact-email-big {
+  display: inline-block;
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
   color: var(--text-1);
   text-decoration: none;
-  transition: color var(--dur-fast);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--s-2);
+  transition: color var(--dur-fast), border-color var(--dur-fast);
 }
-.contact-email:hover,
-.contact-value:hover { color: var(--accent); }
+.contact-email-big:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
 .contact-links {
   display: flex;
   align-items: center;
-  gap: var(--s-6);
+  gap: clamp(24px, 4vw, 48px);
   flex-wrap: wrap;
+  margin-top: clamp(32px, 4vw, 48px);
 }
 .social-link {
-  font-size: var(--t-lg);
-  font-weight: 600;
-  color: var(--text-1);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-2);
   text-decoration: none;
   transition: color var(--dur-fast);
 }
 .social-link:hover { color: var(--accent); }
-.social-sep { color: var(--text-3); }
 
 /* ── FOOTER ──────────────────────────────────────────────── */
 .site-footer {
@@ -1764,9 +1743,8 @@ body.loaded .hero-spotlight { opacity: 1; }
   .stat { border-right: none; border-bottom: 1px solid var(--border); }
   .stat:last-child { border-bottom: none; }
 
-  /* Contact — single column */
-  .contact-grid { grid-template-columns: 1fr; gap: clamp(40px, 10vw, 64px); }
-  .contact-right { order: 2; }
+  /* Contact — compact email on small screens */
+  .contact-email-big { font-size: var(--t-xl); }
 
   /* Footer */
   .footer-inner { flex-direction: column; gap: var(--s-3); text-align: center; }
