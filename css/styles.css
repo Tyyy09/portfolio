@@ -284,7 +284,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   content: "";
   position: absolute;
   inset: 0 0 auto 0;
-  height: 30px;
+  height: 16px;
   z-index: -1;
   pointer-events: none;
   background: linear-gradient(to bottom,
