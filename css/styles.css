@@ -228,26 +228,51 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .loader-status { color: var(--text-3); }
 
-/* Big count sits exactly where the hero name is handed off to. */
-.loader-count {
+/* The wordmark sits exactly where the hero name is handed off to, and
+   "inks in" from left to right as real progress advances. */
+.loader-word {
   position: absolute;
   left: var(--pgrid);
   bottom: var(--name-bottom);
+  line-height: 1;
+}
+.loader-word-ghost,
+.loader-word-ink {
+  display: block;
+}
+.loader-word-ghost {
+  color: var(--text-3);
+  -webkit-text-fill-color: var(--text-3);
+  opacity: 0.4;
+}
+.loader-word-ink {
+  position: absolute;
+  inset: 0;
+  color: var(--text-1);
+  -webkit-text-fill-color: var(--text-1);
+  clip-path: inset(0 100% 0 0);   /* revealed left→right via JS */
+}
+
+/* Percentage read-out — small, mono, at the word's right baseline. */
+.loader-meta {
+  position: absolute;
+  right: var(--pgrid);
+  bottom: calc(var(--name-bottom) + 0.35em);
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+}
+.loader-count {
   display: flex;
   align-items: flex-start;
-  font-family: var(--font);
-  font-weight: 600;
-  font-size: clamp(2.6rem, 13.5vw, 12rem);
-  line-height: 1;
-  letter-spacing: -0.045em;
-  color: var(--text-1);
+  font-size: clamp(1.4rem, 3.4vw, 2.6rem);
+  font-weight: 400;
+  color: var(--text-2);
 }
 #loader-number { font-variant-numeric: tabular-nums; }
 .loader-pct {
-  font-size: 0.26em;
-  font-weight: 500;
+  font-size: 0.5em;
   color: var(--accent);
-  margin-top: 0.35em;
+  margin-top: 0.2em;
   margin-left: 0.12em;
 }
 
@@ -1849,8 +1874,6 @@ body.loaded .hero-spotlight { opacity: 1; }
   .hero-ctas { order: 4; display: flex; flex-wrap: wrap; gap: var(--s-4); }
   .hero-foot { order: 5; margin-top: var(--s-8); }
   .big-name  { font-size: clamp(2.4rem, 12.5vw, 6rem); }  /* eased off the edges */
-  /* loader count matches the smaller hero name size */
-  .loader-count { font-size: clamp(2.4rem, 12.5vw, 6rem); }
 }
 
 /* ── HERO: small screens ─────────────────────────────────── */
