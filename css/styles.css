@@ -863,42 +863,57 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   padding: var(--section-gap) 0;
   border-top: 1px solid var(--border);
 }
+/* Big editorial statement */
+.about-top { margin-bottom: clamp(56px, 8vw, 120px); }
+.about-statement {
+  margin-top: var(--s-6);
+  font-size: clamp(1.9rem, 4.6vw, 4.2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  color: var(--text-1);
+  max-width: 22ch;
+}
+
+/* Bio + portrait */
 .about-grid {
   display: grid;
-  grid-template-columns: 1fr 1.45fr;
+  grid-template-columns: 1.5fr 1fr;
   gap: clamp(40px, 6vw, 96px);
   align-items: start;
 }
-.about-photo-wrap {
+.about-bio {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+  max-width: 56ch;
+}
+.about-bio p {
+  font-size: var(--t-base);
+  color: var(--text-2);
+  line-height: 1.85;
+}
+.about-portrait {
   position: sticky;
   top: 80px;
 }
 .about-photo {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
   object-position: top;
-  border-radius: 4px;
   filter: grayscale(15%) contrast(1.05);
 }
-.about-heading {
-  font-size: var(--t-3xl);
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  line-height: 1.2;
-  margin-bottom: var(--s-8);
-  color: var(--text-1);
-}
-.about-body {
+.about-portrait-cap {
   display: flex;
-  flex-direction: column;
-  gap: var(--s-5);
-  margin-bottom: var(--s-10);
-}
-.about-body p {
-  font-size: var(--t-base);
-  color: var(--text-2);
-  line-height: 1.85;
+  justify-content: space-between;
+  gap: var(--s-4);
+  margin-top: var(--s-3);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
 }
 .about-stats {
   display: grid;
@@ -906,6 +921,83 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
   border: 1px solid var(--border);
   border-radius: 8px;
   overflow: hidden;
+  margin-top: var(--s-4);
+}
+
+/* ── ABOUT · NUMBERED INDEX (Focus / Recognition / Education) ── */
+.about-index {
+  margin-top: clamp(64px, 10vw, 150px);
+}
+.idx-block {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.42fr) 1fr;
+  gap: clamp(20px, 4vw, 64px);
+  padding: clamp(28px, 3.5vw, 52px) 0;
+  border-top: 1px solid var(--border);
+}
+.about-index .idx-block:last-child { border-bottom: 1px solid var(--border); }
+.idx-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+}
+.idx-num {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  color: var(--accent);
+  letter-spacing: 0.1em;
+}
+.idx-title {
+  font-size: var(--t-lg);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--text-1);
+}
+.idx-list { display: flex; flex-direction: column; }
+.idx-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: var(--s-3) var(--s-5);
+  padding: var(--s-4) 0;
+  border-top: 1px solid var(--border);
+}
+.idx-list .idx-row:first-child { border-top: none; padding-top: 0; }
+.idx-role {
+  font-size: var(--t-lg);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--text-1);
+}
+.idx-meta {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.04em;
+  color: var(--text-3);
+  text-align: right;
+}
+/* Education rows: title + year on the top line, meta + detail beneath */
+.idx-row-edu { grid-template-columns: 1fr auto; }
+.idx-row-edu .idx-year {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+  text-align: right;
+}
+.idx-row-edu .idx-meta {
+  grid-column: 1 / -1;
+  text-align: left;
+  color: var(--text-2);
+  margin-top: calc(var(--s-1) * -1);
+}
+.idx-row-edu .idx-detail {
+  grid-column: 1 / -1;
+  font-size: var(--t-sm);
+  color: var(--text-2);
+  line-height: 1.7;
+  max-width: 60ch;
+  margin-top: var(--s-2);
 }
 .stat {
   padding: var(--s-6) var(--s-5);
@@ -1722,8 +1814,10 @@ body.loaded .hero-spotlight { opacity: 1; }
 
 /* ── RESPONSIVE: TABLET ──────────────────────────────────── */
 @media (max-width: 960px) {
-  .about-grid { grid-template-columns: 1fr; }
-  .about-photo-wrap { position: static; max-width: 280px; }
+  .about-grid { grid-template-columns: 1fr; gap: clamp(32px, 8vw, 56px); }
+  .about-portrait { position: static; order: -1; max-width: 320px; }
+  .idx-block { grid-template-columns: 1fr; gap: var(--s-5); }
+  .idx-head { gap: var(--s-2); }
 
   .project-item { grid-template-columns: 1fr; gap: var(--s-8); }
   .project-item--rev .project-img-wrap { order: unset; }
