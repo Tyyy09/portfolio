@@ -16,6 +16,7 @@ const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
   const loader = document.getElementById('loader');
   const numEl  = document.getElementById('loader-number');
   const barEl  = document.getElementById('loader-bar-fill');
+  const inkEl  = document.getElementById('loader-ink');
   const statusEl = document.getElementById('loader-status');
   if (!loader || !numEl) return;
 
@@ -54,6 +55,7 @@ const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
     const pct = Math.min(100, Math.round(shown));
     numEl.textContent = pct;
     if (barEl) barEl.style.width = pct + '%';
+    if (inkEl) inkEl.style.clipPath = 'inset(0 ' + (100 - shown) + '% 0 0)';
     if (statusEl && pct >= 100) statusEl.textContent = 'Ready';
     if (target >= 100 && pct >= 100) {
       if (!finished) { finished = true; setTimeout(finish, REDUCED ? 0 : 300); }
