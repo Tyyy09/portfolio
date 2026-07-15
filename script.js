@@ -1050,5 +1050,103 @@ if (FINE_POINTER && !REDUCED) {
   requestAnimationFrame(frame);
 })();
 
+/* ── CONTACT WIREFRAME TORUS (sibling motif to the hero globe) ── */
+(function () {
+  const canvas = document.getElementById('footer-art');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  let stroke = 'rgb(180,180,180)';
+  function readColor() { stroke = getComputedStyle(canvas).color; }
+  readColor();
+  new MutationObserver(readColor).observe(
+    document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }
+  );
+
+  let W = 0, H = 0;
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // Parametric torus mesh.
+  const NU = 32, NV = 12, RMAJ = 1.0, RMIN = 0.42;
+  const pts = [];
+  for (let i = 0; i < NU; i++) {
+    const u = (i / NU) * Math.PI * 2;
+    for (let j = 0; j < NV; j++) {
+      const v = (j / NV) * Math.PI * 2;
+      const ring = RMAJ + RMIN * Math.cos(v);
+      pts.push([ring * Math.cos(u), ring * Math.sin(u), RMIN * Math.sin(v)]);
+    }
+  }
+  const at = (i, j) => ((i % NU) + NU) % NU * NV + ((j % NV) + NV) % NV;
+  const edges = [];
+  for (let i = 0; i < NU; i++) {
+    for (let j = 0; j < NV; j++) {
+      edges.push([at(i, j), at(i + 1, j)]);   // around the ring
+      edges.push([at(i, j), at(i, j + 1)]);   // around the tube
+    }
+  }
+
+  let mx = 0, my = 0, tmx = 0, tmy = 0;
+  window.addEventListener('pointermove', (e) => {
+    tmx = (e.clientX / window.innerWidth - 0.5) * 2;
+    tmy = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+
+  const proj = new Array(pts.length);
+  let ry = 0;
+  const TILT = 0.62;
+
+  function frame() {
+    mx += (tmx - mx) * 0.05;
+    my += (tmy - my) * 0.05;
+    if (!REDUCED) ry += 0.0026;
+
+    const rotY = ry + mx * 0.5;
+    const rotX = TILT + my * 0.4;
+    const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+    const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+
+    const R = Math.max(W, H) * 0.46;
+    const cx = W + R * 0.34;   // bleed off the right
+    const cy = H * 0.5;
+    const persp = 3.0;
+
+    for (let k = 0; k < pts.length; k++) {
+      const p = pts[k];
+      const x1 = p[0] * cosY - p[2] * sinY;
+      const z1 = p[0] * sinY + p[2] * cosY;
+      const y1 = p[1] * cosX - z1 * sinX;
+      const z2 = p[1] * sinX + z1 * cosX;
+      const s = persp / (persp - z2);
+      proj[k] = [cx + x1 * R * s, cy + y1 * R * s, z2];
+    }
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 1;
+    for (let e = 0; e < edges.length; e++) {
+      const a = proj[edges[e][0]], b = proj[edges[e][1]];
+      const depth = (a[2] + b[2]) * 0.5;
+      ctx.globalAlpha = 0.05 + (depth + 1) * 0.5 * 0.34;
+      ctx.beginPath();
+      ctx.moveTo(a[0], a[1]);
+      ctx.lineTo(b[0], b[1]);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
 /* ── FOOTER YEAR ──────────────────────────────────────────── */
 document.getElementById('year').textContent = new Date().getFullYear();
