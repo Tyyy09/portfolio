@@ -1458,52 +1458,69 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
 }
 .edu-right .tag-list { margin-top: var(--s-5); }
 
-/* ── CONTACT ─────────────────────────────────────────────── */
-.contact-section {
-  padding: var(--section-gap) 0;
+/* ── CONTACT / FOOTER (Eva-style big statement) ──────────── */
+.contact-footer {
+  display: block;
+  padding: clamp(80px, 12vw, 200px) 0 clamp(28px, 3vw, 44px);
   border-top: 1px solid var(--border);
 }
-.contact-inner {
-  max-width: 60ch;
-}
-.contact-heading {
-  font-size: var(--t-4xl);
+.contact-inner { width: 100%; }
+
+/* Giant clickable statement that fills the width */
+.contact-bigcta {
+  display: block;
+  margin: clamp(20px, 3vw, 44px) 0 clamp(48px, 7vw, 110px);
   font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1.05;
-  margin: var(--s-4) 0 var(--s-6);
-  color: var(--text-1);
-}
-.contact-sub {
-  font-size: var(--t-base);
-  color: var(--text-2);
-  line-height: 1.65;
-  margin-bottom: clamp(40px, 6vw, 72px);
-  max-width: 42ch;
-}
-/* Big email — focal point */
-.contact-email-big {
-  display: inline-block;
-  font-size: var(--t-2xl);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+  font-size: clamp(3.4rem, 15.5vw, 16rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
   color: var(--text-1);
   text-decoration: none;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: var(--s-2);
-  transition: color var(--dur-fast), border-color var(--dur-fast);
+  transition: color var(--dur-fast);
 }
-.contact-email-big:hover {
-  color: var(--accent);
-  border-color: var(--accent);
+.contact-bigcta:hover { color: var(--accent); }
+.contact-bigcta-arrow {
+  display: inline-block;
+  font-size: 0.24em;
+  font-weight: 400;
+  vertical-align: 0.9em;
+  margin-left: 0.15em;
+  transition: transform var(--dur-med) var(--ease-out);
+}
+.contact-bigcta:hover .contact-bigcta-arrow { transform: translate(0.12em, -0.12em); }
+
+/* Baseline row: email + availability on the left, social links on the right */
+.contact-baseline {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(28px, 5vw, 64px);
+  flex-wrap: wrap;
+  padding-top: clamp(28px, 3vw, 40px);
+  border-top: 1px solid var(--border);
+}
+.contact-email-sm {
+  display: inline-block;
+  font-size: var(--t-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-1);
+  text-decoration: none;
+  transition: color var(--dur-fast);
+}
+.contact-email-sm:hover { color: var(--accent); }
+.contact-avail {
+  margin-top: var(--s-3);
+  font-size: var(--t-sm);
+  color: var(--text-2);
+  line-height: 1.6;
+  max-width: 34ch;
 }
 .contact-links {
   display: flex;
   align-items: center;
-  gap: clamp(24px, 4vw, 48px);
+  gap: clamp(20px, 3vw, 44px);
   flex-wrap: wrap;
-  margin-top: clamp(32px, 4vw, 48px);
 }
 .social-link {
   font-family: var(--font-mono);
@@ -1516,15 +1533,14 @@ body.loaded .hero-foot { animation: fadeUp 0.6s var(--ease-out) 0.68s forwards; 
 }
 .social-link:hover { color: var(--accent); }
 
-/* ── FOOTER ──────────────────────────────────────────────── */
-.site-footer {
-  border-top: 1px solid var(--border);
-  padding: var(--s-8) 0;
-}
-.footer-inner {
+/* Fine print */
+.contact-legal {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: clamp(56px, 8vw, 120px);
 }
 .footer-copy, .footer-credit {
   font-size: var(--t-xs);
@@ -1787,11 +1803,9 @@ body.loaded .hero-spotlight { opacity: 1; }
   .stat { border-right: none; border-bottom: 1px solid var(--border); }
   .stat:last-child { border-bottom: none; }
 
-  /* Contact — compact email on small screens */
-  .contact-email-big { font-size: var(--t-xl); }
-
-  /* Footer */
-  .footer-inner { flex-direction: column; gap: var(--s-3); text-align: center; }
+  /* Contact / footer — stack the baseline + legal rows */
+  .contact-baseline { flex-direction: column; align-items: flex-start; gap: var(--s-8); }
+  .contact-legal { flex-direction: column; align-items: flex-start; gap: var(--s-2); }
 
   /* ── Mobile refinement: compact tags, tighter rhythm ──── */
   .tag { font-size: 0.72rem; padding: 4px 11px; border-radius: 7px; }
