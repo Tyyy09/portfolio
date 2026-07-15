@@ -921,5 +921,122 @@ if (FINE_POINTER && !REDUCED) {
   }
 })();
 
+/* ── HERO LINE-ART HOOK (rotating wireframe network) ───────── */
+(function () {
+  const canvas = document.getElementById('hero-art');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  // Resolve the stroke colour from CSS (--text-2) so it tracks the theme.
+  let stroke = 'rgb(200,200,200)';
+  function readColor() { stroke = getComputedStyle(canvas).color; }
+  readColor();
+  new MutationObserver(readColor).observe(
+    document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }
+  );
+
+  let W = 0, H = 0;
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // Fibonacci sphere of points.
+  const N = 150;
+  const pts = [];
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  for (let i = 0; i < N; i++) {
+    const y = 1 - (i / (N - 1)) * 2;
+    const r = Math.sqrt(Math.max(0, 1 - y * y));
+    const th = golden * i;
+    pts.push([Math.cos(th) * r, y, Math.sin(th) * r]);
+  }
+
+  // Static edge list: each point linked to its 3 nearest neighbours (deduped).
+  const edges = [];
+  const seen = new Set();
+  for (let i = 0; i < N; i++) {
+    const d = [];
+    for (let j = 0; j < N; j++) {
+      if (i === j) continue;
+      const dx = pts[i][0] - pts[j][0], dy = pts[i][1] - pts[j][1], dz = pts[i][2] - pts[j][2];
+      d.push([dx * dx + dy * dy + dz * dz, j]);
+    }
+    d.sort((a, b) => a[0] - b[0]);
+    for (let k = 0; k < 3; k++) {
+      const j = d[k][1];
+      const key = i < j ? i + '_' + j : j + '_' + i;
+      if (!seen.has(key)) { seen.add(key); edges.push([i, j]); }
+    }
+  }
+
+  // Cursor easing.
+  let mx = 0, my = 0, tmx = 0, tmy = 0;
+  window.addEventListener('pointermove', (e) => {
+    tmx = (e.clientX / window.innerWidth - 0.5) * 2;
+    tmy = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+
+  const proj = new Array(N);
+  let ry = 0;
+
+  function frame() {
+    mx += (tmx - mx) * 0.05;
+    my += (tmy - my) * 0.05;
+    if (!REDUCED) ry += 0.0022;
+
+    const rotY = ry + mx * 0.6;
+    const rotX = my * 0.5;
+    const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+    const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+    const cx = W * 0.5, cy = H * 0.5;
+    const R = Math.min(W, H) * 0.4;
+    const persp = 2.8;
+
+    for (let i = 0; i < N; i++) {
+      const p = pts[i];
+      const x1 = p[0] * cosY - p[2] * sinY;
+      const z1 = p[0] * sinY + p[2] * cosY;
+      const y1 = p[1] * cosX - z1 * sinX;
+      const z2 = p[1] * sinX + z1 * cosX;
+      const s = persp / (persp - z2);
+      proj[i] = [cx + x1 * R * s, cy + y1 * R * s, z2, s];
+    }
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.strokeStyle = stroke;
+    ctx.fillStyle = stroke;
+    ctx.lineWidth = 1;
+
+    for (let e = 0; e < edges.length; e++) {
+      const pa = proj[edges[e][0]], pb = proj[edges[e][1]];
+      const depth = (pa[2] + pb[2]) * 0.5;      // -1 (back) .. 1 (front)
+      ctx.globalAlpha = (0.06 + (depth + 1) * 0.5 * 0.34);
+      ctx.beginPath();
+      ctx.moveTo(pa[0], pa[1]);
+      ctx.lineTo(pb[0], pb[1]);
+      ctx.stroke();
+    }
+
+    for (let i = 0; i < N; i++) {
+      const p = proj[i];
+      ctx.globalAlpha = 0.15 + (p[2] + 1) * 0.5 * 0.7;
+      ctx.beginPath();
+      ctx.arc(p[0], p[1], 0.5 + p[3] * 1.1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
 /* ── FOOTER YEAR ──────────────────────────────────────────── */
 document.getElementById('year').textContent = new Date().getFullYear();
