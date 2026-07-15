@@ -48,16 +48,24 @@ const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
   window.addEventListener('load', () => { target = 100; });
   setTimeout(() => { target = 100; }, 8000);
 
+  // Minimum on-screen time so the ink animation always gets to play, even when
+  // everything is cached and the real fraction jumps to 100 instantly.
+  const MIN_MS = REDUCED ? 0 : 2600;
+  const start = performance.now();
+
   let shown = 0, finished = false;
   function loop() {
-    shown += (target - shown) * 0.14;
-    if (target - shown < 0.6) shown = target;
+    // The bar can't outrun real progress OR the minimum time, whichever is slower.
+    const timeCap = MIN_MS ? Math.min(100, ((performance.now() - start) / MIN_MS) * 100) : 100;
+    const eff = Math.min(target, timeCap);
+    shown += (eff - shown) * 0.14;
+    if (eff - shown < 0.6) shown = eff;
     const pct = Math.min(100, Math.round(shown));
     numEl.textContent = pct;
     if (barEl) barEl.style.width = pct + '%';
     if (inkEl) inkEl.style.clipPath = 'inset(0 ' + (100 - shown) + '% 0 0)';
     if (statusEl && pct >= 100) statusEl.textContent = 'Ready';
-    if (target >= 100 && pct >= 100) {
+    if (target >= 100 && eff >= 100 && pct >= 100) {
       if (!finished) { finished = true; setTimeout(finish, REDUCED ? 0 : 300); }
       return;
     }
