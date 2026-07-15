@@ -416,16 +416,15 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* ── HERO ────────────────────────────────────────────────── */
 .hero-section { position: relative; overflow: hidden; }
 
-/* interactive line-art hook — rotating wireframe network on the right */
+/* interactive line-art hook — large wireframe sphere bleeding off the right */
 .hero-artwrap {
   position: absolute;
-  top: 0; right: 0; bottom: 0;
-  width: 54%;
+  inset: 0;
   z-index: 0;
   pointer-events: none;
   opacity: 0;
-  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 62% 50%, #000 55%, transparent 100%);
-          mask-image: radial-gradient(ellipse 70% 70% at 62% 50%, #000 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 32%, #000 60%);
+          mask-image: linear-gradient(to right, transparent 32%, #000 60%);
 }
 body.loaded .hero-artwrap { animation: fadeIn 1.1s var(--ease-out) 0.5s forwards; }
 .hero-artcanvas {
@@ -435,12 +434,6 @@ body.loaded .hero-artwrap { animation: fadeIn 1.1s var(--ease-out) 0.5s forwards
   color: var(--text-2);
 }
 @media (max-width: 860px) {
-  .hero-artwrap {
-    width: 100%;
-    opacity: 0;
-    -webkit-mask-image: radial-gradient(ellipse 80% 46% at 50% 30%, #000 45%, transparent 100%);
-            mask-image: radial-gradient(ellipse 80% 46% at 50% 30%, #000 45%, transparent 100%);
-  }
   body.loaded .hero-artwrap { animation: fadeInFaint 1.1s var(--ease-out) 0.5s forwards; }
 }
 @keyframes fadeInFaint { from { opacity: 0; } to { opacity: 0.5; } }

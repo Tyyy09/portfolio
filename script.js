@@ -995,8 +995,10 @@ if (FINE_POINTER && !REDUCED) {
     const rotX = my * 0.5;
     const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
     const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
-    const cx = W * 0.5, cy = H * 0.5;
-    const R = Math.min(W, H) * 0.4;
+    // Large sphere pushed off the right edge — only ~30% of it peeks in.
+    const R = Math.max(W, H) * 0.62;
+    const cx = W + R * 0.4;
+    const cy = H * 0.5;
     const persp = 2.8;
 
     for (let i = 0; i < N; i++) {
