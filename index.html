@@ -34,8 +34,6 @@
 </head>
 <body>
 
-<div class="bg-grid" aria-hidden="true"></div>
-
 <div class="grain" aria-hidden="true"></div>
 
 <div class="page-transition" id="page-transition" aria-hidden="true">
@@ -43,15 +41,19 @@
 </div>
 
 <div id="loader" aria-hidden="true">
+  <!-- the panels are the loader's backdrop; they sweep up in sequence to reveal the hero -->
+  <div class="loader-panels">
+    <span class="loader-panel"></span>
+    <span class="loader-panel"></span>
+    <span class="loader-panel"></span>
+    <span class="loader-panel"></span>
+    <span class="loader-panel"></span>
+    <span class="loader-panel"></span>
+  </div>
+
   <div class="loader-head">
     <span class="loader-id">ICHTYTE_YYZ</span>
     <span class="loader-status" id="loader-status">Loading assets</span>
-  </div>
-
-  <!-- the wordmark inks in with real progress, then hands off to the hero name -->
-  <div class="loader-word big-name">
-    <span class="loader-word-ghost">Ichty Te</span>
-    <span class="loader-word-ink" id="loader-ink">Ichty Te</span>
   </div>
 
   <div class="loader-meta">
@@ -140,14 +142,14 @@
       <!-- Big editorial statement -->
       <div class="about-top section-reveal">
         <p class="label">About</p>
-        <h2 class="about-statement">Computer&nbsp;programming student working across software engineering &amp; design, from Phnom&nbsp;Penh, now based in Barrie,&nbsp;Ontario.</h2>
+        <h2 class="about-statement">Computer&nbsp;programming student building software end to end, from the data model underneath to the interface on top.</h2>
       </div>
 
       <!-- Bio + portrait -->
       <div class="about-grid">
         <div class="about-bio section-reveal">
-          <p>I'm Ichty Te, a Computer Programming student with a dual focus on software engineering and design. I don't just write code or create visuals. I think about the whole product: how it functions, how it feels, and why it matters.</p>
-          <p>From firmware and machine learning at a Honda hackathon to brand identity and UI, I work across the full stack of building digital products. I care about the details most skip: spacing, hierarchy, performance, and the small interactions that make something feel finished.</p>
+          <p>I'm Ichty Te, a Computer Programming student. I build applications end to end, from schema design and backend logic through to the interface, and I care as much about how a system holds together as whether it runs.</p>
+          <p>My work spans predictive monitoring built on live sensor data and machine learning, real-time web applications, and relational database design. I care about the details most skip: correctness, performance, and the small interactions that make something feel finished.</p>
 
           <div class="about-stats">
             <div class="stat">
@@ -159,15 +161,15 @@
               <span class="stat-label">Years building</span>
             </div>
             <div class="stat">
-              <div class="stat-num-row"><span class="stat-num" data-target="2">00</span></div>
-              <span class="stat-label">Core disciplines</span>
+              <div class="stat-num-row"><span class="stat-num" data-target="7">00</span></div>
+              <span class="stat-label">Languages</span>
             </div>
           </div>
         </div>
 
         <div class="about-portrait section-reveal">
           <img src="./images/profile.jpg" alt="Ichty Te" class="about-photo" data-parallax="0.08" />
-          <p class="about-portrait-cap"><span>Ichty Te</span><span>Barrie, ON · YYZ</span></p>
+          <p class="about-portrait-cap"><span>Ichty Te</span><span>Software Developer</span></p>
         </div>
       </div>
 
@@ -177,8 +179,9 @@
         <div class="idx-block section-reveal">
           <div class="idx-head"><span class="idx-num">001</span><h3 class="idx-title">Focus</h3></div>
           <ul class="idx-list" role="list">
-            <li class="idx-row"><span class="idx-role">Software Engineering</span><span class="idx-meta">Full-stack · Java · Web · SQL</span></li>
-            <li class="idx-row"><span class="idx-role">Product &amp; UI Design</span><span class="idx-meta">Figma · Brand · Interaction</span></li>
+            <li class="idx-row"><span class="idx-role">Software Engineering</span><span class="idx-meta">Full-stack · Java · C# · Web</span></li>
+            <li class="idx-row"><span class="idx-role">Data &amp; Databases</span><span class="idx-meta">SQL · Data modelling · Validation</span></li>
+            <li class="idx-row"><span class="idx-role">Interface Development</span><span class="idx-meta">React · Performance · Accessibility</span></li>
           </ul>
         </div>
 
@@ -186,7 +189,6 @@
           <div class="idx-head"><span class="idx-num">002</span><h3 class="idx-title">Recognition &amp; experience</h3></div>
           <ul class="idx-list" role="list">
             <li class="idx-row"><span class="idx-role">AutoHack 2.0</span><span class="idx-meta">2nd place · Honda Canada hackathon</span></li>
-            <li class="idx-row"><span class="idx-role">Georgian College</span><span class="idx-meta">Barrie, Ontario</span></li>
           </ul>
         </div>
 
@@ -196,14 +198,14 @@
             <li class="idx-row idx-row-edu">
               <span class="idx-role">Diploma in Computer Programming &amp; Co-op</span>
               <span class="idx-year">2025 / 2026</span>
-              <span class="idx-meta">Georgian College · Barrie, ON · GPA 3.3</span>
+              <span class="idx-meta">Georgian College · GPA 3.3</span>
               <p class="idx-detail">Object-oriented programming, web development, data structures &amp; algorithms, and networking. Full-stack skills across Java, web technologies, and SQL.</p>
             </li>
             <li class="idx-row idx-row-edu">
               <span class="idx-role">Bachelor of Architectural Design</span>
               <span class="idx-year">2023 / 2024</span>
-              <span class="idx-meta">SETEC Institute · Phnom Penh · GPA 3.4</span>
-              <p class="idx-detail">2D/3D modelling, visual design, and UX/UI. The foundation of my eye for layout, hierarchy, and spatial composition.</p>
+              <span class="idx-meta">SETEC Institute · GPA 3.4</span>
+              <p class="idx-detail">Technical drawing, 2D/3D modelling, and structured problem solving under precise constraints.</p>
             </li>
           </ul>
         </div>

@@ -16,9 +16,27 @@ const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
   const loader = document.getElementById('loader');
   const numEl  = document.getElementById('loader-number');
   const barEl  = document.getElementById('loader-bar-fill');
-  const inkEl  = document.getElementById('loader-ink');
   const statusEl = document.getElementById('loader-status');
   if (!loader || !numEl) return;
+
+  const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÆØ#%&@*/<>';
+  const randGlyph = () => GLYPHS[(Math.random() * GLYPHS.length) | 0];
+
+  function scrambleTo(el, text, duration) {
+    if (REDUCED) { el.textContent = text; return; }
+    const start = performance.now();
+    (function frame(now) {
+      const t = (now - start) / duration;
+      let out = '';
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (ch === ' ') { out += ' '; continue; }
+        out += (t >= 0.15 + (i / text.length) * 0.7) ? ch : randGlyph();
+      }
+      el.textContent = out;
+      if (t < 1) requestAnimationFrame(frame); else el.textContent = text;
+    })(performance.now());
+  }
 
   // Collect the real things we're waiting on: web fonts + every image src.
   const srcs = [...new Set(
@@ -50,11 +68,12 @@ const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
 
   // Minimum on-screen time so the ink animation always gets to play, even when
   // everything is cached and the real fraction jumps to 100 instantly.
-  const MIN_MS = REDUCED ? 0 : 2600;
+  const MIN_MS = REDUCED ? 0 : 1500;
   const start = performance.now();
 
-  let shown = 0, finished = false;
-  function loop() {
+  let shown = 0, finished = false, statusDone = false;
+  function loop(now) {
+    now = now || performance.now();
     // The bar can't outrun real progress OR the minimum time, whichever is slower.
     const timeCap = MIN_MS ? Math.min(100, ((performance.now() - start) / MIN_MS) * 100) : 100;
     const eff = Math.min(target, timeCap);
@@ -63,8 +82,7 @@ const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
     const pct = Math.min(100, Math.round(shown));
     numEl.textContent = pct;
     if (barEl) barEl.style.width = pct + '%';
-    if (inkEl) inkEl.style.clipPath = 'inset(0 ' + (100 - shown) + '% 0 0)';
-    if (statusEl && pct >= 100) statusEl.textContent = 'Ready';
+    if (statusEl && pct >= 100 && !statusDone) { statusDone = true; scrambleTo(statusEl, 'Ready', 420); }
     if (target >= 100 && eff >= 100 && pct >= 100) {
       if (!finished) { finished = true; setTimeout(finish, REDUCED ? 0 : 300); }
       return;
@@ -76,8 +94,8 @@ const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
   function finish() {
     document.body.classList.add('loaded');
     animateHeroName();
-    loader.classList.add('hide');                 // fades out, revealing the hero
-    setTimeout(() => loader.classList.add('gone'), REDUCED ? 0 : 700);
+    loader.classList.add('wipe');                 // panels sweep up, revealing the hero
+    setTimeout(() => loader.classList.add('gone'), REDUCED ? 0 : 1300);
   }
 })();
 
@@ -957,34 +975,20 @@ if (FINE_POINTER && !REDUCED) {
   window.addEventListener('resize', resize);
   resize();
 
-  // Fibonacci sphere of points.
-  const N = 150;
-  const pts = [];
-  const golden = Math.PI * (3 - Math.sqrt(5));
-  for (let i = 0; i < N; i++) {
-    const y = 1 - (i / (N - 1)) * 2;
-    const r = Math.sqrt(Math.max(0, 1 - y * y));
-    const th = golden * i;
-    pts.push([Math.cos(th) * r, y, Math.sin(th) * r]);
+  /* Contour lines are level slices through a sphere whose radius is pushed
+     around by a travelling field. Every level samples that same field, so
+     neighbouring lines bend together and read as one landform instead of
+     a stack of unrelated rings. */
+  function field(x, y, z, t) {
+    return (Math.sin(x * 3.1 + t) * 0.5
+          + Math.sin(y * 4.3 - t * 0.7) * 0.3
+          + Math.sin(z * 2.7 + t * 0.5) * 0.4
+          + Math.sin((x + z) * 5.2 - t * 0.9) * 0.2) / 1.4;
   }
 
-  // Static edge list: each point linked to its 3 nearest neighbours (deduped).
-  const edges = [];
-  const seen = new Set();
-  for (let i = 0; i < N; i++) {
-    const d = [];
-    for (let j = 0; j < N; j++) {
-      if (i === j) continue;
-      const dx = pts[i][0] - pts[j][0], dy = pts[i][1] - pts[j][1], dz = pts[i][2] - pts[j][2];
-      d.push([dx * dx + dy * dy + dz * dz, j]);
-    }
-    d.sort((a, b) => a[0] - b[0]);
-    for (let k = 0; k < 3; k++) {
-      const j = d[k][1];
-      const key = i < j ? i + '_' + j : j + '_' + i;
-      if (!seen.has(key)) { seen.add(key); edges.push([i, j]); }
-    }
-  }
+  const LEVELS = 46;   // contour lines from pole to pole
+  const SEG = 90;      // samples around each line
+  const AMP = 0.13;    // how far the field displaces the radius
 
   // Cursor easing.
   let mx = 0, my = 0, tmx = 0, tmy = 0;
@@ -993,13 +997,12 @@ if (FINE_POINTER && !REDUCED) {
     tmy = (e.clientY / window.innerHeight - 0.5) * 2;
   }, { passive: true });
 
-  const proj = new Array(N);
-  let ry = 0;
+  let ry = 0, t = 0;
 
   function frame() {
     mx += (tmx - mx) * 0.05;
     my += (tmy - my) * 0.05;
-    if (!REDUCED) ry += 0.0022;
+    if (!REDUCED) { ry += 0.0022; t += 0.004; }
 
     const rotY = ry + mx * 0.6;
     const rotX = my * 0.5;
@@ -1007,47 +1010,81 @@ if (FINE_POINTER && !REDUCED) {
     const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
     // Large sphere pushed off the right edge — only ~30% of it peeks in.
     const R = Math.max(W, H) * 0.62;
-    const cx = W + R * 0.4;
+    const cx = W + R * 0.28;
     const cy = H * 0.5;
     const persp = 2.8;
 
-    for (let i = 0; i < N; i++) {
-      const p = pts[i];
-      const x1 = p[0] * cosY - p[2] * sinY;
-      const z1 = p[0] * sinY + p[2] * cosY;
-      const y1 = p[1] * cosX - z1 * sinX;
-      const z2 = p[1] * sinX + z1 * cosX;
-      const s = persp / (persp - z2);
-      proj[i] = [cx + x1 * R * s, cy + y1 * R * s, z2, s];
-    }
-
     ctx.clearRect(0, 0, W, H);
     ctx.strokeStyle = stroke;
-    ctx.fillStyle = stroke;
     ctx.lineWidth = 1;
 
-    for (let e = 0; e < edges.length; e++) {
-      const pa = proj[edges[e][0]], pb = proj[edges[e][1]];
-      const depth = (pa[2] + pb[2]) * 0.5;      // -1 (back) .. 1 (front)
-      ctx.globalAlpha = (0.06 + (depth + 1) * 0.5 * 0.34);
-      ctx.beginPath();
-      ctx.moveTo(pa[0], pa[1]);
-      ctx.lineTo(pb[0], pb[1]);
-      ctx.stroke();
-    }
+    for (let l = 0; l < LEVELS; l++) {
+      const y = -0.94 + (l / (LEVELS - 1)) * 1.88;
+      const r0 = Math.sqrt(Math.max(0, 1 - y * y));
+      let prevBucket = 0;
 
-    for (let i = 0; i < N; i++) {
-      const p = proj[i];
-      ctx.globalAlpha = 0.15 + (p[2] + 1) * 0.5 * 0.7;
-      ctx.beginPath();
-      ctx.arc(p[0], p[1], 0.5 + p[3] * 1.1, 0, Math.PI * 2);
-      ctx.fill();
+      for (let s = 0; s <= SEG; s++) {
+        const th = (s / SEG) * Math.PI * 2;
+        const ct = Math.cos(th), st = Math.sin(th);
+        const r = r0 + field(ct * r0, y, st * r0, t) * AMP;
+        const px = ct * r, pz = st * r;
+
+        const x1 = px * cosY - pz * sinY;
+        const z1 = px * sinY + pz * cosY;
+        const y1 = y * cosX - z1 * sinX;
+        const z2 = y * sinX + z1 * cosX;
+        const sc = persp / (persp - z2);
+        const sx = cx + x1 * R * sc;
+        const sy = cy + y1 * R * sc;
+
+        // Quantise depth so a line can be stroked in a few runs rather than
+        // one path per segment, while still fading as it turns away.
+        const bucket = Math.round((z2 + 1) * 4);
+        if (s === 0) { ctx.beginPath(); ctx.moveTo(sx, sy); prevBucket = bucket; continue; }
+
+        ctx.lineTo(sx, sy);
+        if (bucket !== prevBucket || s === SEG) {
+          ctx.globalAlpha = 0.04 + (prevBucket / 8) * 0.26;
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(sx, sy);
+          prevBucket = bucket;
+        }
+      }
     }
 
     ctx.globalAlpha = 1;
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
+})();
+
+/* ── HERO ART: released once Work scrolls in ───────────────
+   The canvas is pinned to the viewport, so it needs an explicit cue to
+   leave — otherwise it would sit behind every section below. */
+(function () {
+  const wrap = document.querySelector('.hero-artwrap');
+  const work = document.getElementById('projects');
+  if (!wrap || !work) return;
+
+  /* Derived from Work's position every time rather than from intersection
+     events: an observer only reports state *changes*, so reloading deep in the
+     page and jumping back to the top can skip the callback and strand the
+     artwork hidden. */
+  let queued = false;
+  function update() {
+    queued = false;
+    wrap.classList.toggle('is-off', work.getBoundingClientRect().top <= window.innerHeight * 0.1);
+  }
+  function onScroll() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(update);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
 })();
 
 /* ── CONTACT WIREFRAME TORUS (sibling motif to the hero globe) ── */

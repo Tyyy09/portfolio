@@ -97,26 +97,6 @@ body.loaded .page-aura { opacity: 1; }
 
 /* Background column grid — faint dashed vertical guides, fixed behind content,
    aligned to the content container (Eva Sanchez style). */
-.bg-grid {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(var(--container-max), calc(100% - var(--container-pad) * 2));
-  height: 100vh;
-  z-index: -1;
-  pointer-events: none;
-  background-image: repeating-linear-gradient(to right,
-    rgba(255, 255, 255, 0.06) 0 1px,
-    transparent 1px calc(100% / 6));
-  -webkit-mask-image: repeating-linear-gradient(to bottom, #000 0 6px, transparent 6px 13px);
-  mask-image: repeating-linear-gradient(to bottom, #000 0 6px, transparent 6px 13px);
-}
-html[data-theme="light"] .bg-grid {
-  background-image: repeating-linear-gradient(to right,
-    rgba(0, 0, 0, 0.07) 0 1px,
-    transparent 1px calc(100% / 6));
-}
 /* A single fixed-size glow blob translated to the cursor. Moving it with
    transform is GPU-composited (no per-frame repaint like a moving gradient). */
 .page-aura::before {
@@ -205,13 +185,43 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: var(--bg);
+  background: transparent;   /* the panels carry the fill, so they can leave independently */
   visibility: visible;
-  opacity: 1;
-  transition: opacity 0.6s var(--ease-out);
 }
-#loader.hide { opacity: 0; pointer-events: none; }
+#loader.wipe { pointer-events: none; }
 #loader.gone { visibility: hidden; }
+
+.loader-panels { position: absolute; inset: 0; display: flex; }
+.loader-panel {
+  flex: 1 1 0;
+  background: var(--bg);
+  will-change: transform;
+}
+/* Overlap by a hair so subpixel rounding can't open seams between panels. */
+.loader-panel + .loader-panel { margin-left: -1px; }
+
+/* Panel and page are both near-black, so the sweep would be invisible without
+   a trailing edge. The hairline picks up where the filled progress bar ends,
+   reading as the bar breaking into segments and lifting away. */
+#loader.wipe .loader-panel {
+  transform: translateY(-100%);
+  transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+  box-shadow: 0 1px 0 var(--accent);
+}
+#loader.wipe .loader-panel:nth-child(1) { transition-delay: 0s; }
+#loader.wipe .loader-panel:nth-child(2) { transition-delay: 0.07s; }
+#loader.wipe .loader-panel:nth-child(3) { transition-delay: 0.14s; }
+#loader.wipe .loader-panel:nth-child(4) { transition-delay: 0.21s; }
+#loader.wipe .loader-panel:nth-child(5) { transition-delay: 0.28s; }
+#loader.wipe .loader-panel:nth-child(6) { transition-delay: 0.35s; }
+
+/* The readouts clear out first so the panels sweep an empty field. */
+.loader-head,
+.loader-meta,
+.loader-bar { transition: opacity 0.35s var(--ease-out); }
+#loader.wipe .loader-head,
+#loader.wipe .loader-meta,
+#loader.wipe .loader-bar { opacity: 0; }
 
 .loader-head {
   position: absolute;
@@ -228,43 +238,19 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .loader-status { color: var(--text-3); }
 
-/* The wordmark sits exactly where the hero name is handed off to, and
-   "inks in" from left to right as real progress advances. */
-.loader-word {
+/* Percentage read-out — the only figure on the panel, sitting on the same
+   grid line the hero name comes up on. */
+.loader-meta {
   position: absolute;
   left: var(--pgrid);
   bottom: var(--name-bottom);
-  line-height: 1;
-}
-.loader-word-ghost,
-.loader-word-ink {
-  display: block;
-}
-.loader-word-ghost {
-  color: var(--text-3);
-  -webkit-text-fill-color: var(--text-3);
-  opacity: 0.4;
-}
-.loader-word-ink {
-  position: absolute;
-  inset: 0;
-  color: var(--text-1);
-  -webkit-text-fill-color: var(--text-1);
-  clip-path: inset(0 100% 0 0);   /* revealed left→right via JS */
-}
-
-/* Percentage read-out — small, mono, at the word's right baseline. */
-.loader-meta {
-  position: absolute;
-  right: var(--pgrid);
-  bottom: calc(var(--name-bottom) + 0.35em);
   font-family: var(--font-mono);
   letter-spacing: 0.06em;
 }
 .loader-count {
   display: flex;
   align-items: flex-start;
-  font-size: clamp(1.4rem, 3.4vw, 2.6rem);
+  font-size: clamp(2rem, 4.6vw, 3.6rem);
   font-weight: 400;
   color: var(--text-2);
 }
@@ -291,8 +277,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #loader { transition: none; }
   .loader-bar-fill { transition: none; }
+  #loader.wipe .loader-panel { transition: none; }
 }
 
 /* ── NAVBAR ──────────────────────────────────────────────── */
@@ -442,12 +428,14 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hero-section { position: relative; overflow: hidden; }
 
 /* interactive line-art hook — large wireframe sphere bleeding off the right */
+/* Pinned to the viewport so the form holds still behind hero, about and
+   stack, then released once Work arrives (see .is-off). */
 .hero-artwrap {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0;
+  transition: opacity 0.7s var(--ease-out);
   -webkit-mask-image:
     linear-gradient(to right, transparent 32%, #000 60%),
     linear-gradient(to bottom, transparent 3%, #000 18%, #000 80%, transparent 99%);
@@ -457,15 +445,20 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
     linear-gradient(to bottom, transparent 3%, #000 18%, #000 80%, transparent 99%);
           mask-composite: intersect;
 }
-body.loaded .hero-artwrap { animation: fadeIn 1.1s var(--ease-out) 0.5s forwards; }
+/* The entrance animation lives on the canvas so the wrapper's opacity stays
+   free for the scroll fade — an animation with fill:forwards would otherwise
+   outrank it. */
+.hero-artwrap.is-off { opacity: 0; }
 .hero-artcanvas {
   display: block;
   width: 100%;
   height: 100%;
   color: var(--text-2);
+  opacity: 0;
 }
+body.loaded .hero-artcanvas { animation: fadeIn 1.1s var(--ease-out) 0.5s forwards; }
 @media (max-width: 860px) {
-  body.loaded .hero-artwrap { animation: fadeInFaint 1.1s var(--ease-out) 0.5s forwards; }
+  body.loaded .hero-artcanvas { animation: fadeInFaint 1.1s var(--ease-out) 0.5s forwards; }
 }
 @keyframes fadeInFaint { from { opacity: 0; } to { opacity: 0.5; } }
 .hero-inner {
