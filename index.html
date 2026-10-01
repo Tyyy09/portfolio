@@ -25,7 +25,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css" />
 
@@ -263,129 +263,147 @@
     </div>
   </section>
 
-  <!-- PROJECTS — pinned horizontal gallery -->
+  <!-- PROJECTS — interactive index -->
   <section id="projects" class="projects-section">
-    <div class="hscroll" id="work-hscroll">
-      <div class="hscroll-sticky">
-
-        <div class="hscroll-head">
-          <div class="container hscroll-head-inner">
-            <div>
-              <p class="label">Selected Work</p>
-              <h2 class="section-title">Things I've built.</h2>
-            </div>
-            <div class="hscroll-meta">
-              <span class="hscroll-count"><span id="work-index">01</span> <span class="hscroll-sep">/</span> 04</span>
-              <span class="hscroll-hint">Scroll <span class="arrow" aria-hidden="true">→</span></span>
-            </div>
-          </div>
-          <div class="hscroll-progress" aria-hidden="true"><span class="hscroll-progress-bar" id="work-progress"></span></div>
+    <div class="container">
+      <div class="hscroll-head-inner work-head">
+        <div>
+          <p class="label">Selected Work</p>
+          <h2 class="section-title">Things I've built.</h2>
         </div>
+        <p class="work-head-hint">Hover a project <span class="arrow" aria-hidden="true">→</span></p>
+      </div>
 
-        <div class="hscroll-viewport">
-          <div class="hscroll-track" id="work-track">
+      <div class="work-explorer" id="work-explorer">
 
-            <!-- 01 Honda EQM -->
-            <article class="work-panel">
-              <div class="project-img-wrap">
-                <img src="images/Honda.webp" alt="Honda EQM predictive monitoring dashboard" class="project-img" loading="lazy" />
+        <!-- Index list -->
+        <ol class="work-list" id="work-list">
+
+          <li class="work-row is-active" data-accent="#f57000">
+            <a class="work-row-head" href="https://demo-hackathon.vercel.app" target="_blank" rel="noopener noreferrer">
+              <span class="work-row-num">01</span>
+              <span class="work-row-name">Honda EQM</span>
+              <span class="work-row-meta">Predictive ML · IoT</span>
+              <span class="work-row-arrow" aria-hidden="true">↗</span>
+            </a>
+            <div class="work-row-detail">
+              <div class="work-preview-frame">
+                <img class="work-preview-img" src="images/Honda.webp" alt="Honda EQM predictive monitoring dashboard" loading="lazy" />
                 <span class="project-award">2nd Place · AutoHack 2.0</span>
               </div>
-              <div class="project-info">
-                <div class="project-top">
-                  <span class="project-num">01</span>
-                  <ul class="tag-list" role="list">
-                    <li class="tag">C++ / Arduino</li>
-                    <li class="tag">scikit-learn</li>
-                    <li class="tag">Llama 3.3-70b</li>
-                    <li class="tag">Groq API</li>
-                    <li class="tag">PostgreSQL</li>
-                  </ul>
-                </div>
-                <h3 class="project-name">Honda EQM</h3>
-                <p class="project-desc">As UX Lead on Team Ctrl Alt Elite, I helped build a predictive equipment failure monitoring system in 24 hours at Honda of Canada Mfg. Firmware reads real-time machine health from temperature and vibration sensors; anomalies are detected with scikit-learn and surfaced as natural-language alerts via Llama 3.3-70b.</p>
-                <a href="https://demo-hackathon.vercel.app" target="_blank" rel="noopener noreferrer" class="project-link">
-                  View Project <span class="arrow" aria-hidden="true">→</span>
-                </a>
-              </div>
-            </article>
+              <ul class="tag-list" role="list">
+                <li class="tag">C++ / Arduino</li><li class="tag">scikit-learn</li><li class="tag">Llama 3.3-70b</li><li class="tag">Groq API</li><li class="tag">PostgreSQL</li>
+              </ul>
+              <p class="project-desc">As UX Lead on Team Ctrl Alt Elite, I helped build a predictive equipment failure monitoring system in 24 hours at Honda of Canada Mfg. Firmware reads real-time machine health from temperature and vibration sensors; anomalies are detected with scikit-learn and surfaced as natural-language alerts via Llama 3.3-70b.</p>
+              <a href="https://demo-hackathon.vercel.app" target="_blank" rel="noopener noreferrer" class="project-link">View Project <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </li>
 
-            <!-- 02 KromTrip -->
-            <article class="work-panel">
-              <div class="project-img-wrap">
-                <img src="images/poster/kromtrip.svg" alt="KromTrip travel planner" class="project-img" loading="lazy" />
+          <li class="work-row" data-accent="#f57000">
+            <a class="work-row-head" href="kromtrip.html">
+              <span class="work-row-num">02</span>
+              <span class="work-row-name">KromTrip</span>
+              <span class="work-row-meta">React · Firebase · Real-time</span>
+              <span class="work-row-arrow" aria-hidden="true">↗</span>
+            </a>
+            <div class="work-row-detail">
+              <div class="work-preview-frame">
+                <img class="work-preview-img" src="images/poster/kromtrip.svg" alt="KromTrip travel planner" loading="lazy" />
               </div>
-              <div class="project-info">
-                <div class="project-top">
-                  <span class="project-num">02</span>
-                  <ul class="tag-list" role="list">
-                    <li class="tag">React 19</li>
-                    <li class="tag">Firebase</li>
-                    <li class="tag">Firestore</li>
-                    <li class="tag">Vite</li>
-                    <li class="tag">Real-time</li>
-                  </ul>
-                </div>
-                <h3 class="project-name">KromTrip</h3>
-                <p class="project-desc">A real-time group travel management app in React and Firebase. Members plan itineraries, split expenses with automatic settle-up, chat, and share documents, all syncing live through Cloud Firestore. A full product with auth, a live database, and eleven screens.</p>
-                <div class="project-links">
-                  <a href="kromtrip.html" class="project-link">
-                    Read Case Study <span class="arrow" aria-hidden="true">→</span>
-                  </a>
-                  <a href="https://krom-trip.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link project-link--ghost">
-                    Live Site <span class="arrow" aria-hidden="true">↗</span>
-                  </a>
-                </div>
+              <ul class="tag-list" role="list">
+                <li class="tag">React 19</li><li class="tag">Firebase</li><li class="tag">Firestore</li><li class="tag">Vite</li><li class="tag">Real-time</li>
+              </ul>
+              <p class="project-desc">A real-time group travel management app in React and Firebase. Members plan itineraries, split expenses with automatic settle-up, chat, and share documents, all syncing live through Cloud Firestore. A full product with auth, a live database, and eleven screens.</p>
+              <div class="project-links">
+                <a href="kromtrip.html" class="project-link">Read Case Study <span class="arrow" aria-hidden="true">→</span></a>
+                <a href="https://krom-trip.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link project-link--ghost">Live Site <span class="arrow" aria-hidden="true">↗</span></a>
               </div>
-            </article>
+            </div>
+          </li>
 
-            <!-- 03 VERDE Energy Bowl Builder -->
-            <article class="work-panel">
-              <div class="project-img-wrap">
-                <img src="images/poster/energybowl.png" alt="VERDE custom energy bowl builder" class="project-img" loading="lazy" />
+          <li class="work-row" data-accent="#4ade80">
+            <a class="work-row-head" href="https://energy-bowl-builder.vercel.app/" target="_blank" rel="noopener noreferrer">
+              <span class="work-row-num">03</span>
+              <span class="work-row-name">VERDE</span>
+              <span class="work-row-meta">Vanilla JS · Product</span>
+              <span class="work-row-arrow" aria-hidden="true">↗</span>
+            </a>
+            <div class="work-row-detail">
+              <div class="work-preview-frame">
+                <img class="work-preview-img" src="images/poster/energybowl.png" alt="VERDE custom energy bowl builder" loading="lazy" />
               </div>
-              <div class="project-info">
-                <div class="project-top">
-                  <span class="project-num">03</span>
-                  <ul class="tag-list" role="list">
-                    <li class="tag">HTML</li>
-                    <li class="tag">CSS</li>
-                    <li class="tag">JavaScript</li>
-                  </ul>
-                </div>
-                <h3 class="project-name">VERDE</h3>
-                <p class="project-desc">A custom energy bowl builder where users compose an order step by step: base, fruits, toppings, protein, and size. Built in vanilla JavaScript with real-time price updates, form validation, and locally saved order history.</p>
-                <a href="https://energy-bowl-builder.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link">
-                  View Project <span class="arrow" aria-hidden="true">→</span>
-                </a>
-              </div>
-            </article>
+              <ul class="tag-list" role="list">
+                <li class="tag">HTML</li><li class="tag">CSS</li><li class="tag">JavaScript</li>
+              </ul>
+              <p class="project-desc">A custom energy bowl builder where users compose an order step by step: base, fruits, toppings, protein, and size. Built in vanilla JavaScript with real-time price updates, form validation, and locally saved order history.</p>
+              <a href="https://energy-bowl-builder.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link">View Project <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </li>
 
-            <!-- 04 NASA Space Explorer -->
-            <article class="work-panel">
-              <div class="project-img-wrap">
-                <img src="images/poster/nasa-apod.png" alt="NASA Space Explorer" class="project-img" loading="lazy" />
+          <li class="work-row" data-accent="#3b82f6">
+            <a class="work-row-head" href="https://nasa-apod-12re.vercel.app/" target="_blank" rel="noopener noreferrer">
+              <span class="work-row-num">04</span>
+              <span class="work-row-name">NASA Space Explorer</span>
+              <span class="work-row-meta">JavaScript · NASA API</span>
+              <span class="work-row-arrow" aria-hidden="true">↗</span>
+            </a>
+            <div class="work-row-detail">
+              <div class="work-preview-frame">
+                <img class="work-preview-img" src="images/poster/nasa-apod.png" alt="NASA Space Explorer" loading="lazy" />
               </div>
-              <div class="project-info">
-                <div class="project-top">
-                  <span class="project-num">04</span>
-                  <ul class="tag-list" role="list">
-                    <li class="tag">JavaScript</li>
-                    <li class="tag">NASA API</li>
-                    <li class="tag">HTML</li>
-                    <li class="tag">CSS</li>
-                  </ul>
-                </div>
-                <h3 class="project-name">NASA Space Explorer</h3>
-                <p class="project-desc">A space imagery explorer built in vanilla JavaScript against two NASA APIs. Browse the Astronomy Picture of the Day back to 1995, or search across 140,000+ images in NASA's media library. Dependency free, with full keyboard support.</p>
-                <a href="https://nasa-apod-12re.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link">
-                  View Project <span class="arrow" aria-hidden="true">→</span>
-                </a>
-              </div>
-            </article>
+              <ul class="tag-list" role="list">
+                <li class="tag">JavaScript</li><li class="tag">NASA API</li><li class="tag">HTML</li><li class="tag">CSS</li>
+              </ul>
+              <p class="project-desc">A space imagery explorer built in vanilla JavaScript against two NASA APIs. Browse the Astronomy Picture of the Day back to 1995, or search across 140,000+ images in NASA's media library. Dependency free, with full keyboard support.</p>
+              <a href="https://nasa-apod-12re.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link">View Project <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </li>
 
-          </div>
+          <li class="work-row" data-accent="#8b5cf6">
+            <a class="work-row-head" href="https://github.com/Tyyy09/RetroVideoGameStore" target="_blank" rel="noopener noreferrer">
+              <span class="work-row-num">05</span>
+              <span class="work-row-name">Retro Game Store</span>
+              <span class="work-row-meta">C# · ASP.NET Core</span>
+              <span class="work-row-arrow" aria-hidden="true">↗</span>
+            </a>
+            <div class="work-row-detail">
+              <div class="work-preview-frame">
+                <img class="work-preview-img" src="images/poster/retro-store.svg" alt="Retro Video Game Store e-commerce app" loading="lazy" />
+              </div>
+              <ul class="tag-list" role="list">
+                <li class="tag">C# / .NET</li><li class="tag">ASP.NET Core</li><li class="tag">EF Core</li><li class="tag">Identity Auth</li><li class="tag">SQL Server</li>
+              </ul>
+              <p class="project-desc">A full e-commerce store built with ASP.NET Core MVC and Entity Framework Core. Features user accounts with ASP.NET Identity, a categorised product catalogue, shopping cart, and order management, all backed by code-first database migrations and a relational schema.</p>
+              <a href="https://github.com/Tyyy09/RetroVideoGameStore" target="_blank" rel="noopener noreferrer" class="project-link">View Code <span class="arrow" aria-hidden="true">↗</span></a>
+            </div>
+          </li>
+
+          <li class="work-row" data-accent="#22d3ee">
+            <a class="work-row-head" href="https://github.com/Tyyy09/HandTracking" target="_blank" rel="noopener noreferrer">
+              <span class="work-row-num">06</span>
+              <span class="work-row-name">Hand &amp; Object Detection</span>
+              <span class="work-row-meta">Python · Computer Vision</span>
+              <span class="work-row-arrow" aria-hidden="true">↗</span>
+            </a>
+            <div class="work-row-detail">
+              <div class="work-preview-frame">
+                <img class="work-preview-img" src="images/poster/handtracking.svg" alt="Real-time hand and object detection with LLM narration" loading="lazy" />
+              </div>
+              <ul class="tag-list" role="list">
+                <li class="tag">Python</li><li class="tag">YOLOv8</li><li class="tag">MediaPipe</li><li class="tag">Groq LLM</li><li class="tag">OpenCV</li>
+              </ul>
+              <p class="project-desc">A real-time scene understanding system that reads a live webcam feed, detects objects with YOLOv8, tracks hands with MediaPipe, and feeds the results to a Groq LLM to generate natural-language descriptions of what is happening on screen, drawn back as live overlays.</p>
+              <a href="https://github.com/Tyyy09/HandTracking" target="_blank" rel="noopener noreferrer" class="project-link">View Code <span class="arrow" aria-hidden="true">↗</span></a>
+            </div>
+          </li>
+
+        </ol>
+
+        <!-- Sticky preview (desktop) -->
+        <div class="work-preview" aria-hidden="true">
+          <div class="work-preview-inner" id="work-preview-inner"></div>
         </div>
+
       </div>
     </div>
   </section>

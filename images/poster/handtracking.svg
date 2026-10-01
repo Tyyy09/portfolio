@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1400" height="875" viewBox="0 0 1400 875" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="38%" r="55%">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.30"/>
+      <stop offset="55%" stop-color="#22d3ee" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="875" fill="#0f0f0f"/>
+  <rect width="1400" height="875" fill="url(#glow)"/>
+
+  <!-- Detection bounding box with corner ticks -->
+  <g stroke="#22d3ee" fill="none" stroke-width="4" opacity="0.9">
+    <rect x="548" y="170" width="304" height="300" rx="4" stroke-dasharray="10 12" opacity="0.5"/>
+    <path d="M548,200 L548,170 L578,170" stroke-width="7"/>
+    <path d="M822,170 L852,170 L852,200" stroke-width="7"/>
+    <path d="M548,440 L548,470 L578,470" stroke-width="7"/>
+    <path d="M822,470 L852,470 L852,440" stroke-width="7"/>
+  </g>
+  <text x="548" y="158" font-family="'JetBrains Mono', monospace" font-size="20" fill="#22d3ee">hand 0.98</text>
+
+  <!-- Hand landmark skeleton -->
+  <g stroke="#ffffff" stroke-width="5" fill="none" opacity="0.85">
+    <!-- bones from wrist -->
+    <path d="M700,440 L628,372 L600,330 L578,300"/>   <!-- thumb -->
+    <path d="M700,440 L662,350 L656,296 L652,250"/>   <!-- index -->
+    <path d="M700,440 L700,342 L700,284 L700,232"/>   <!-- middle -->
+    <path d="M700,440 L740,350 L748,296 L754,250"/>   <!-- ring -->
+    <path d="M700,440 L778,362 L794,320 L808,288"/>   <!-- pinky -->
+    <!-- knuckle arc -->
+    <path d="M662,350 L700,342 L740,350 L778,362"/>
+  </g>
+
+  <!-- joints -->
+  <g fill="#22d3ee">
+    <circle cx="700" cy="440" r="12"/>
+    <circle cx="628" cy="372" r="8"/><circle cx="600" cy="330" r="8"/><circle cx="578" cy="300" r="8"/>
+    <circle cx="662" cy="350" r="8"/><circle cx="656" cy="296" r="8"/><circle cx="652" cy="250" r="8"/>
+    <circle cx="700" cy="342" r="8"/><circle cx="700" cy="284" r="8"/><circle cx="700" cy="232" r="8"/>
+    <circle cx="740" cy="350" r="8"/><circle cx="748" cy="296" r="8"/><circle cx="754" cy="250" r="8"/>
+    <circle cx="778" cy="362" r="8"/><circle cx="794" cy="320" r="8"/><circle cx="808" cy="288" r="8"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="700" y="640" text-anchor="middle" font-family="'Helvetica Now', Helvetica, Arial, sans-serif" font-size="106" font-weight="700" letter-spacing="-3">
+    <tspan fill="#ffffff">HAND</tspan><tspan fill="#22d3ee">TRACK</tspan>
+  </text>
+
+  <!-- Tagline -->
+  <text x="700" y="700" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="22" letter-spacing="5" fill="#22d3ee">COMPUTER VISION &#183; YOLOv8 &#183; LLM NARRATION</text>
+</svg>

@@ -577,46 +577,38 @@ function onScrollHeader(y) { siteHeader.classList.toggle('scrolled', y > 40); }
 if (lenis) lenis.on('scroll', ({ scroll }) => onScrollHeader(scroll));
 else window.addEventListener('scroll', () => onScrollHeader(window.scrollY), { passive: true });
 
-/* ── HORIZONTAL WORK GALLERY ───────────────────────────────
-   The Work section pins while the card track translates left as
-   you scroll down. Vertical scroll length = travel * FACTOR for a
-   deliberate, cinematic feel. Falls back to a vertical stack under
-   900px (handled in CSS; height/transform cleared here). */
+/* ── WORK INDEX ────────────────────────────────────────────
+   An editorial index: hovering or focusing a project row swaps
+   the sticky preview panel (image, tags, description, links) and
+   tints the active row with that project's accent. On narrow
+   screens the sticky preview is hidden and each row expands into
+   a full card (handled in CSS). */
 (function () {
-  const wrap  = document.getElementById('work-hscroll');
-  const track = document.getElementById('work-track');
-  const bar   = document.getElementById('work-progress');
-  const idx   = document.getElementById('work-index');
-  if (!wrap || !track) return;
+  const list    = document.getElementById('work-list');
+  const preview = document.getElementById('work-preview-inner');
+  const explorer = document.getElementById('work-explorer');
+  if (!list || !preview || !explorer) return;
+
+  const rows = Array.from(list.querySelectorAll('.work-row'));
+  if (!rows.length) return;
   const mq = window.matchMedia('(min-width: 900px)');
-  const panelCount = track.querySelectorAll('.work-panel').length;
-  const FACTOR = 1.3;
-  let travel = 0, scrollLen = 0;
 
-  function measure() {
-    if (!mq.matches) { wrap.style.height = ''; track.style.transform = ''; return; }
-    travel = Math.max(0, track.scrollWidth - window.innerWidth);
-    scrollLen = travel * FACTOR;
-    wrap.style.height = (window.innerHeight + scrollLen) + 'px';
-    update();
+  function activate(row) {
+    rows.forEach(r => r.classList.toggle('is-active', r === row));
+    explorer.style.setProperty('--row-accent', row.dataset.accent || 'var(--accent)');
+    if (!mq.matches) return;                 // mobile shows inline detail instead
+    const detail = row.querySelector('.work-row-detail');
+    if (detail) preview.innerHTML = detail.innerHTML;
   }
 
-  function update() {
-    if (!mq.matches || scrollLen === 0) return;
-    const top = wrap.getBoundingClientRect().top;
-    const scrolled = Math.min(Math.max(-top, 0), scrollLen);
-    const p = scrolled / scrollLen;                 // 0 → 1 through the section
-    track.style.transform = `translate3d(${-(p * travel).toFixed(2)}px, 0, 0)`;
-    if (bar) bar.style.width = (p * 100).toFixed(1) + '%';
-    if (idx) idx.textContent = String(Math.min(panelCount, Math.floor(p * panelCount) + 1)).padStart(2, '0');
-  }
+  rows.forEach(row => {
+    row.addEventListener('mouseenter', () => { if (mq.matches) activate(row); });
+    row.addEventListener('focusin',  () => { if (mq.matches) activate(row); });
+  });
 
-  measure();
-  window.addEventListener('load', measure);
-  window.addEventListener('resize', measure);
-  // Bind both: Lenis for smooth frames, native scroll as a robust fallback.
-  if (lenis) lenis.on('scroll', update);
-  window.addEventListener('scroll', update, { passive: true });
+  // Initialise with the first row (or whichever is pre-marked active).
+  activate(rows.find(r => r.classList.contains('is-active')) || rows[0]);
+  mq.addEventListener('change', () => activate(document.querySelector('.work-row.is-active') || rows[0]));
 })();
 
 /* ── HAMBURGER ────────────────────────────────────────────── */
