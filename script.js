@@ -991,6 +991,20 @@ if (FINE_POINTER && !REDUCED) {
 
   let ry = 0, t = 0;
 
+  /* Scroll progress 0 → 1: 0 at the top of the page, 1 by the time the Work
+     section reaches the top of the viewport. Used to slide the sphere from the
+     right edge across to the left as the visitor scrolls down. */
+  const workEl = document.getElementById('projects');
+  function scrollProgress() {
+    if (!workEl) return 0;
+    const workTopPage = workEl.getBoundingClientRect().top + window.scrollY;
+    const end = workTopPage - window.innerHeight * 0.2;
+    if (end <= 0) return 1;
+    const p = window.scrollY / end;
+    const c = Math.min(1, Math.max(0, p));
+    return c * c * (3 - 2 * c); // smoothstep for an eased, unhurried glide
+  }
+
   function frame() {
     mx += (tmx - mx) * 0.05;
     my += (tmy - my) * 0.05;
@@ -1000,9 +1014,13 @@ if (FINE_POINTER && !REDUCED) {
     const rotX = my * 0.5;
     const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
     const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
-    // Large sphere pushed off the right edge — only ~30% of it peeks in.
+    // Large sphere that slides from off the right edge to off the left edge
+    // as the page scrolls toward the Work section.
     const R = Math.max(W, H) * 0.62;
-    const cx = W + R * 0.28;
+    const p = scrollProgress();
+    const rightCx = W + R * 0.28;   // ~30% peeks in on the right (at top)
+    const leftCx = -R * 0.28;        // ~30% peeks in on the left (at Work)
+    const cx = rightCx + (leftCx - rightCx) * p;
     const cy = H * 0.5;
     const persp = 2.8;
 

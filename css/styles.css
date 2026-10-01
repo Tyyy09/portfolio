@@ -461,11 +461,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   pointer-events: none;
   transition: opacity 0.7s var(--ease-out);
   -webkit-mask-image:
-    linear-gradient(to right, transparent 32%, #000 60%),
+    linear-gradient(to right, transparent 2%, #000 22%, #000 78%, transparent 98%),
     linear-gradient(to bottom, transparent 3%, #000 18%, #000 80%, transparent 99%);
   -webkit-mask-composite: source-in;
           mask-image:
-    linear-gradient(to right, transparent 32%, #000 60%),
+    linear-gradient(to right, transparent 2%, #000 22%, #000 78%, transparent 98%),
     linear-gradient(to bottom, transparent 3%, #000 18%, #000 80%, transparent 99%);
           mask-composite: intersect;
 }
