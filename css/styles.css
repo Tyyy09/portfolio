@@ -455,7 +455,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* Pinned to the viewport so the form holds still behind hero, about and
    stack, then released once Work arrives (see .is-off). */
 .hero-artwrap {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
@@ -485,6 +485,37 @@ body.loaded .hero-artcanvas { animation: fadeIn 1.1s var(--ease-out) 0.5s forwar
   body.loaded .hero-artcanvas { animation: fadeInFaint 1.1s var(--ease-out) 0.5s forwards; }
 }
 @keyframes fadeInFaint { from { opacity: 0; } to { opacity: 0.5; } }
+
+/* Per-section 3D background motif — one distinct wireframe per section.
+   Absolutely filling its section, behind the content, masked to fade at the
+   edges. The canvas clips its own drawing, so no overflow:hidden is needed
+   (which would also break the Work section's sticky preview). */
+.about-section, .skills-section, .projects-section { position: relative; }
+.about-section > .container,
+.skills-section > .container,
+.projects-section > .container { position: relative; z-index: 1; }
+.section-art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 1%, #000 24%, #000 82%, transparent 99%),
+    linear-gradient(to bottom, transparent 1%, #000 14%, #000 86%, transparent 99%);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(to right, transparent 1%, #000 24%, #000 82%, transparent 99%),
+    linear-gradient(to bottom, transparent 1%, #000 14%, #000 86%, transparent 99%);
+          mask-composite: intersect;
+}
+.section-art canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: var(--text-2);
+  opacity: 0;
+}
+body.loaded .section-art canvas { animation: fadeInFaint 1.1s var(--ease-out) 0.3s forwards; }
 .hero-inner {
   min-height: 100svh;
   padding-top: 84px;

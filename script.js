@@ -991,20 +991,6 @@ if (FINE_POINTER && !REDUCED) {
 
   let ry = 0, t = 0;
 
-  /* Scroll progress 0 → 1: 0 at the top of the page, 1 by the time the Work
-     section reaches the top of the viewport. Used to slide the sphere from the
-     right edge across to the left as the visitor scrolls down. */
-  const workEl = document.getElementById('projects');
-  function scrollProgress() {
-    if (!workEl) return 0;
-    const workTopPage = workEl.getBoundingClientRect().top + window.scrollY;
-    const end = workTopPage - window.innerHeight * 0.2;
-    if (end <= 0) return 1;
-    const p = window.scrollY / end;
-    const c = Math.min(1, Math.max(0, p));
-    return c * c * (3 - 2 * c); // smoothstep for an eased, unhurried glide
-  }
-
   function frame() {
     mx += (tmx - mx) * 0.05;
     my += (tmy - my) * 0.05;
@@ -1014,13 +1000,9 @@ if (FINE_POINTER && !REDUCED) {
     const rotX = my * 0.5;
     const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
     const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
-    // Large sphere that slides from off the right edge to off the left edge
-    // as the page scrolls toward the Work section.
+    // Large sphere pushed off the right edge — only ~30% of it peeks in.
     const R = Math.max(W, H) * 0.62;
-    const p = scrollProgress();
-    const rightCx = W + R * 0.28;   // ~30% peeks in on the right (at top)
-    const leftCx = -R * 0.28;        // ~30% peeks in on the left (at Work)
-    const cx = rightCx + (leftCx - rightCx) * p;
+    const cx = W + R * 0.28;
     const cy = H * 0.5;
     const persp = 2.8;
 
@@ -1197,3 +1179,169 @@ if (FINE_POINTER && !REDUCED) {
 
 /* ── FOOTER YEAR ──────────────────────────────────────────── */
 document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ── PER-SECTION 3D MOTIFS ─────────────────────────────────
+   Each content section gets its own wireframe background, drawn on an
+   absolutely-positioned canvas that fills the section behind the content.
+   Shared scaffolding (resize, theme colour, cursor easing, rAF loop) lives
+   in sectionArt(); each section supplies only its draw routine. */
+function sectionArt(id, draw) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  let stroke = 'rgb(180,180,180)';
+  const readColor = () => { stroke = getComputedStyle(canvas).color; };
+  readColor();
+  new MutationObserver(readColor).observe(
+    document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }
+  );
+
+  let W = 0, H = 0;
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+  // Sections grow once content/fonts settle; re-measure shortly after load.
+  window.addEventListener('load', () => setTimeout(resize, 300));
+
+  let mx = 0, my = 0, tmx = 0, tmy = 0;
+  window.addEventListener('pointermove', (e) => {
+    tmx = (e.clientX / window.innerWidth - 0.5) * 2;
+    tmy = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+
+  let t = 0;
+  function frame() {
+    mx += (tmx - mx) * 0.05;
+    my += (tmy - my) * 0.05;
+    if (!REDUCED) t += 1;
+    if (W > 0 && H > 0) {
+      // Keep the shape at the vertical centre of whatever slice of this
+      // (often taller-than-viewport) section is currently on screen.
+      const top = canvas.getBoundingClientRect().top;
+      const cy = Math.max(0, Math.min(H, window.innerHeight / 2 - top));
+      ctx.clearRect(0, 0, W, H);
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = 1;
+      draw(ctx, { W, H, mx, my, t, cy });
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ABOUT — rotating icosahedron */
+(function () {
+  const PHI = (1 + Math.sqrt(5)) / 2;
+  let V = [
+    [-1, PHI, 0], [1, PHI, 0], [-1, -PHI, 0], [1, -PHI, 0],
+    [0, -1, PHI], [0, 1, PHI], [0, -1, -PHI], [0, 1, -PHI],
+    [PHI, 0, -1], [PHI, 0, 1], [-PHI, 0, -1], [-PHI, 0, 1],
+  ].map(p => { const L = Math.hypot(p[0], p[1], p[2]); return [p[0]/L, p[1]/L, p[2]/L]; });
+  const E = [];
+  for (let i = 0; i < V.length; i++)
+    for (let j = i + 1; j < V.length; j++) {
+      const d = Math.hypot(V[i][0]-V[j][0], V[i][1]-V[j][1], V[i][2]-V[j][2]);
+      if (d < 1.2) E.push([i, j]);
+    }
+
+  sectionArt('about-art', (ctx, s) => {
+    const { W, H, mx, my, t } = s;
+    const rotY = t * 0.004 + mx * 0.5, rotX = 0.3 + my * 0.4;
+    const cY = Math.cos(rotY), sY = Math.sin(rotY), cX = Math.cos(rotX), sX = Math.sin(rotX);
+    const R = Math.min(W, window.innerHeight) * 0.34;
+    const ox = W + R * 0.15, oy = s.cy, persp = 3.2;
+    const P = V.map(p => {
+      const x1 = p[0]*cY - p[2]*sY, z1 = p[0]*sY + p[2]*cY;
+      const y1 = p[1]*cX - z1*sX, z2 = p[1]*sX + z1*cX;
+      const sc = persp / (persp - z2);
+      return [ox + x1*R*sc, oy + y1*R*sc, z2];
+    });
+    for (const [a, b] of E) {
+      const z = (P[a][2] + P[b][2]) * 0.5;
+      ctx.globalAlpha = 0.1 + Math.max(0, (z + 1) / 2) * 0.5;
+      ctx.beginPath(); ctx.moveTo(P[a][0], P[a][1]); ctx.lineTo(P[b][0], P[b][1]); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  });
+})();
+
+/* SKILLS — rotating double helix */
+(function () {
+  const N = 64, turns = 3, r = 0.5;
+  sectionArt('skills-art', (ctx, s) => {
+    const { W, H, mx, my, t } = s;
+    const rotY = t * 0.006 + mx * 0.4;
+    const cY = Math.cos(rotY), sY = Math.sin(rotY);
+    const tilt = 0.1 + my * 0.2, cX = Math.cos(tilt), sX = Math.sin(tilt);
+    const Sx = Math.min(W, window.innerHeight) * 0.3;
+    const Sy = Math.min(H, window.innerHeight) * 0.42;
+    const ox = W * 0.78, oy = s.cy, persp = 3.0;
+    const proj = (ang, yy) => {
+      const x = Math.cos(ang) * r, z = Math.sin(ang) * r, y = yy;
+      const x1 = x*cY - z*sY, z1 = x*sY + z*cY;
+      const y1 = y*cX - z1*sX, z2 = y*sX + z1*cX;
+      const sc = persp / (persp - z2);
+      return [ox + x1*Sx*sc, oy + y1*Sy*sc, z2];
+    };
+    const A = [], B = [];
+    for (let k = 0; k <= N; k++) {
+      const f = k / N, yy = -1 + 2 * f, ang = f * Math.PI * 2 * turns + t * 0.01;
+      A.push(proj(ang, yy)); B.push(proj(ang + Math.PI, yy));
+    }
+    const strand = (arr) => {
+      for (let k = 1; k < arr.length; k++) {
+        const z = (arr[k][2] + arr[k-1][2]) * 0.5;
+        ctx.globalAlpha = 0.1 + Math.max(0, (z + 1) / 2) * 0.5;
+        ctx.beginPath(); ctx.moveTo(arr[k-1][0], arr[k-1][1]); ctx.lineTo(arr[k][0], arr[k][1]); ctx.stroke();
+      }
+    };
+    strand(A); strand(B);
+    for (let k = 0; k <= N; k += 3) {
+      const z = (A[k][2] + B[k][2]) * 0.5;
+      ctx.globalAlpha = 0.07 + Math.max(0, (z + 1) / 2) * 0.33;
+      ctx.beginPath(); ctx.moveTo(A[k][0], A[k][1]); ctx.lineTo(B[k][0], B[k][1]); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  });
+})();
+
+/* WORK — undulating grid / wave plane */
+(function () {
+  const GX = 22, GY = 14, sp = 0.2;
+  sectionArt('work-art', (ctx, s) => {
+    const { W, H, mx, my, t } = s;
+    const rotY = mx * 0.3, cY = Math.cos(rotY), sY = Math.sin(rotY);
+    const tilt = 1.12 + my * 0.15, cX = Math.cos(tilt), sX = Math.sin(tilt);
+    const scale = Math.min(W, window.innerHeight) * 0.6;
+    const ox = W * 0.82, oy = s.cy, persp = 5.0;
+    const P = [];
+    for (let j = 0; j < GY; j++) {
+      P[j] = [];
+      for (let i = 0; i < GX; i++) {
+        const x = (i - (GX - 1) / 2) * sp;
+        const z = (j - (GY - 1) / 2) * sp;
+        const y = (Math.sin(x * 2.3 + t * 0.03) + Math.cos(z * 2.1 + t * 0.024)) * 0.16;
+        const x1 = x*cY - z*sY, z1 = x*sY + z*cY;
+        const y1 = y*cX - z1*sX, z2 = y*sX + z1*cX;
+        const sc = persp / (persp - z2);
+        P[j][i] = [ox + x1*scale*sc, oy + y1*scale*sc, z2];
+      }
+    }
+    const seg = (a, b) => {
+      const z = (a[2] + b[2]) * 0.5;
+      ctx.globalAlpha = 0.05 + Math.max(0, (z + 1) / 2) * 0.4;
+      ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+    };
+    for (let j = 0; j < GY; j++) for (let i = 1; i < GX; i++) seg(P[j][i-1], P[j][i]);
+    for (let i = 0; i < GX; i++) for (let j = 1; j < GY; j++) seg(P[j-1][i], P[j][i]);
+    ctx.globalAlpha = 1;
+  });
+})();
