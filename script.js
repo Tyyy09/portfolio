@@ -989,9 +989,10 @@ if (FINE_POINTER && !REDUCED) {
     tmy = (e.clientY / window.innerHeight - 0.5) * 2;
   }, { passive: true });
 
-  let ry = 0, t = 0;
+  let ry = 0, t = 0, raf = null, visible = true;
 
   function frame() {
+    if (!visible) { raf = null; return; }
     mx += (tmx - mx) * 0.05;
     my += (tmy - my) * 0.05;
     if (!REDUCED) { ry += 0.0022; t += 0.004; }
@@ -1046,9 +1047,12 @@ if (FINE_POINTER && !REDUCED) {
     }
 
     ctx.globalAlpha = 1;
-    requestAnimationFrame(frame);
+    raf = requestAnimationFrame(frame);
   }
-  requestAnimationFrame(frame);
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if (visible && raf == null) raf = requestAnimationFrame(frame);
+  }, { rootMargin: '150px' }).observe(canvas);
 })();
 
 /* ── HERO ART: released once Work scrolls in ───────────────
@@ -1131,10 +1135,11 @@ if (FINE_POINTER && !REDUCED) {
   }, { passive: true });
 
   const proj = new Array(pts.length);
-  let ry = 0;
+  let ry = 0, raf = null, visible = true;
   const TILT = 0.62;
 
   function frame() {
+    if (!visible) { raf = null; return; }
     mx += (tmx - mx) * 0.05;
     my += (tmy - my) * 0.05;
     if (!REDUCED) ry += 0.0026;
@@ -1172,9 +1177,12 @@ if (FINE_POINTER && !REDUCED) {
       ctx.stroke();
     }
     ctx.globalAlpha = 1;
-    requestAnimationFrame(frame);
+    raf = requestAnimationFrame(frame);
   }
-  requestAnimationFrame(frame);
+  new IntersectionObserver(([ent]) => {
+    visible = ent.isIntersecting;
+    if (visible && raf == null) raf = requestAnimationFrame(frame);
+  }, { rootMargin: '150px' }).observe(canvas);
 })();
 
 /* ── FOOTER YEAR ──────────────────────────────────────────── */
@@ -1217,8 +1225,9 @@ function sectionArt(id, draw) {
     tmy = (e.clientY / window.innerHeight - 0.5) * 2;
   }, { passive: true });
 
-  let t = 0;
+  let t = 0, raf = null, visible = true;
   function frame() {
+    if (!visible) { raf = null; return; }   // paused off-screen; IO restarts it
     mx += (tmx - mx) * 0.05;
     my += (tmy - my) * 0.05;
     if (!REDUCED) t += 1;
@@ -1232,9 +1241,13 @@ function sectionArt(id, draw) {
       ctx.lineWidth = 1;
       draw(ctx, { W, H, mx, my, t, cy });
     }
-    requestAnimationFrame(frame);
+    raf = requestAnimationFrame(frame);
   }
-  requestAnimationFrame(frame);
+  // Only animate while the canvas is near the viewport.
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if (visible && raf == null) raf = requestAnimationFrame(frame);
+  }, { rootMargin: '150px' }).observe(canvas);
 }
 
 /* ABOUT — rotating icosahedron */
