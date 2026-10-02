@@ -12,7 +12,7 @@
 
   --text-1: #ededed;
   --text-2: #999999;
-  --text-3: #555555;
+  --text-3: #7a7a7a;
 
   --accent:      #ffffff;
   --accent-rgb:  255, 255, 255;
@@ -2083,7 +2083,7 @@ html[data-theme="light"] {
 
   --text-1: #16140f;
   --text-2: #5c574e;
-  --text-3: #9a9388;
+  --text-3: #777064;
 
   --accent:        #111111;
   --accent-rgb:    17, 17, 17;
