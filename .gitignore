@@ -1,0 +1,4 @@
+node_modules/
+
+# Claude Code local config (dev-server defs + permission allowlist)
+.claude/
